@@ -48,15 +48,9 @@ def test_closest():
     ]
 
     elements = [
-        (
-            datetime(2017, 4, 10) + timedelta(seconds=10*60*i)
-        ).isoformat() + "+02:00"
-        for i in range(36)
+        datetime(2017, 4, 10) + timedelta(seconds=10*60*i) for i in range(20)
     ]
-    values = list(map(parse, elements))
-    assert search.closest(values, map(parse, elements)) == list(
-        enumerate(map(parse, elements))
-    )
+    assert search.closest(elements, elements) == list(enumerate(elements))
 
 
 def test_previous():
