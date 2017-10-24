@@ -9,3 +9,11 @@ olutils provide common tools to simplify project creation. It includes:
 - parameter management
 - object management (copy, saving, loading)
 
+
+# Installation
+
+```
+git clone https://github.com/OctaveLauby/olutils.git
+cd olutils
+pip install -e .
+```

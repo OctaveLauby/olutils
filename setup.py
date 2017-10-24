@@ -1,7 +1,6 @@
 from setuptools import setup
 
 setup(
-
     name="olutils",
     version="0.1.0",
     description="common tools to build a project",
