@@ -1,12 +1,13 @@
 """Utils to manage parameters and arguments"""
 
 
-def read_params(params, dft_params):
+def read_params(params, dft_params, name="params"):
     """Return parameters completed with default.
 
     Args:
         params      (dict): user parameters
         dft_params  (dict): dft parameters
+        name        (name): name of params
 
     Returns:
         (dict): user parameters completed with defaults
@@ -25,7 +26,8 @@ def read_params(params, dft_params):
 
     if unknown_keys:
         raise KeyError(
-            "Unexpected keys in params: %s" % ", ".join(map(str, unknown_keys))
+            "Unexpected keys in %s: %s"
+            % (name, ", ".join(map(str, unknown_keys)))
         )
 
     return res_params
