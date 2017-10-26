@@ -66,27 +66,41 @@ class LogClass(object):
         self.log.debug("Log Level set to %s", lvl)
 
 
-def create_logger(name, lvl, path=None):
+def create_logger(name, lvl, path=None, overwrite=False):
     """Create a logger.
 
     Args:
         name (str): name of logger
-        lvl (str or NoneType, opt): level of log you want for logger
+        lvl (str): level of log you want for logger
             can be any argument accepted by logging.Loger.setLevel
-        path (str or NoneType, opt): path to logs messages in
+        path (str): path to logs messages in
             set it to None if you want logs and stdout
+        overwrite (bool): overwrite logger with with same name if exists
     """
+    if not name:
+        raise ValueError(
+            "'%s' is not a valid name for a logger"
+        )
     log = logging.getLogger(name)
 
+    # Overwrite existant logger
     while log.hasHandlers():
+        if not overwrite:
+            raise ValueError(
+                "'%s' logger already exists"
+                ", use overwrite argument to overwrite it"
+                % name
+            )
         log.removeHandler(log.handlers[0])
 
+    # Build path if necessary
     if path:
         # Create log file container if necessary
         log_dir = os.path.dirname(path)
         if log_dir and not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
+    # Create handlers of logger
     log_sh = (
         logging.FileHandler(path, encoding="utf-8")
         if path else logging.StreamHandler()

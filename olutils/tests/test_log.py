@@ -1,4 +1,5 @@
 import os
+import pytest
 import shutil
 
 from olutils import log
@@ -70,9 +71,29 @@ def test_create_logger():
         for line, expected_log in zip(lines[4:], EXPECTED_LOGS[-2:]):
             assert expected_log.format("LogThree") in line
 
+    # Invalid names
+
+    with pytest.raises(ValueError):
+        log.create_logger(None, "DEBUG")
+
+    with pytest.raises(TypeError):
+        log.create_logger(1, "DEBUG")
+
+    with pytest.raises(ValueError):
+        log.create_logger("", "DEBUG")
+
+    # Existant logger
+
+    log4 = log.create_logger("LogFour", "DEBUG")
+    with pytest.raises(ValueError):
+        log.create_logger("LogFour", "DEBUG")
+    log4 = log.create_logger("LogFour", "INFO", overwrite=True)
+
+    assert log4.level == 20
+
 
 def test_logclass():
-    instance = log.LogClass(name="test", loglvl="INFO")
+    instance = log.LogClass(name="myLogInstance", loglvl="INFO")
 
     assert instance.get_loglvl(explicit=True) == "INFO"
     instance.set_loglvl("ERROR")
