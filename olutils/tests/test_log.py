@@ -121,13 +121,21 @@ def test_removal():
 
 
 def test_logclass():
-    instance = log.LogClass(name="myLogInstance", loglvl="INFO")
+    instance = log.LogClass(name="myLogInstance", loglvl="ERROR")
 
-    assert instance.get_loglvl(explicit=True) == "INFO"
-    instance.set_loglvl("ERROR")
     assert instance.get_loglvl(explicit=True) == "ERROR"
+    instance.set_loglvl("INFO")
+    assert instance.get_loglvl(explicit=True) == "INFO"
     instance.set_loglvl("DEBUG")
     assert instance.get_loglvl(explicit=True) == "DEBUG"
     assert instance.get_loglvl() == 10
 
-    instance.close_log()
+    # Delete (make sure logger becomes available)
+    with pytest.raises(ValueError):
+        log.LogClass(name="myLogInstance")
+    del instance
+    instance = log.LogClass(name="myLogInstance")
+    assert instance.get_loglvl(explicit=True) == "INFO"
+
+    # Default loglvl
+    assert instance.get_loglvl(explicit=True) == "INFO"
