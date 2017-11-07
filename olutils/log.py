@@ -65,6 +65,10 @@ class LogClass(object):
         self.log.setLevel(lvl)
         self.log.debug("Log Level set to %s", lvl)
 
+    def __del__(self):
+        self.close_log()
+        return super().__del__()
+
 
 # --------------------------------------------------------------------------- #
 # Management of loggers
