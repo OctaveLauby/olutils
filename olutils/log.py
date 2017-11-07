@@ -66,7 +66,22 @@ class LogClass(object):
         self.log.debug("Log Level set to %s", lvl)
 
 
-def create_logger(name, lvl, path=None, overwrite=False):
+# --------------------------------------------------------------------------- #
+# Management of loggers
+
+def clear_loggers():
+    """Close all loggers."""
+    for logger in logging.Logger.manager.loggerDict.values():
+        close_logger(logger)
+
+
+def close_logger(log):
+    """Close logger."""
+    for handler in log.handlers:
+        handler.close()
+        log.removeHandler(handler)
+
+
 def create_logger(name, lvl="INFO", path=None, overwrite=False):
     """Create a logger.
 
@@ -82,17 +97,17 @@ def create_logger(name, lvl="INFO", path=None, overwrite=False):
         raise ValueError(
             "'%s' is not a valid name for a logger"
         )
-    log = logging.getLogger(name)
+    logger = logging.getLogger(name)
 
     # Overwrite existant logger
-    while log.hasHandlers():
+    while logger.hasHandlers():
         if not overwrite:
             raise ValueError(
                 "'%s' logger already exists"
                 ", use overwrite argument to overwrite it"
                 % name
             )
-        log.removeHandler(log.handlers[0])
+        logger.removeHandler(logger.handlers[0])
 
     # Build path if necessary
     if path:
@@ -110,14 +125,16 @@ def create_logger(name, lvl="INFO", path=None, overwrite=False):
         "%(asctime)s: [%(levelname)s] %(name)s - %(message)s"
     )
     log_sh.setFormatter(formatter)
-    log.setLevel(lvl)
-    log.addHandler(log_sh)
+    logger.setLevel(lvl)
+    logger.addHandler(log_sh)
 
-    return log
+    return logger
 
 
-def close_logger(log):
-    """Close logger."""
-    for handler in log.handlers:
-        handler.close()
-        log.removeHandler(handler)
+def get_loggers():
+    """Return all loggers."""
+    return {
+        name: logger
+        for name, logger in logging.Logger.manager.loggerDict.items()
+        if logger.hasHandlers()
+    }

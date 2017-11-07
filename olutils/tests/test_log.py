@@ -92,6 +92,34 @@ def test_create_logger():
     assert log4.level == 20
 
 
+def test_removal():
+
+    log.clear_loggers()
+    assert len(log.get_loggers()) == 0
+
+    log1 = log.create_logger("test1")
+    log.create_logger("test2")
+    assert len(log.get_loggers()) == 2
+
+    # Close one logger
+    with pytest.raises(ValueError):
+        log.create_logger("test1")
+    log.close_logger(log1)
+    assert len(log.get_loggers()) == 1
+    log.create_logger("test1")
+    assert len(log.get_loggers()) == 2
+
+    # Close all loggers
+    with pytest.raises(ValueError):
+        log.create_logger("test1")
+    with pytest.raises(ValueError):
+        log.create_logger("test2")
+    log.clear_loggers()
+    assert len(log.get_loggers()) == 0
+    log.create_logger("test2")
+    assert len(log.get_loggers()) == 1
+
+
 def test_logclass():
     instance = log.LogClass(name="myLogInstance", loglvl="INFO")
 
