@@ -46,7 +46,7 @@ def test_create_logger():
     path2 = os.path.join(TMP_DIR, "2.log")
 
     log1 = log.create_logger("LogOne", lvl="DEBUG", path=path1)
-    log2 = log.create_logger("LogTwo", lvl="INFO", path=path2)
+    log2 = log.create_logger("LogTwo", path=path2)  # default lvl = INFO
     log3 = log.create_logger("LogThree", lvl="ERROR", path=path2)
 
     log_levels(log1)
@@ -74,20 +74,20 @@ def test_create_logger():
     # Invalid names
 
     with pytest.raises(ValueError):
-        log.create_logger(None, "DEBUG")
+        log.create_logger(None)
 
     with pytest.raises(TypeError):
-        log.create_logger(1, "DEBUG")
+        log.create_logger(1)
 
     with pytest.raises(ValueError):
-        log.create_logger("", "DEBUG")
+        log.create_logger("")
 
     # Existant logger
 
-    log4 = log.create_logger("LogFour", "DEBUG")
+    log4 = log.create_logger("LogFour")
     with pytest.raises(ValueError):
-        log.create_logger("LogFour", "DEBUG")
-    log4 = log.create_logger("LogFour", "INFO", overwrite=True)
+        log.create_logger("LogFour")
+    log4 = log.create_logger("LogFour", overwrite=True)
 
     assert log4.level == 20
 

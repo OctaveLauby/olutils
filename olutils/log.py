@@ -67,6 +67,7 @@ class LogClass(object):
 
 
 def create_logger(name, lvl, path=None, overwrite=False):
+def create_logger(name, lvl="INFO", path=None, overwrite=False):
     """Create a logger.
 
     Args:
