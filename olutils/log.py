@@ -22,7 +22,7 @@ class LogClass(object):
         self.log.fatal(msg)
     """
 
-    def __init__(self, name, loglvl, logpath=None):
+    def __init__(self, name, loglvl="INFO", logpath=None):
         """Create instance.
 
         Args:
