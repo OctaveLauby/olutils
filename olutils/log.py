@@ -63,7 +63,6 @@ class LogClass(object):
 
     def __del__(self):
         close_logger(self.log)
-        return super().__del__()
 
 
 # --------------------------------------------------------------------------- #
