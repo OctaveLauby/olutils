@@ -37,10 +37,6 @@ class LogClass(object):
         )
         self.log.debug("Logger created")
 
-    def close_log(self):
-        """Close logger."""
-        close_logger(self.log)
-
     def get_loglvl(self, explicit=False):
         """Return loglvl.
 
@@ -66,7 +62,7 @@ class LogClass(object):
         self.log.debug("Log Level set to %s", lvl)
 
     def __del__(self):
-        self.close_log()
+        close_logger(self.log)
         return super().__del__()
 
 
