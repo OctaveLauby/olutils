@@ -5,40 +5,32 @@ import pytest
 from olutils import params
 
 
+def test_check_type():
+    assert params.check_type("arg", 1, int) is None
+    assert params.check_type("arg", "hello", str) is None
+    assert params.check_type("arg", 1., float) is None
+
+    with pytest.raises(TypeError):
+        params.check_type("arg", 1, str)
+
+    with pytest.raises(TypeError):
+        params.check_type("arg", 1., int)
+
+
 def test_read_params():
-    dft_params = {
-        1: "un",
-        2: "deux",
-        3: "trois",
-    }
+    kwargs = params.read_params({"a": 1}, {"a": 0, "b": 2})
+    assert kwargs == {'a': 1, 'b': 2}
+    assert kwargs.a == 1
+    assert kwargs.b == 2
+    kwargs.b = 3
+    assert kwargs.b == 3
+    assert kwargs == {'a': 1, 'b': 3}
 
-    params_1 = {
-        1: "one",
-        3: None,
-    }
-    assert params.read_params(params_1, dft_params) == {
-        1: "one",
-        2: "deux",
-        3: "trois",
-    }
-
-    params_2 = {
-        2: "dos",
-        3: "tres",
-    }
-    assert params.read_params(params_2, dft_params) == {
-        1: "un",
-        2: "dos",
-        3: "tres",
-    }
-
-    params_3 = {
-        0: "zero",
-        3: "troyes",
-        4: "quatre",
-    }
     with pytest.raises(KeyError):
-        params.read_params(params_3, dft_params)
+        params.read_params({"a": 1, "c": 3}, {"a": 0, "b": 2})
+
+    kwargs = params.read_params({"a": 1, "c": 3}, {"a": 0, "b": 2}, safe=False)
+    assert kwargs == {'a': 1, 'b': 2, 'c': 3}
 
 
 def test_add_dft_args(capfd):

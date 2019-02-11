@@ -1,49 +1,40 @@
-"""Utils to manage common python objects."""
-import json
-import os
-import pickle
+"""Some common utils"""
 
 
-def load(path, method=None):
-    """Load obj at path given a method (json or pickle).
+def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
+    """Iter elems from a while counting
 
-    method=None to catch method from path extension.
+    Args:
+        a (iterable)
+        start (int)     : count starting point
+        prefix (string) : count prefix in display
+        suffix (string) : count suffix in display
+        w_count (bool)  : also yield count
+        v_batch (int)   : number of iteration b/w displays
+
+    Return:
+        (iterable)
+            if w_count: yield (i, elem)
+            else: yield elem
     """
-    if method is None:
-        method = path.split(".")[-1]
+    verb = True if v_batch else False
+    try:
+        n = len(a) + start - 1
+    except TypeError:
+        n = "?"
 
-    res = None
-    if method == "json":
-        with open(path) as file:
-            res = json.load(file)
-    elif method == "pickle":
-        with open(path, "rb") as file:
-            res = pickle.load(file)
-    else:
-        raise ValueError("Unknown method %s" % method)
-    return res
+    i = 0
+    for i, elem in enumerate(a, start):
+        if i == start or i % v_batch == 0:
+            display("\r" + prefix + "%s/%s" % (i, n) + suffix, end="", v=verb)
+        yield (i, elem) if w_count else elem
+
+    display("\r" + prefix + "%s/%s" % (i, n) + suffix, end="", v=verb)
+    display(v=verb)
 
 
-def save(obj, path, method=None):
-    """Save obj to path given a method (json or pickle).
-
-    method=None to catch method from path extension.
-    """
-    directory = os.path.dirname(path)
-
-    if method is None:
-        method = path.split(".")[-1]
-
-    if directory and not os.path.exists(directory):
-        os.makedirs(directory)
-
-    if method == "json":
-        with open(path, "w") as file:
-            json.dump(
-                obj, file, sort_keys=True, indent=4, separators=(',', ': ')
-            )
-    elif method == "pickle":
-        with open(path, "wb") as file:
-            pickle.dump(obj, file)
-    else:
-        raise ValueError("Unknown method %s" % method)
+def display(*args, **kwargs):
+    """Extension of print with v kwarg for verbose (False > no print)"""
+    verb = kwargs.pop("v", True)
+    if verb:
+        print(*args, **kwargs)

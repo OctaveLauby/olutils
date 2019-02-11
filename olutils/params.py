@@ -1,36 +1,111 @@
 """Utils to manage parameters and arguments"""
+import itertools
 
 
-def read_params(params, dft_params, name="params"):
-    """Return parameters completed with default.
+class Param(dict):
+
+    def __getattr__(self, attr):
+        """Return stat associated to attr if attr is not an attribute.
+
+        About
+        -----
+            Stats related to x can be gather as day by adding #d in attr
+            For instance : stats.#d
+        """
+        try:
+            return self[attr]
+        except KeyError:
+            raise AttributeError(
+                "%s is neither a param attribute nor a field" % attr
+            ) from None
+
+    def __setattr__(self, attr, val):
+        if attr in self:
+            self[attr] = val
+        else:
+            raise AttributeError(
+                "%s is neither a param attribute nor a field" % attr
+            )
+
+
+def check_type(name, value, exp_type):
+    """Simple check of param type, raising TypeError with explicit message
 
     Args:
-        params      (dict): user parameters
-        dft_params  (dict): dft parameters
-        name        (name): name of params
+        name (str)      : parameter name to display in error message
+        value (object)  : parameter value to check the type of
+        exp_type (type or tuple): expected type of parameter
 
-    Returns:
-        (dict): user parameters completed with defaults
-
-    Raises:
-        KeyError when user parameters are not all in dft parameters
+    Raise:
+        (TypeError) if type not correct
     """
-    res_params = dict(dft_params)
-
-    unknown_keys = []
-    for (key, value) in params.items():
-        if key not in res_params:
-            unknown_keys.append(key)
-        elif value is not None:
-            res_params[key] = value
-
-    if unknown_keys:
-        raise KeyError(
-            "Unexpected keys in %s: %s"
-            % (name, ", ".join(map(str, unknown_keys)))
+    if not isinstance(value, exp_type):
+        raise TypeError(
+            "parameter %s should be %s instance, got %s: %s"
+            % (name, exp_type, type(value), repr(value))
         )
 
-    return res_params
+
+def read_params(params, dft_params, safe=True):
+    """Return params completed with dft params in convenient dict-like object
+
+    Args:
+        params (NoneType or dict): list of params given by user
+        dft_params (dict): expected parameters with default values
+        safe (bool): raises KeyError if params contains key not in dft_params
+
+    Return:
+        (Param) dict-like structure where params are accessible as attributes
+    """
+    params = {} if params is None else params
+    assert isinstance(params, dict) and isinstance(dft_params, dict), (
+        "read_params expect dict arguments : got %s and %s"
+        % (type(params), type(dft_params))
+    )
+    res = dft_params.copy()
+    wrong_params = []
+    params = params if params else {}
+    for key, val in params.items():
+        if key not in res:
+            wrong_params.append(key)
+        res[key] = val
+    if wrong_params and safe:
+        raise KeyError("Unexpected params : %s" % ", ".join(wrong_params))
+    return Param(res)
+
+
+def iter_params(param_ranges):
+    """Return iterator on all possible param value associations
+
+    Args:
+        param_ranges (dict of list): for each parameter, possible values
+
+    Example:
+        >> param_iter = iter_params({'int': [1, 2], 'str': ["a", "b"]})
+        >> next(param_iter)
+        {'int': 1, 'str': 'a'}
+        >> for string in param_iter: print(string)
+        {'int': 1, 'str': 'b'}
+        {'int': 2, 'str': 'a'}
+        {'int': 2, 'str': 'b'}
+        >> next(param_iter)
+        StopIteration
+
+    Return:
+        (iterator)
+    """
+    params, ranges = [], []
+    for param, prange in param_ranges.items():
+        params.append(param)
+        ranges.append(prange)
+
+    def params_iter(params, ranges):
+        for param_set in itertools.product(*ranges):
+            yield {
+                param: value
+                for param, value in zip(params, param_set)
+            }
+    return params_iter(params, ranges)
 
 
 def add_dft_args(parser, dft_args, flag_prefix="", help_prefix=""):
