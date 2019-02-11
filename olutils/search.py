@@ -2,13 +2,13 @@
 
 
 def closest(values, elements, scope=None, strict=True):
-    """Return closests (index, elem) of sorted values from sorted elements.
+    """Return closest (index, elem) of sorted values
 
     If 2 elements have same distance to a given value, second elem will be
         return has closest.
 
     Example:
-        > closests([1, 4], [0, 2, 3])
+        > closest([1, 4], [0, 2, 3])
         [(1, 2), (2, 3)]
     """
     res = []

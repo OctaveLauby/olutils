@@ -19,7 +19,7 @@ def copy(obj):
 def load(path, method=None):
     """Load obj at path given a method (json or pickle).
 
-    method=None to catch method from path extansion.
+    method=None to catch method from path extension.
     """
     if method is None:
         method = path.split(".")[-1]
@@ -39,7 +39,7 @@ def load(path, method=None):
 def save(obj, path, method=None):
     """Save obj to path given a method (json or pickle).
 
-    method=None to catch method from path extansion.
+    method=None to catch method from path extension.
     """
     directory = os.path.dirname(path)
 
