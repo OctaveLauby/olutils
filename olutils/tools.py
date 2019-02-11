@@ -4,18 +4,6 @@ import os
 import pickle
 
 
-def copy(obj):
-    """Recursively copy object."""
-    if isinstance(obj, dict):
-        res = {}
-        for key, value in obj.items():
-            res[key] = copy(value)
-        return res
-    elif isinstance(obj, list):
-        return [copy(elem) for elem in obj]
-    return obj
-
-
 def load(path, method=None):
     """Load obj at path given a method (json or pickle).
 
