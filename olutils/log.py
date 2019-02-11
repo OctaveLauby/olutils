@@ -87,7 +87,7 @@ def create_logger(name, lvl="INFO", path=None, overwrite=False):
     Args:
         name (str): name of logger
         lvl (str): level of log you want for logger
-            can be any argument accepted by logging.Loger.setLevel
+            can be any argument accepted by logging.Logger.setLevel
         path (str): path to logs messages in
             set it to None if you want logs and stdout
         overwrite (bool): overwrite logger with with same name if exists
@@ -98,8 +98,8 @@ def create_logger(name, lvl="INFO", path=None, overwrite=False):
         )
     logger = logging.getLogger(name)
 
-    # Overwrite existant logger
-    while logger.hasHandlers():
+    # Overwrite existing logger
+    while logger.handlers:
         if not overwrite:
             raise ValueError(
                 "'%s' logger already exists"
@@ -135,5 +135,5 @@ def get_loggers():
     return {
         name: logger
         for name, logger in logging.Logger.manager.loggerDict.items()
-        if logger.hasHandlers()
+        if logger.handlers
     }

@@ -82,7 +82,7 @@ def test_create_logger():
     with pytest.raises(ValueError):
         log.create_logger("")
 
-    # Existant logger
+    # Existing logger
 
     log4 = log.create_logger("LogFour")
     with pytest.raises(ValueError):
@@ -97,26 +97,26 @@ def test_removal():
     log.clear_loggers()
     assert len(log.get_loggers()) == 0
 
-    log1 = log.create_logger("test1")
-    log.create_logger("test2")
+    log1 = log.create_logger("test_1")
+    log.create_logger("test_2")
     assert len(log.get_loggers()) == 2
 
     # Close one logger
     with pytest.raises(ValueError):
-        log.create_logger("test1")
+        log.create_logger("test_1")
     log.close_logger(log1)
     assert len(log.get_loggers()) == 1
-    log.create_logger("test1")
+    log.create_logger("test_1")
     assert len(log.get_loggers()) == 2
 
     # Close all loggers
     with pytest.raises(ValueError):
-        log.create_logger("test1")
+        log.create_logger("test_1")
     with pytest.raises(ValueError):
-        log.create_logger("test2")
+        log.create_logger("test_2")
     log.clear_loggers()
     assert len(log.get_loggers()) == 0
-    log.create_logger("test2")
+    log.create_logger("test_2")
     assert len(log.get_loggers()) == 1
 
 
