@@ -7,6 +7,7 @@ from olutils import storing
 
 
 TMP_DIR = "tmp"
+MOCK_DIR = os.path.join("olutils", "tests", "mockups")
 
 
 def assert_content_equal(path, content):
@@ -29,6 +30,27 @@ def teardown_function(function):
 
 # --------------------------------------------------------------------------- #
 # Tests
+
+
+def test_read_csv():
+
+    rows = [
+        {'col_1': "11", 'col_2': "12", 'col_3': "13"},
+        {'col_1': "21", 'col_2': "22", 'col_3': ""},
+        {'col_1': "31", 'col_2': "", 'col_3': "33"},  # col_2 should be None
+        {'col_1': "forty_one", 'col_2': "forty_two", 'col_3': "forty_three"},
+    ]
+
+    filepath = os.path.join(MOCK_DIR, "base_comma.csv")
+    assert list(storing.read_csv(filepath)) == rows
+
+    filepath = os.path.join(MOCK_DIR, "base_semicolon.csv")
+    assert list(storing.read_csv(filepath)) == rows
+
+    filepath = os.path.join(MOCK_DIR, "base_tab.csv")
+    assert list(storing.read_csv(filepath)) == rows
+
+    # TODO : more testing
 
 
 def test_write_csv():

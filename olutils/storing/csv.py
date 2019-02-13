@@ -7,7 +7,7 @@ from olutils.tools import countiter
 
 
 def read_csv(path, delimiter="smart", encoding=None, **params):
-    """Return DictReader iterator on file at path & display row count
+    """Return csv.DictReader iterator on file at path (can display row count)
 
     Args:
         path (str)      : path to input
@@ -15,6 +15,7 @@ def read_csv(path, delimiter="smart", encoding=None, **params):
             "smart" > try common delimiters and use the one building more cols
         encoding (str)  : encoding of file
         **params (dict) : @see utils.tools.countiter
+            v_batch     dft value is 0 (no display)
 
     Returns:
         (iterator)
@@ -29,9 +30,12 @@ def read_csv(path, delimiter="smart", encoding=None, **params):
         if n_cols <= 1:
             raise ValueError("Could not find delimiter of '%s'" % path)
 
+    params['v_batch'] = params.pop('v_batch', 0)
     with open(path, encoding=encoding) as file:
+        # TODO : read empty cell as None (and "" cell as '')
         reader = DictReader(file, delimiter=delimiter)
-        countiter(reader, start=1, **params)
+        for elem in countiter(reader, start=1, **params):
+            yield elem
 
 
 def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
@@ -96,6 +100,7 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
     # Write file
     with sopen(path, "w+", encoding=encoding) as file:
         # TODO : find a convenient way to raise error when field is missing
+        # TODO : write '' cell as "" and None as empty
         writer = DictWriter(file, fieldnames=fieldnames, **params)
         file.write(params.delimiter.join(header) + "\n")
         writer.writerows(rows)
