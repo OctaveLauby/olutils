@@ -1,4 +1,5 @@
 from csv import DictReader, DictWriter
+from itertools import chain
 
 from olutils.files import sopen
 from olutils.params import read_params
@@ -33,27 +34,54 @@ def read_csv(path, delimiter="smart", encoding=None, **params):
         countiter(reader, start=1, **params)
 
 
-def write_csv(rows, path, fieldnames=None, header=None, pretty=False, **params):
+def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
+              encoding=None, **params):
     """"Write a list of dictionaries to path
 
     Args:
-        rows (list of dict) : list of rows (dictionaries sharing same keys)
-        path (str)          : path to output (path tree is auto-generated)
+        rows (iterable of dict) : rows (dictionaries sharing same keys)
+        path (str)              : path to output (path tree is auto-generated)
         fieldnames  (n-list of str) : from rows to use (dft is row keys)
         header      (n-list)        : column names regarding field names
         pretty      (bool)          : pretty frmt header
-        params (dict):
-            encoding    dft is None
-            delimiter   dft is ","
-    """
-    params = read_params(params, {'delimiter': ",", 'encoding': None})
+        encoding    (str)           : encoding to open output
+        params (dict): @see params for csv.DictWriter
+            delimiter       dft is ","
+            lineterminator  dft is "\n"
+            restval         dft is None if field missing in a row
+            extrasaction    dft is "ignore" additional fields in rows
 
+    Raise:
+        (ValueError) if rows empty and fieldnames is None
+        (TypeError) if fst row is not a dictionary and fieldnames is None
+        (---) then same behavior than csv.DictWriter
+    """
+    encoding = params.pop('encoding', None)
+    params = read_params(params, {
+            'delimiter': ",",
+            'lineterminator': "\n",
+            'restval': None,
+            'extrasaction': "ignore"  # Ignore additional keys if rows
+    }, safe=False)
+    i_rows = iter(rows)
+
+    # Read fieldnames
     if fieldnames is None:
         try:
-            fieldnames = list(rows[0].keys())
-        except IndexError:
-            raise ValueError("Can't write an empty list of dictionaries")
+            fstrow = next(i_rows)
+        except StopIteration:
+            raise ValueError(
+                "Can't deduce fieldnames if rows is empty"
+            ) from None
+        try:
+            fieldnames = list(fstrow.keys())
+        except AttributeError:
+            raise TypeError(
+                "rows must be an iterable on dictionaries"
+            ) from None
+        i_rows = chain([fstrow], i_rows)
 
+    # Read and compute header
     header = fieldnames if header is None else header
     assert len(header) == len(fieldnames), (
         "Specified header (%s) must have same length as fieldnames (%s)"
@@ -65,13 +93,9 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False, **params):
             for field in fieldnames
         ]
 
-    with sopen(path, "w+", encoding=params.encoding) as file:
-        writer = DictWriter(
-            file,
-            fieldnames=fieldnames,
-            lineterminator="\n",
-            delimiter=params.delimiter
-        )
+    # Write file
+    with sopen(path, "w+", encoding=encoding) as file:
+        # TODO : find a convenient way to raise error when field is missing
+        writer = DictWriter(file, fieldnames=fieldnames, **params)
         file.write(params.delimiter.join(header) + "\n")
-        for row in rows:
-            writer.writerow(row)
+        writer.writerows(rows)
