@@ -24,22 +24,27 @@ def teardown_function(function):
 # --------------------------------------------------------------------------- #
 # Tests
 
+
 def test_save_load():
 
     obj = {
         "1": 1, "2": 2,
     }
 
-    path_json = os.path.join(TMP_DIR, "obj.json")
-    path_pickle = os.path.join(TMP_DIR, "obj.pickle")
-    path_unk = os.path.join(TMP_DIR, "obj.unk")
+    path_frmt = os.path.join(TMP_DIR, "obj.{}")
 
-    storing.save(obj, path_json)
-    storing.save(obj, path_pickle)
+    for mthd in ["json", "pickle"]:
+        path = path_frmt.format(mthd)
+        storing.save(obj, path)
+        assert storing.load(path) == obj
+
+    path = path_frmt.format("unk")
     with pytest.raises(ValueError):
-        storing.save(obj, path_unk)
-    storing.save(obj, path_unk, mthd="json")
+        storing.save(obj, path)
+    storing.save(obj, path, mthd="json")
 
-    assert storing.load(path_json) == obj
-    assert storing.load(path_pickle) == obj
-    assert storing.load(path_unk, mthd="json") == obj
+    with pytest.raises(ValueError):
+        storing.load(path)
+    assert storing.load(path, mthd="json") == obj
+
+    # TODO : more testing
