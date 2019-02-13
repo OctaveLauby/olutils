@@ -1,5 +1,4 @@
 import os
-import pytest
 import shutil
 from collections import OrderedDict
 
@@ -25,28 +24,7 @@ def teardown_function(function):
 # --------------------------------------------------------------------------- #
 # Tests
 
-def test_save_load():
-
-    obj = {
-        "1": 1, "2": 2,
-    }
-
-    path_json = os.path.join(TMP_DIR, "obj.json")
-    path_pickle = os.path.join(TMP_DIR, "obj.pickle")
-    path_unk = os.path.join(TMP_DIR, "obj.unk")
-
-    storing.save(obj, path_json)
-    storing.save(obj, path_pickle)
-    with pytest.raises(ValueError):
-        storing.save(obj, path_unk)
-    storing.save(obj, path_unk, mthd="json")
-
-    assert storing.load(path_json) == obj
-    assert storing.load(path_pickle) == obj
-    assert storing.load(path_unk, mthd="json") == obj
-
-
-def testwrite_csv():
+def test_write_csv():
 
     filepath = os.path.join(TMP_DIR, "file.txt")
 
