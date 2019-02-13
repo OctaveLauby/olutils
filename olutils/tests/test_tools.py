@@ -41,6 +41,16 @@ def test_countiter(capfd):
             assert readout(capfd) == ""
     assert readout(capfd) == "\r> 26/26 <\n"
 
+    for i, elem in tools.countiter([1, 2, 3], w_count=True, v_batch=0):
+        assert elem == i
+        assert readout(capfd) == ""
+    assert readout(capfd) == ""
+
+    for i, elem in tools.countiter([1, 2, 3], w_count=True, v_batch=None):
+        assert elem == i
+        assert readout(capfd) == ""
+    assert readout(capfd) == ""
+
 
 def test_display(capfd):
 

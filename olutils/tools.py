@@ -17,7 +17,7 @@ def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
             if w_count: yield (i, elem)
             else: yield elem
     """
-    verb = True if v_batch else False
+    verbose = True if v_batch else False
     try:
         n = len(a) + start - 1
     except TypeError:
@@ -25,12 +25,13 @@ def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
 
     i = 0
     for i, elem in enumerate(a, start):
-        if i == start or i % v_batch == 0:
-            display("\r" + prefix + "%s/%s" % (i, n) + suffix, end="", v=verb)
+        if verbose and (i == start or i % v_batch == 0):
+            print("\r" + prefix + "%s/%s" % (i, n) + suffix, end="")
         yield (i, elem) if w_count else elem
 
-    display("\r" + prefix + "%s/%s" % (i, n) + suffix, end="", v=verb)
-    display(v=verb)
+    if verbose:
+        print("\r" + prefix + "%s/%s" % (i, n) + suffix, end="")
+        print()
 
 
 def display(*args, **kwargs):
