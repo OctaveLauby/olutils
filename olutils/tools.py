@@ -34,7 +34,21 @@ def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
 
 
 def display(*args, **kwargs):
-    """Extension of print with v kwarg for verbose (False > no print)"""
-    verb = kwargs.pop("v", True)
+    """Extension of print with verbose kwarg
+
+    Args:
+        v, verbose (bool): whether to print or not
+        *args, **kwargs: @see print
+    """
+    v, verbose = kwargs.pop("v", None), kwargs.pop("verbose", None)
+    if isinstance(v, bool) and isinstance(verbose, bool):
+        raise TypeError(
+            "Got multiple values for verbose argument 'v'/'verbose'"
+        )
+    verb = (
+        (verbose is None or verbose)
+        if v is None
+        else (v is None or v)
+    )
     if verb:
         print(*args, **kwargs)
