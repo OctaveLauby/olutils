@@ -4,7 +4,7 @@ import os
 import pickle
 from csv import DictReader, DictWriter
 
-from .files import safe_open
+from .files import sopen
 from .params import read_params
 from .tools import countiter
 
@@ -81,7 +81,7 @@ def save(obj, path, mthd=None, encoding=None, **params):
     if mthd == "csv":
         write_csv(obj, path, encoding=encoding, **params)
     elif mthd == "json":
-        with safe_open(path, "w", encoding=encoding) as file:
+        with sopen(path, "w", encoding=encoding) as file:
             params = read_params(
                 params,
                 {'sort_keys': True, 'indent': 4, 'separators': (',', ': ')},
@@ -91,7 +91,7 @@ def save(obj, path, mthd=None, encoding=None, **params):
                 obj, file, **params
             )
     elif mthd == "pickle":
-        with safe_open(path, "wb", encoding=encoding) as file:
+        with sopen(path, "wb", encoding=encoding) as file:
             pickle.dump(obj, file, **params)
     else:
         raise ValueError("Unknown method '%s'" % mthd)
@@ -157,7 +157,7 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False, **params):
             for field in fieldnames
         ]
 
-    with safe_open(path, "w+", encoding=params.encoding) as file:
+    with sopen(path, "w+", encoding=params.encoding) as file:
         writer = DictWriter(
             file,
             fieldnames=fieldnames,
