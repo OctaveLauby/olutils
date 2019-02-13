@@ -7,10 +7,10 @@ def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
     Args:
         a (iterable)
         start (int)     : count starting point
-        prefix (string) : count prefix in display
-        suffix (string) : count suffix in display
         w_count (bool)  : also yield count
         v_batch (int)   : number of iteration b/w displays
+        prefix (string) : count prefix in display
+        suffix (string) : count suffix in display
 
     Return:
         (iterable)
