@@ -38,7 +38,6 @@ def load(path, mthd=None, encoding=None, **params):
 
     res = None
     if mthd == "csv":
-        params['v'] = params.get('v', False)
         res = read_csv(path, encoding=encoding, **params)
     elif mthd == "json":
         with open(path,  encoding=encoding) as file:
@@ -60,7 +59,7 @@ def save(obj, path, mthd=None, encoding=None, **params):
         mthd (str): method of storing
             csv     > store as csv file (requires obj to be list of dict)
                 use write_csv to personalize saving
-            json    > store as json file (requires obj to be json like)
+            json    > store as pretty json file (requires obj to be json like)
             pickle  > store as pickle file
             None    > catch method from path extension
         encoding (str): file encoding

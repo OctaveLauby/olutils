@@ -1,4 +1,5 @@
 import os
+import pickle
 import pytest
 import shutil
 
@@ -27,24 +28,32 @@ def teardown_function(function):
 
 def test_save_load():
 
-    obj = {
-        "1": 1, "2": 2,
-    }
+    obj = [
+        {"1": 1, "2": 2},
+        {"1": 10, "2": 20},
+        {"1": -1, "2": -2},
+    ]
 
     path_frmt = os.path.join(TMP_DIR, "obj.{}")
 
-    for mthd in ["json", "pickle"]:
+    for mthd in ["csv", "json", "pickle"]:
         path = path_frmt.format(mthd)
         storing.save(obj, path)
-        assert storing.load(path) == obj
+        if mthd == "csv":
+            assert list(storing.load(path)) == [
+                {key: str(val) for key, val in row.items()}
+                for row in obj
+            ]
+        else:
+            assert storing.load(path) == obj
 
     path = path_frmt.format("unk")
     with pytest.raises(ValueError):
         storing.save(obj, path)
-    storing.save(obj, path, mthd="json")
 
+    storing.save(obj, path, mthd="json")
     with pytest.raises(ValueError):
         storing.load(path)
+    with pytest.raises(pickle.UnpicklingError):
+        storing.load(path, mthd="pickle")
     assert storing.load(path, mthd="json") == obj
-
-    # TODO : more testing
