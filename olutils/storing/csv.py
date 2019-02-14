@@ -1,3 +1,16 @@
+"""This module provide functions to read and write csv.
+
+It is based on csv library, and add a layer so that :
+- Functions open and close file
+- delimiter can be automatically guessed for reading
+- fieldnames can be deduced from fst row in reading
+
+Also, because it is based on csv library, it has same limitations :
+- empty string and None are not distinguished
+- delimiter must be single character
+
+@see https://stackoverflow.com/questions/11379300/csv-reader-behavior-with-none-and-empty-string
+"""
 from csv import DictReader, DictWriter
 from itertools import chain
 
@@ -32,7 +45,6 @@ def read_csv(path, delimiter="smart", encoding=None, **params):
 
     params['v_batch'] = params.pop('v_batch', 0)
     with open(path, encoding=encoding) as file:
-        # TODO : read empty cell as None (and "" cell as '')
         reader = DictReader(file, delimiter=delimiter)
         for elem in countiter(reader, start=1, **params):
             yield elem
@@ -100,7 +112,6 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
     # Write file
     with sopen(path, "w+", encoding=encoding) as file:
         # TODO : find a convenient way to raise error when field is missing
-        # TODO : write '' cell as "" and None as empty
         writer = DictWriter(file, fieldnames=fieldnames, **params)
         file.write(params.delimiter.join(header) + "\n")
         writer.writerows(rows)
