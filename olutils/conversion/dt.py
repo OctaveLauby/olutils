@@ -15,19 +15,6 @@ def float2dt(nb):
     return DATE_REF + timedelta(seconds=nb)
 
 
-def dtref2float(dateref, timeref):
-    """Build datetime from date and time reference
-
-    Args:
-        dateref (str): date reference (like '1993-05-16')
-        timeref (str): time reference (string of seconds since midnight)
-
-    Return:
-        (datetime.datetime)
-    """
-    return dt2float(str2dt(dateref) + timedelta(seconds=float(timeref)))
-
-
 def str2dt(string, *args, **kwargs):
     """Return string converted to datetime"""
     return parse(string, *args, **kwargs)
