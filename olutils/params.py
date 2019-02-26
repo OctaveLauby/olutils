@@ -5,13 +5,6 @@ import itertools
 class Param(dict):
 
     def __getattr__(self, attr):
-        """Return stat associated to attr if attr is not an attribute.
-
-        About
-        -----
-            Stats related to x can be gather as day by adding #d in attr
-            For instance : stats.#d
-        """
         try:
             return self[attr]
         except KeyError:
@@ -39,6 +32,7 @@ def check_type(name, value, exp_type):
     Raise:
         (TypeError) if type not correct
     """
+    # TODO : Manage callable and NoneType
     if not isinstance(value, exp_type):
         raise TypeError(
             "parameter %s should be %s instance, got %s: %s"
