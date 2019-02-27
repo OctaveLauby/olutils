@@ -1,9 +1,7 @@
 """Convenient tools to read and encapsule rows (dictionaries)"""
 from collections import OrderedDict
 
-
-class RowUncomplete(Exception):
-    pass
+from olutils import tools
 
 
 class Row(OrderedDict):
@@ -100,7 +98,7 @@ class RowReader(object):
             irow (dict): row to read
 
         Raises:
-            (RowUncomplete) if a field is missing in row
+            (KeyError) if a field is missing in row
 
         Return:
             (self.rowcls)
@@ -111,10 +109,11 @@ class RowReader(object):
                 for attr, field in self.fields.items()
             ]))
         except KeyError:
-            raise RowUncomplete(
-                "row fields %s does not contain all expected fields %s"
-                % (list(irow.keys()), list(self.fields.values()))
-            )
+            diff = tools.diff(irow.keys(), self.fields.values())
+            raise KeyError(
+                "Row is missing some keys: %s"
+                % ", ".join(map(repr, diff['plus']))
+            ) from None
 
         for attr, func in self.conversions.items():
             row.setattr(attr, func(getattr(row, attr)))

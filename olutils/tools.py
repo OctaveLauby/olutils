@@ -34,6 +34,29 @@ def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
         print()
 
 
+def diff(list1, list2):
+    """Return diff b/w lists in a dictionary
+
+    About:
+        Because 0 == False and 1 == True, diff may not work as wanted with
+        list mixing booleans and integers.
+
+    Return:
+        (dict) with following items
+            'common', set of common elements
+            'minus', set of elements in list1 and not in list2
+            'plus', set of elements in list2 and not in list1
+    """
+    s1 = set(list1)
+    s2 = set(list2)
+    common = s1.intersection(s2)
+    return {
+        'common': common,
+        'minus': s1 - common,
+        'plus': s2 - common,
+    }
+
+
 def display(*args, **kwargs):
     """Extension of print with verbose kwarg
 

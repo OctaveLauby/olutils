@@ -50,7 +50,7 @@ def test_RowReader():
     assert row == {'field1': 1, 'field2': 2}
     assert row.attributes == ['field1', 'field2']
 
-    with pytest.raises(rowreader.RowUncomplete):
+    with pytest.raises(KeyError):
         row = reader.read({'Header1': 1, 'Header3': 3})
 
     # ---- More Elaborate test
