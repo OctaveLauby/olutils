@@ -33,6 +33,26 @@ class Row(OrderedDict):
         """Ordered row attributes/keys"""
         return self._attributes
 
+    def delattr(self, key):
+        """Remove attribute"""
+        try:
+            self.pop(key)
+        except KeyError:
+            raise AttributeError(
+                "Row does not contain attribute '%s', so it can't be deleted"
+                % key
+            ) from None
+
+    def pop(self, key, *args, **kwargs):
+        """Remove specified key and return the corresponding value"""
+        output = super().pop(key, *args, **kwargs)
+        try:
+            self._attributes.remove(key)
+            delattr(self, key)
+        except (ValueError, AttributeError):
+            pass
+        return output
+
     def setattr(self, key, value):
         """Set attribute and fills attributes list"""
         if key not in self.attributes:
@@ -44,32 +64,34 @@ class Row(OrderedDict):
 class RowReader(object):
     """Convenient row reader that includes attr conversions and building"""
 
-    def __init__(self, attrfields, attrconvert=None, attroperation=None):
+    def __init__(self, fields, conversions=None, operations=None, delete=None):
         """Init a row row reader instance
 
         Args:
-            attrfields (dict)   : (attribute, column name) items to read attr
+            fields (dict)       : (attribute, column name) items to read attr
                 from initial row
-            attrconvert (dict)  : (attribute, conversion func) items to convert
+            conversions (dict)  : (attribute, conversion func) items to convert
                 attributes read from rows
-            attroperation (dict): (attribute, func) to build new attributes
+            operations (dict)   : (attribute, func) to build new attributes
                 from instance built with read and converted attributes
                 One should use OrderedDict if operation order matters
+            delete (list)       : attributes to delete ones building is over
 
         Example:
             >> reader = RowReader(
-                attrfields={'id': "ID", 'name': "Name"},
-                attrconvert={'id': int},
-                attroperation={'label': lambda r: str(r.id) + "." + r.name}
+                fields={'id': "ID", 'name': "Name"},
+                conversions={'id': int},
+                operations={'label': lambda r: str(r.id) + "." + r.name}
             )
             >> row = reader.read({'ID': "8", 'name': "Name"})
             >> assert row.id == 8
             >> assert row.name == "Octave"
             >> assert row.label == "8.Octave"
         """
-        self.attrfields = attrfields
-        self.attrconvert = attrconvert if attrconvert else {}
-        self.attroperation = attroperation if attroperation else {}
+        self.fields = fields
+        self.conversions = conversions if conversions else {}
+        self.operations = operations if operations else {}
+        self.delete = delete if delete else []
 
     def read(self, irow):
         """Build an instance from initial row with required attributes
@@ -86,18 +108,21 @@ class RowReader(object):
         try:
             row = Row(OrderedDict([
                 (attr, irow[field])
-                for attr, field in self.attrfields.items()
+                for attr, field in self.fields.items()
             ]))
         except KeyError:
             raise RowUncomplete(
                 "row fields %s does not contain all expected fields %s"
-                % (list(irow.keys()), list(self.attrfields.values()))
+                % (list(irow.keys()), list(self.fields.values()))
             )
 
-        for attr, func in self.attrconvert.items():
+        for attr, func in self.conversions.items():
             row.setattr(attr, func(getattr(row, attr)))
 
-        for attr, func in self.attroperation.items():
+        for attr, func in self.operations.items():
             row.setattr(attr, func(row))
+
+        for attr in self.delete:
+            row.delattr(attr)
 
         return row
