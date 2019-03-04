@@ -12,8 +12,17 @@ The module ***olutils*** provide common tools to simplify project creation. It i
 
 # Installation
 
+Manual installation :
+
 ```
 git clone https://github.com/OctaveLauby/olutils.git
 cd olutils
 pip install -e .
+```
+
+# Testing
+
+```
+pytest olutils -vv
+pylint olutils --ignore-patterns=test*
 ```
