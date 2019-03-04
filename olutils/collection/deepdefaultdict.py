@@ -1,12 +1,14 @@
+"""Extensions of collections.defaultdict w. dict conv. and pretty formatting"""
+
 import collections
 
 from olutils.conversion import basedict, dict2str
 
 
-class defaultdict(collections.defaultdict):
+class DefaultDict(collections.defaultdict):
     """dict with default factory
 
-    Overloading over collections.defaultdict
+    Overload collections.defaultdict
     """
     def to_dict(self):
         """Return base dictionary from self"""
@@ -29,14 +31,18 @@ class defaultdict(collections.defaultdict):
         Args:
             *args, **kwargs: @see olutils.conversion.dict2str
         """
-        print(self.dict2str(*args, **kwargs))
+        print(self.pstring(*args, **kwargs))
 
 
-def deepdefaultdict(item_frmt, depth):
+def defaultdict(default_factory, *args, **kwargs):
+    """Return defaultdict given the default factory to produce new values"""
+    return DefaultDict(default_factory, *args, **kwargs)
+
+
+def deepdefaultdict(default_factory, depth):
     """Return a multi ladder defaultdict given the depth and the leaf frmt"""
     if depth == 0:
-        return item_frmt
+        return default_factory
     elif depth == 1:
-        return defaultdict(item_frmt)
-    else:
-        return defaultdict(lambda: deepdefaultdict(item_frmt, depth-1))
+        return defaultdict(default_factory)
+    return defaultdict(lambda: deepdefaultdict(default_factory, depth-1))

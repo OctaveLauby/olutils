@@ -47,13 +47,13 @@ def diff(list1, list2):
             'minus', set of elements in list1 and not in list2
             'plus', set of elements in list2 and not in list1
     """
-    s1 = set(list1)
-    s2 = set(list2)
-    common = s1.intersection(s2)
+    set1 = set(list1)
+    set2 = set(list2)
+    common = set1.intersection(set2)
     return {
         'common': common,
-        'minus': s1 - common,
-        'plus': s2 - common,
+        'minus': set1 - common,
+        'plus': set2 - common,
     }
 
 

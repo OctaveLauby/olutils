@@ -40,10 +40,10 @@ def load(path, mthd=None, encoding=None, **params):
     if mthd == "csv":
         res = read_csv(path, encoding=encoding, **params)
     elif mthd == "json":
-        with open(path,  encoding=encoding) as file:
+        with open(path, encoding=encoding) as file:
             res = json.load(file, **params)
     elif mthd == "pickle":
-        with open(path, "rb",  encoding=encoding) as file:
+        with open(path, "rb", encoding=encoding) as file:
             res = pickle.load(file, **params)
     else:
         raise ValueError("Unknown mthd '%s'" % mthd)

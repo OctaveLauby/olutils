@@ -1,4 +1,4 @@
-"""Convenient tools to read and encapsule rows (dictionaries)"""
+"""Convenient tools to read and encapsulate rows (dictionaries)"""
 from collections import OrderedDict
 
 from olutils import tools
@@ -21,6 +21,7 @@ class Row(OrderedDict):
             >> assert row.key2 == 2
             >> assert row.attributes == ['key1', 'key0', 'key2']
         """
+        super().__init__(content)
         self._attributes = []
         items = content.items() if isinstance(content, dict) else content
         for key, value in items:

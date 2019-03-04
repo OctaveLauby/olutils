@@ -1,4 +1,4 @@
-"""Convenient converters"""
+"""Convenient converters for temporality"""
 from datetime import datetime, timedelta
 from dateutil.parser import parse
 
@@ -10,9 +10,9 @@ def dt2float(dt):
     return (dt-DATE_REF).total_seconds()
 
 
-def float2dt(nb):
+def float2dt(timestamp):
     """Return datetime from seconds since the Unix Epoch"""
-    return DATE_REF + timedelta(seconds=nb)
+    return DATE_REF + timedelta(seconds=timestamp)
 
 
 def str2dt(string, *args, **kwargs):

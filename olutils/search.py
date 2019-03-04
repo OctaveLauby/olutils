@@ -14,6 +14,7 @@ def closest(values, elements, scope=None, strict=True):
     res = []
 
     def add(val, index, elem):
+        """Add elem to res"""
         diff = abs(elem - val)
         if scope is None:
             res.append((index, elem))

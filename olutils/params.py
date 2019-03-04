@@ -3,6 +3,7 @@ import itertools
 
 
 class Param(dict):
+    """Container for parameters where items are accessible as attributes"""
 
     def __getattr__(self, attr):
         try:
@@ -94,6 +95,7 @@ def iter_params(param_ranges):
         ranges.append(prange)
 
     def params_iter(params, ranges):
+        """Return iterable on parameters given there ranges"""
         for param_set in itertools.product(*ranges):
             yield {
                 param: value

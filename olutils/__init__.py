@@ -1,3 +1,12 @@
+"""olutils provide tools for common operation in a module
+
+- conversions
+- file writing / reading
+- object storing
+- logs
+- parameter management
+- loop monitoring
+"""
 from .collection import *
 from .conversion import *
 from .storing import *

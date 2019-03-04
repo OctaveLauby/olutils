@@ -74,10 +74,10 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
     """
     encoding = params.pop('encoding', None)
     params = read_params(params, {
-            'delimiter': ",",
-            'lineterminator': "\n",
-            'restval': None,
-            'extrasaction': "ignore"  # Ignore additional keys if rows
+        'delimiter': ",",
+        'lineterminator': "\n",
+        'restval': None,
+        'extrasaction': "ignore"  # Ignore additional keys if rows
     }, safe=False)
     i_rows = iter(rows)
 

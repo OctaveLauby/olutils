@@ -16,8 +16,7 @@ def basedict(obj, leaf_conv=lambda x: x):
             key: basedict(value, leaf_conv=leaf_conv)
             for key, value in obj.items()
         }
-    else:
-        return leaf_conv(obj)
+    return leaf_conv(obj)
 
 
 def dict2str(obj, bullets="#*>-", indent="\t", prefix="",
