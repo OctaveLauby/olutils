@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 from dateutil.parser import parse
 
+# TODO : Handle timezones
 DATE_REF = datetime(1970, 1, 1)
 
 
