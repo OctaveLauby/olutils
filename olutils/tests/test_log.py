@@ -2,7 +2,7 @@ import os
 import pytest
 import shutil
 
-from olutils import log
+from olutils import log as lib
 
 # --------------------------------------------------------------------------- #
 # Parameters
@@ -45,17 +45,17 @@ def test_create_logger():
     path1 = os.path.join(TMP_DIR, "1.log")
     path2 = os.path.join(TMP_DIR, "2.log")
 
-    log1 = log.create_logger("LogOne", lvl="DEBUG", path=path1)
-    log2 = log.create_logger("LogTwo", path=path2)  # default lvl = INFO
-    log3 = log.create_logger("LogThree", lvl="ERROR", path=path2)
+    log1 = lib.create_logger("LogOne", lvl="DEBUG", path=path1)
+    log2 = lib.create_logger("LogTwo", path=path2)  # default lvl = INFO
+    log3 = lib.create_logger("LogThree", lvl="ERROR", path=path2)
 
     log_levels(log1)
     log_levels(log2)
     log_levels(log3)
 
-    log.close_logger(log1)
-    log.close_logger(log2)
-    log.close_logger(log3)
+    lib.close_logger(log1)
+    lib.close_logger(log2)
+    lib.close_logger(log3)
 
     with open(path1) as file1:
         lines = file1.readlines()
@@ -74,54 +74,54 @@ def test_create_logger():
     # Invalid names
 
     with pytest.raises(ValueError):
-        log.create_logger(None)
+        lib.create_logger(None)
 
     with pytest.raises(TypeError):
-        log.create_logger(1)
+        lib.create_logger(1)
 
     with pytest.raises(ValueError):
-        log.create_logger("")
+        lib.create_logger("")
 
     # Existing logger
 
-    log4 = log.create_logger("LogFour")
+    log4 = lib.create_logger("LogFour")
     with pytest.raises(ValueError):
-        log.create_logger("LogFour")
-    log4 = log.create_logger("LogFour", overwrite=True)
+        lib.create_logger("LogFour")
+    log4 = lib.create_logger("LogFour", overwrite=True)
 
     assert log4.level == 20
 
 
 def test_removal():
 
-    log.clear_loggers()
-    assert len(log.get_loggers()) == 0
+    lib.clear_loggers()
+    assert len(lib.get_loggers()) == 0
 
-    log1 = log.create_logger("test_1")
-    log.create_logger("test_2")
-    assert len(log.get_loggers()) == 2
+    log1 = lib.create_logger("test_1")
+    lib.create_logger("test_2")
+    assert len(lib.get_loggers()) == 2
 
     # Close one logger
     with pytest.raises(ValueError):
-        log.create_logger("test_1")
-    log.close_logger(log1)
-    assert len(log.get_loggers()) == 1
-    log.create_logger("test_1")
-    assert len(log.get_loggers()) == 2
+        lib.create_logger("test_1")
+    lib.close_logger(log1)
+    assert len(lib.get_loggers()) == 1
+    lib.create_logger("test_1")
+    assert len(lib.get_loggers()) == 2
 
     # Close all loggers
     with pytest.raises(ValueError):
-        log.create_logger("test_1")
+        lib.create_logger("test_1")
     with pytest.raises(ValueError):
-        log.create_logger("test_2")
-    log.clear_loggers()
-    assert len(log.get_loggers()) == 0
-    log.create_logger("test_2")
-    assert len(log.get_loggers()) == 1
+        lib.create_logger("test_2")
+    lib.clear_loggers()
+    assert len(lib.get_loggers()) == 0
+    lib.create_logger("test_2")
+    assert len(lib.get_loggers()) == 1
 
 
 def test_logclass():
-    instance = log.LogClass(name="myLogInstance", loglvl="ERROR")
+    instance = lib.LogClass(name="myLogInstance", loglvl="ERROR")
 
     assert instance.get_loglvl(explicit=True) == "ERROR"
     instance.set_loglvl("INFO")
@@ -132,9 +132,9 @@ def test_logclass():
 
     # Delete (make sure logger becomes available)
     with pytest.raises(ValueError):
-        log.LogClass(name="myLogInstance")
+        lib.LogClass(name="myLogInstance")
     del instance
-    instance = log.LogClass(name="myLogInstance")
+    instance = lib.LogClass(name="myLogInstance")
     assert instance.get_loglvl(explicit=True) == "INFO"
 
     # Default loglvl

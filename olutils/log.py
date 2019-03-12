@@ -70,15 +70,15 @@ class LogClass(object):
 
 def clear_loggers():
     """Close all loggers."""
-    for logger in logging.Logger.manager.loggerDict.values():
+    for logger in get_loggers().values():
         close_logger(logger)
 
 
-def close_logger(log):
+def close_logger(logger):
     """Close logger."""
-    for handler in log.handlers:
+    for handler in logger.handlers:
         handler.close()
-        log.removeHandler(handler)
+        logger.removeHandler(handler)
 
 
 def create_logger(name, lvl="INFO", path=None, overwrite=False):
@@ -135,5 +135,5 @@ def get_loggers():
     return {
         name: logger
         for name, logger in logging.Logger.manager.loggerDict.items()
-        if logger.handlers
+        if isinstance(logger, logging.Logger) and logger.handlers
     }
