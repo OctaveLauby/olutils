@@ -113,5 +113,5 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
     with sopen(path, "w+", encoding=encoding) as file:
         # TODO : find a convenient way to raise error when field is missing
         writer = DictWriter(file, fieldnames=fieldnames, **params)
-        file.write(params.delimiter.join(header) + "\n")
+        file.write(params['delimiter'].join(header) + "\n")
         writer.writerows(rows)

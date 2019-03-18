@@ -18,7 +18,7 @@ def closest(values, elements, scope=None, strict=True):
         diff = abs(elem - val)
         if scope is None:
             res.append((index, elem))
-        elif (diff < scope if strict else diff <= scope):
+        elif diff < scope if strict else diff <= scope:
             res.append((index, elem))
         else:
             res.append((None, None))
@@ -100,7 +100,7 @@ def previous(values, elements, scope=None, strict=True):
             continue
 
         thld = elem + scope
-        if (val < thld if strict else val <= thld):
+        if val < thld if strict else val <= thld:
             res.append((index, elem))
         else:
             res.append((None, None))

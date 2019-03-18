@@ -83,7 +83,7 @@ def plotiter(elems, n_cols=2, w_subplot=False, **params):
         subplot = plotiterator.next()
 
         if w_subplot:
-            yield((subplot, elem))
+            yield subplot, elem
         else:
-            yield(elem)
+            yield elem
     plotiterator.endline()

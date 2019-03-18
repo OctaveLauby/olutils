@@ -10,7 +10,7 @@ from olutils import read_params
 # Globals
 
 DFT_FONT_PARAMS = {
-    'title': {'size': 25, 'weight': "bold",     'family': "Perpetua"},
+    'title': {'size': 25, 'weight': "bold", 'family': "Perpetua"},
     'legend': {'size': 14},
     'xlabel': {'size': 16, 'weight': "semibold", 'family': "Verdana"},
     'ylabel': {'size': 16, 'weight': "semibold", 'family': "Verdana"},
@@ -53,6 +53,7 @@ def w_deco_params(n_spaces=12, beacon="<deco_param_descr>"):
         """Decorator for function with plot decoration parameters"""
         @functools.wraps(func)
         def func_wrapper(*args, **kwargs):
+            """flat use of func"""
             return func(*args, **kwargs)
         func_wrapper.__doc__ = func.__doc__.replace(
             beacon, DECO_PARAMS_DOC_FRMT.format(spaces=" " * n_spaces)
@@ -77,35 +78,35 @@ def decorate(subplot=None, **params):
     subplot = plt.gca() if subplot is None else subplot
     params, font_params = splitparams_(params)
     if params.xlabel:
-        subplot.set_xlabel(params.xlabel)
+        subplot.set_xlabel(params['xlabel'])
         subplot.xaxis.label.set_fontproperties(
-            FontProperties(**font_params.xlabel)
+            FontProperties(**font_params['xlabel'])
         )
-    if params.ylabel:
-        subplot.set_ylabel(params.ylabel)
+    if params['ylabel']:
+        subplot.set_ylabel(params['ylabel'])
         subplot.yaxis.label.set_fontproperties(
-            FontProperties(**font_params.ylabel)
+            FontProperties(**font_params['ylabel'])
         )
-    if params.title:
-        plt.title(params.title)
+    if params['title']:
+        plt.title(params['title'])
         subplot.title.set_fontproperties(
-            FontProperties(**font_params.title)
+            FontProperties(**font_params['title'])
         )
-    if params.w_grid:
+    if params['w_grid']:
         plt.grid(True)
 
     for label in subplot.get_xticklabels():
         label.set_fontproperties(
-            FontProperties(**font_params.xticks)
+            FontProperties(**font_params['xticks'])
         )
     for label in subplot.get_yticklabels():
         label.set_fontproperties(
-            FontProperties(**font_params.yticks)
+            FontProperties(**font_params['yticks'])
         )
 
-    if len(subplot.get_legend_handles_labels()[0]):
-        prop = FontProperties(**font_params.legend)
-        subplot.legend(**params.legend, prop=prop)
+    if subplot.get_legend_handles_labels()[0]:
+        prop = FontProperties(**font_params['legend'])
+        subplot.legend(**params['legend'], prop=prop)
 
 
 @w_deco_params()
