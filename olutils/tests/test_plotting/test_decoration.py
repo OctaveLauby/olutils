@@ -61,10 +61,12 @@ def assert_dftfonts(subplot, skip=[]):
 
 def test_w_deco_params():
 
-    with pytest.raises(AssertionError):
-        plotting.w_deco_params(myfunc)
+    w_deco_params = plotting.decoration.w_deco_params
 
-    nfunc = plotting.w_deco_params(beacon="<beacon>")(myfunc)
+    with pytest.raises(AssertionError):
+        w_deco_params(myfunc)
+
+    nfunc = w_deco_params(beacon="<beacon>")(myfunc)
     assert "xlabel" in nfunc.__doc__
     assert "ylabel" in nfunc.__doc__
     assert "title" in nfunc.__doc__
@@ -103,6 +105,8 @@ def test_decorate():
 
 def test_splitparams_():
 
+    splitparams_ = plotting.decoration.splitparams_
+
     params_all = {
         'xlabel': XLABEL,
         'title': TITLE,
@@ -110,7 +114,7 @@ def test_splitparams_():
             'title': {'size': 17}
         }
     }
-    params, font_params = plotting.splitparams_(params_all)
+    params, font_params = splitparams_(params_all)
     assert params == {
         param: (
             XLABEL
@@ -135,7 +139,7 @@ def test_splitparams_():
     params_all2 = {
         'font_params': {'xticks': {'family': "Verdana"}}
     }
-    params2, font_params2 = plotting.splitparams_(
+    params2, font_params2 = splitparams_(
         params_all2, dft=params, fdft=font_params
     )
     assert params2 == params
