@@ -71,16 +71,6 @@ my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 
 ## Virtual Environment
 
-Using classical virtual environment :
-
-```
-python -m venv venv
-source venv/Scripts/activate
-pip install -r requirements.txt
-...
-deactivate
-```
-
 Using new pipenv feature (`pip install pipenv`)
 
 ```
@@ -91,9 +81,28 @@ exit
 ```
 
 
+**Comments** :
+
+1. Matplotlib does not have to be imported : plotting submodule is not loaded in that case
+
+2. One can alternatively use classic virtual environment :
+
+```
+python -m venv venv
+source venv/Scripts/activate
+python -m pip install -r requirements.txt
+...
+deactivate
+```
+
+## About
+
+
+
+
 ## Testing
 
 ```
 python -m pytest olutils -vv
-pylint olutils --ignore-patterns=test*
+python -m pylint olutils --ignore-patterns=test*
 ```
