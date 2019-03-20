@@ -12,15 +12,7 @@ The module ***olutils*** provide common tools to simplify project creation. It i
 
 ## Installation
 
-For editable code installation:
-
-```bash
-git clone https://github.com/OctaveLauby/olutils.git
-cd olutils
-pip install -e .
-```
-
-For classic installation (/!\ when library will be published):
+One can install olutils using pip install command:
 
 ```bash
 pip install olutils
@@ -69,6 +61,21 @@ my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 
 # For developers
 
+## Download the project
+
+Clone it using code:
+
+```bash
+git clone https://github.com/OctaveLauby/olutils.git
+cd olutils
+```
+
+One can make an editable code installation:
+
+```bash
+pip install -e .
+```
+
 
 ## Virtual Environment
 
@@ -103,7 +110,6 @@ deactivate
 1. Building manifest file:
 
 ```bash
-pip install check-manifest
 check-manifest --create
 ```
 
@@ -122,10 +128,15 @@ python setup.py sdist
 4. Publishing:
 
 ```bash
-pipenv install --dev twine
-pipenv shell
+python setup.py bdist_wheel sdist
 twine upload dist/*
 ```
+
+> For TestPyPi publication:  `twine upload --repository-url https://test.pypi.org/legacy/ dist/* `
+
+
+> [Not working on Git terminal](https://github.com/pypa/packaging-problems/issues/197) for some reason
+
 
 
 ## Testing
