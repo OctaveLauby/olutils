@@ -82,7 +82,7 @@ pip install -e .
 Using new pipenv feature (`pip install pipenv`)
 
 ```bash
-pipenv install
+pipenv install --dev
 pipenv shell
 ...
 exit
