@@ -12,9 +12,9 @@ The module ***olutils*** provide common tools to simplify project creation. It i
 
 ## Installation
 
-For editable code installation :
+For editable code installation:
 
-```
+```bash
 git clone https://github.com/OctaveLauby/olutils.git
 cd olutils
 pip install -e .
@@ -22,7 +22,7 @@ pip install -e .
 
 For classic installation (/!\ when library will be published):
 
-```
+```bash
 pip install olutils
 ```
 
@@ -30,7 +30,7 @@ pip install olutils
 ## Usage
 
 
-Use of temporal converters and deep defaultdict :
+Use of temporal converters and deep defaultdict:
 
 ```python
 import olutils
@@ -49,7 +49,7 @@ flights.pprint()
 ```
 
 
-File reading and object storing :
+File reading and object storing:
 
 ```python
 import olutils
@@ -69,11 +69,12 @@ my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 
 # For developers
 
+
 ## Virtual Environment
 
 Using new pipenv feature (`pip install pipenv`)
 
-```
+```bash
 pipenv install
 pipenv shell
 ...
@@ -81,13 +82,13 @@ exit
 ```
 
 
-**Comments** :
+**Comments**:
 
-1. Matplotlib does not have to be imported : plotting submodule is not loaded in that case
+1. Matplotlib does not have to be imported: plotting submodule is not loaded in that case
 
-2. One can alternatively use classic virtual environment :
+2. One can alternatively use classic virtual environment:
 
-```
+```bash
 python -m venv venv
 source venv/Scripts/activate
 python -m pip install -r requirements.txt
@@ -95,14 +96,41 @@ python -m pip install -r requirements.txt
 deactivate
 ```
 
-## About
+
+## Distribution
 
 
+1. Building manifest file:
+
+```bash
+pip install check-manifest
+check-manifest --create
+```
+
+2. Building the wheel:
+
+```bash
+python setup.py bdist_wheel
+```
+
+3. Building the source distribution:
+
+```bash
+python setup.py sdist
+```
+
+4. Publishing:
+
+```bash
+pipenv install --dev twine
+pipenv shell
+twine upload dist/*
+```
 
 
 ## Testing
 
-```
+```bash
 python -m pytest olutils -vv
 python -m pylint olutils --ignore-patterns=test*
 ```
