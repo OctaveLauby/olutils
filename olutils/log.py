@@ -94,7 +94,7 @@ def create_logger(name, lvl="INFO", path=None, overwrite=False):
     """
     if not name:
         raise ValueError(
-            "'%s' is not a valid name for a logger"
+            f"{repr(name)} is not a valid name for a logger"
         )
     logger = logging.getLogger(name)
 
@@ -102,9 +102,8 @@ def create_logger(name, lvl="INFO", path=None, overwrite=False):
     while logger.handlers:
         if not overwrite:
             raise ValueError(
-                "'%s' logger already exists"
+                f"'{name}' logger already exists"
                 ", use overwrite argument to overwrite it"
-                % name
             )
         logger.removeHandler(logger.handlers[0])
 

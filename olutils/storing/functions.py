@@ -46,7 +46,7 @@ def load(path, mthd=None, encoding=None, **params):
         with open(path, "rb", encoding=encoding) as file:
             res = pickle.load(file, **params)
     else:
-        raise ValueError("Unknown mthd '%s'" % mthd)
+        raise ValueError(f"Unknown mthd '{mthd}'")
     return res
 
 
@@ -93,4 +93,4 @@ def save(obj, path, mthd=None, encoding=None, **params):
         with sopen(path, "wb", encoding=encoding) as file:
             pickle.dump(obj, file, **params)
     else:
-        raise ValueError("Unknown method '%s'" % mthd)
+        raise ValueError(f"Unknown mthd '{mthd}'")

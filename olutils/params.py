@@ -10,7 +10,7 @@ class Param(dict):
             return self[attr]
         except KeyError:
             raise AttributeError(
-                "%s is neither a param attribute nor a field" % attr
+                f"{attr} is neither a param attribute nor a field"
             ) from None
 
     def __setattr__(self, attr, val):
@@ -18,7 +18,7 @@ class Param(dict):
             self[attr] = val
         else:
             raise AttributeError(
-                "%s is neither a param attribute nor a field" % attr
+                f"{attr} is neither a param attribute nor a field"
             )
 
 
@@ -36,8 +36,8 @@ def check_type(name, value, exp_type):
     # TODO : Manage callable and NoneType
     if not isinstance(value, exp_type):
         raise TypeError(
-            "parameter %s should be %s instance, got %s: %s"
-            % (name, exp_type, type(value), repr(value))
+            f"parameter {name} should be {exp_type} instance"
+            f", got {type(value)}: {repr(value)}"
         )
 
 
@@ -54,8 +54,8 @@ def read_params(params, dft_params, safe=True):
     """
     params = {} if params is None else params
     assert isinstance(params, dict) and isinstance(dft_params, dict), (
-        "read_params expect dict arguments : got %s and %s"
-        % (type(params), type(dft_params))
+        f"read_params expect dict arguments"
+        f": got {type(params)} and {type(dft_params)}"
     )
     res = dft_params.copy()
     wrong_params = []
@@ -65,7 +65,7 @@ def read_params(params, dft_params, safe=True):
             wrong_params.append(key)
         res[key] = val
     if wrong_params and safe:
-        raise KeyError("Unexpected params : %s" % ", ".join(wrong_params))
+        raise KeyError(f"Unexpected params : {', '.join(wrong_params)}")
     return Param(res)
 
 
@@ -114,15 +114,15 @@ def add_dft_args(parser, dft_args, flag_prefix="", help_prefix=""):
         help_prefix (str):  prefix before help
     """
     for param, dft_value in dft_args.items():
-        param_flag = "--%s%s" % (flag_prefix, param)
+        param_flag = f"--{flag_prefix}{param}"
         if isinstance(dft_value, bool):
             action = "store_false" if dft_value else "store_true"
             parser.add_argument(
                 param_flag, action=action,
-                help="%s%s" % (help_prefix, param)
+                help=f"{help_prefix}{param}"
             )
         else:
             parser.add_argument(
                 param_flag, required=False, default=dft_value,
-                help="%s%s, default is %s" % (help_prefix, param, dft_value)
+                help=f"{help_prefix}{param}, default is {dft_value}"
             )

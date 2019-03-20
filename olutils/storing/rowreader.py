@@ -38,8 +38,7 @@ class Row(OrderedDict):
             self.pop(key)
         except KeyError:
             raise AttributeError(
-                "Row does not contain attribute '%s', so it can't be deleted"
-                % key
+                f"Row does not contain attribute '{key}', it can't be deleted"
             ) from None
 
     def pop(self, key, *args, **kwargs):
@@ -112,8 +111,7 @@ class RowReader(object):
         except KeyError:
             diff = tools.diff(irow.keys(), self.fields.values())
             raise KeyError(
-                "Row is missing some keys: %s"
-                % ", ".join(map(repr, diff['plus']))
+                f"Row is missing keys: {', '.join(map(repr, diff['plus']))}"
             ) from None
 
         for attr, func in self.conversions.items():

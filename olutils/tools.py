@@ -26,11 +26,11 @@ def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
     i = 0
     for i, elem in enumerate(a, start):
         if verbose and (i == start or i % v_batch == 0):
-            print("\r" + prefix + "%s/%s" % (i, n) + suffix, end="")
+            print(f"\r{prefix}{i}/{n}{suffix}", end="")
         yield (i, elem) if w_count else elem
 
     if verbose:
-        print("\r" + prefix + "%s/%s" % (i, n) + suffix, end="")
+        print(f"\r{prefix}{i}/{n}{suffix}", end="")
         print()
 
 

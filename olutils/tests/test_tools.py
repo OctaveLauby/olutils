@@ -11,22 +11,22 @@ def test_countiter(capfd):
 
     for i, elem in enumerate(tools.countiter([1, 2, 3]), 1):
         assert elem == i
-        assert readout(capfd) == "\r%s/3" % i
+        assert readout(capfd) == f"\r{i}/3"
     assert readout(capfd) == "\r3/3\n"
 
     for i, elem in tools.countiter([1, 2, 3], w_count=True):
         assert elem == i
-        assert readout(capfd) == "\r%s/3" % i
+        assert readout(capfd) == f"\r{i}/3"
     assert readout(capfd) == "\r3/3\n"
 
     for i, elem in tools.countiter([1, 2, 3], w_count=True, start=2):
         assert elem == i-1
-        assert readout(capfd) == "\r%s/4" % i
+        assert readout(capfd) == f"\r{i}/4"
     assert readout(capfd) == "\r4/4\n"
 
     for i, elem in tools.countiter(iter([1, 2, 3]), w_count=True, start=0):
         assert elem == i+1
-        assert readout(capfd) == "\r%s/?" % i
+        assert readout(capfd) == f"\r{i}/?"
     assert readout(capfd) == "\r2/?\n"
 
     alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -36,7 +36,7 @@ def test_countiter(capfd):
     for i, elem in iterator:
         assert elem == alphabet[i-1]
         if i == 1 or i % 5 == 0:
-            assert readout(capfd) == "\r> %s/26 <" % i
+            assert readout(capfd) == f"\r> {i}/26 <"
         else:
             assert readout(capfd) == ""
     assert readout(capfd) == "\r> 26/26 <\n"

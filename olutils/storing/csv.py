@@ -41,7 +41,7 @@ def read_csv(path, delimiter="smart", encoding=None, **params):
         ], key=lambda i: i[1], reverse=True)
         delimiter, n_cols = delimiters[0]
         if n_cols <= 1:
-            raise ValueError("Could not find delimiter of '%s'" % path)
+            raise ValueError(f"Could not find delimiter of '{path}'")
 
     def row_iterator(path):
         """Iterate row of file at path"""
@@ -104,8 +104,8 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
     # Read and compute header
     header = fieldnames if header is None else header
     assert len(header) == len(fieldnames), (
-        "Specified header (%s) must have same length as fieldnames (%s)"
-        % (len(header), len(fieldnames))
+        f"Specified header must have same length as fieldnames"
+        f" ({len(header)} != {len(fieldnames)})"
     )
     if pretty:
         header = [
