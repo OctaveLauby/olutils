@@ -56,6 +56,13 @@ def test_read_csv(capfd):
     filepath = os.path.join(MOCK_DIR, "base_tab.csv")
     assert list(storing.read_csv(filepath)) == rows
 
+    filepath = os.path.join(MOCK_DIR, "base_dash.csv")
+    with pytest.raises(ValueError):
+        storing.read_csv(filepath)
+
+    filepath = os.path.join(MOCK_DIR, "base_dash.csv")
+    assert list(storing.read_csv(filepath, delimiter="-")) == rows
+
     filepath = os.path.join(MOCK_DIR, "base_comma_lg.csv")
     for i, row in enumerate(storing.read_csv(filepath), 1):
         if i in [1, 3, 8]:

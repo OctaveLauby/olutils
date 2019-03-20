@@ -43,11 +43,15 @@ def read_csv(path, delimiter="smart", encoding=None, **params):
         if n_cols <= 1:
             raise ValueError("Could not find delimiter of '%s'" % path)
 
+    def row_iterator(path):
+        """Iterate row of file at path"""
+        with open(path, encoding=encoding) as file:
+            reader = DictReader(file, delimiter=delimiter)
+            for elem in countiter(reader, start=1, **params):
+                yield elem
+
     params['v_batch'] = params.pop('v_batch', 0)
-    with open(path, encoding=encoding) as file:
-        reader = DictReader(file, delimiter=delimiter)
-        for elem in countiter(reader, start=1, **params):
-            yield elem
+    return row_iterator(path)
 
 
 def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
