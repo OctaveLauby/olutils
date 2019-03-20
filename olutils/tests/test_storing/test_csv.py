@@ -214,10 +214,17 @@ def test_write_csv():
 
     # # Fst row not dictionary
     with pytest.raises(TypeError):
-        storing.write_csv(["ab", "cd"])
+        storing.write_csv(["ab", "cd"], filepath)
     assert_content_equal(filepath, "c_1,c_2\n")
 
     # # rows not iterable on dict
     with pytest.raises(TypeError):
-        storing.write_csv({'key': "value"})
+        storing.write_csv({'key': "value"}, filepath)
     assert_content_equal(filepath, "c_1,c_2\n")
+
+    # # fieldnames and header do not have same length
+    with pytest.raises(AssertionError):
+        storing.write_csv([
+            OrderedDict([('col_1', "val_11"), ('col_2', "val_12")]),
+            OrderedDict([('col_1', ""), ('col_2', None)]),
+        ], filepath, header=["First, Column", "Second Column", "Third Column"])
