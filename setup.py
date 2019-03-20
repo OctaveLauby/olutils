@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -6,15 +6,14 @@ with open("README.md", "r") as fh:
 setup(
     # Library description
     name="olutils",
-    version="0.2",
+    version="0.2.0",
     description="tools for common operations in a module",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords="utils tools",
 
     # Packages / Modules
-    py_modules=["olutils"],
-    package_dir={'': "olutils"},
+    packages=find_packages(),
     install_requires=[
         "python-dateutil>=2.8.0",
     ],
@@ -29,7 +28,8 @@ setup(
     classifiers=[
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6.5",
+        "Programming Language :: Python :: 3.6"
         "Operating System :: OS Independent",
+        "License :: OSI Approved :: Apache 2.0 license",
     ],
 )
