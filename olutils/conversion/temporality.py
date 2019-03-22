@@ -13,7 +13,7 @@ def dt2float(dt):
 
 def float2dt(timestamp):
     """Return datetime from seconds since the Unix Epoch"""
-    return DATE_REF + timedelta(seconds=timestamp)
+    return DATE_REF + timedelta(seconds=float(timestamp))
 
 
 def str2dt(string, *args, **kwargs):
