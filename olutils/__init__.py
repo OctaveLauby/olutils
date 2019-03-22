@@ -14,6 +14,7 @@ from .collection import (
 )
 from .conversion import (
     basedict,
+    convert_ts,
     dict2str,
     dt2float,
     float2dt,
