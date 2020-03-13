@@ -16,6 +16,7 @@ def assert_content_equal(path, content):
 
 
 def readout(capfd):
+    """Read output"""
     return capfd.readouterr()[0]
 
 
@@ -24,12 +25,12 @@ def readout(capfd):
 
 def setup_function(function):
     if os.path.exists(TMP_DIR):
-        shutil.rmtree("tmp")
+        shutil.rmtree(TMP_DIR)
 
 
 def teardown_function(function):
     if os.path.exists(TMP_DIR):
-        shutil.rmtree("tmp")
+        shutil.rmtree(TMP_DIR)
 
 
 # --------------------------------------------------------------------------- #
