@@ -82,31 +82,25 @@ pip install -e .
 
 ## Virtual Environment
 
-Using new pipenv feature (`pip install pipenv`)
-
 ```bash
-pipenv install --dev
-pipenv shell
+python -m venv venv
+source venv/Scripts/activate
+python -m pip install -r requirements.txt
 ...
-exit
+deactivate
 ```
 
-**Comments**:
-
-1. matplotlib does not have to be imported: plotting submodule is not loaded in that case
-
-2. One can alternatively use classic virtual environment:
-
-    ```bash
-    python -m venv venv
-    source venv/Scripts/activate
-    python -m pip install -r requirements.txt
-    ...
-    deactivate
-    ```
+> matplotlib does not have to be imported: plotting submodule is not loaded in that case
 
 
 ## Distribution
+
+0. Install distribution libraries
+
+    ```bash
+    pip install check-manifest
+    pip install twine
+    ```
 
 1. Building manifest file:
 
