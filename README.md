@@ -10,7 +10,7 @@ The module ***olutils*** provide common tools to simplify project creation. It i
 - class with logger
 - parameter management
 - object management (copy, saving, loading)
-- plotting [if matplotlib available]
+- plotting (if matplotlib available)
 
 
 ## Installation
