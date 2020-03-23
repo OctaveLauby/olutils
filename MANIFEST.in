@@ -1,5 +1,4 @@
 include *.lock
 include *.txt
 include LICENSE
-include Pipfile
 recursive-include olutils *.csv
