@@ -43,6 +43,6 @@ def deepdefaultdict(default_factory, depth):
     """Return a multi ladder defaultdict given the depth and the leaf frmt"""
     if depth == 0:
         return default_factory
-    elif depth == 1:
+    if depth == 1:
         return defaultdict(default_factory)
     return defaultdict(lambda: deepdefaultdict(default_factory, depth-1))

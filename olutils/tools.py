@@ -2,11 +2,11 @@
 from time import sleep, time
 
 
-def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
+def countiter(array, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
     """Iter elems from a while counting
 
     Args:
-        a (iterable)
+        array (iterable)
         start (int)     : count starting point
         w_count (bool)  : also yield count
         v_batch (int)   : number of iteration b/w displays
@@ -18,20 +18,20 @@ def countiter(a, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
             if w_count: yield (i, elem)
             else: yield elem
     """
-    verbose = True if v_batch else False
+    verbose = bool(v_batch)
     try:
-        n = len(a) + start - 1
+        size = len(array) + start - 1
     except TypeError:
-        n = "?"
+        size = "?"
 
     i = 0
-    for i, elem in enumerate(a, start):
+    for i, elem in enumerate(array, start):
         if verbose and (i == start or i % v_batch == 0):
-            print(f"\r{prefix}{i}/{n}{suffix}", end="")
+            print(f"\r{prefix}{i}/{size}{suffix}", end="")
         yield (i, elem) if w_count else elem
 
     if verbose:
-        print(f"\r{prefix}{i}/{n}{suffix}", end="")
+        print(f"\r{prefix}{i}/{size}{suffix}", end="")
         print()
 
 
@@ -65,15 +65,15 @@ def display(*args, **kwargs):
         v, verbose (bool): whether to print or not
         *args, **kwargs: @see print
     """
-    v, verbose = kwargs.pop("v", None), kwargs.pop("verbose", None)
-    if isinstance(v, bool) and isinstance(verbose, bool):
+    verb1, verb2 = kwargs.pop("v", None), kwargs.pop("verbose", None)
+    if isinstance(verb1, bool) and isinstance(verb2, bool):
         raise TypeError(
-            "Got multiple values for verbose argument 'v'/'verbose'"
+            "Got multiple values for verbose argument 'v'/'verb2'"
         )
     verb = (
-        (verbose is None or verbose)
-        if v is None
-        else (v is None or v)
+        (verb2 is None or verb2)
+        if verb1 is None
+        else (verb1 is None or verb1)
     )
     if verb:
         print(*args, **kwargs)

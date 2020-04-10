@@ -131,7 +131,7 @@ def splitparams_(params, dft=None, fdft=None):
 # -------------------------------------------------------------------------- #
 # PlotDesigner
 
-class PlotDesigner(object):
+class PlotDesigner:
     """Store plot-decorations when plotting same kind graph
 
     Example:

@@ -11,6 +11,21 @@ HOUR = 3600
 DAY = 24 * HOUR
 YEAR = 365.25 * DAY
 
+UNIT_TO_SEC = {
+    's': 1,
+    'sec': 1,
+    'second': 1,
+    'min': 60,
+    'minute': 60,
+    'h': HOUR,
+    'hour': HOUR,
+    'd': DAY,
+    'day': DAY,
+    'month': YEAR / 12,
+    'y': YEAR,
+    'year': YEAR,
+}
+
 
 def convert_ts(x, unit):
     """Convert timestamp(s) in secs to given unit from given start
@@ -19,7 +34,6 @@ def convert_ts(x, unit):
         x (float or iterable): timestamp(s)
         unit (str): unit to convert into (min, day, month, year, dt, td)
 
-
     Return:
         (float or iterable)
             if x is list, set or tuple, return list set or tuple
@@ -27,31 +41,23 @@ def convert_ts(x, unit):
             elif x is another iterable, return map-object
     """
     try:
-        if unit in ["s", "sec"]:
-            return x
-        elif unit == "min":
-            return x / 60
-        elif unit == "hour":
-            return x / HOUR
-        elif unit == "day":
-            return x / DAY
-        elif unit == "month":
-            return (12 * x) / YEAR
-        elif unit == "year":
-            return x / YEAR
-        elif unit in ["dt", "datetime"]:
+        divisor = UNIT_TO_SEC[unit]
+    except KeyError:
+        divisor = None
+    try:
+        if divisor:
+            return x / divisor
+        if unit in ["dt", "datetime"]:
             return float2dt(x)
-        elif unit in ["td", "timedelta"]:
+        if unit in ["td", "timedelta"]:
             return timedelta(seconds=float(x))
-        else:
-            raise ValueError("Unknown time unit '%s'" % unit)
+        raise ValueError("Unknown time unit '%s'" % unit)
     except TypeError:
         if isinstance(x, (list, set, tuple)):
             return type(x)(convert_ts(tick, unit) for tick in x)
-        elif isinstance(x, Iterable):
+        if isinstance(x, Iterable):
             return map(lambda tick: convert_ts(tick, unit), x)
-        else:
-            raise TypeError(f"Can't convert type {type(x)}") from None
+        raise TypeError(f"Can't convert type {type(x)}") from None
 
 
 def dt2float(dt):

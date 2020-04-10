@@ -11,7 +11,7 @@ import logging
 import os
 
 
-class LogClass(object):
+class LogClass:
     """Class with logger included.
 
     Use log of instance with:
@@ -48,11 +48,11 @@ class LogClass(object):
             return lvl_int
         if lvl_int <= 10:
             return 'DEBUG'
-        elif lvl_int <= 20:
+        if lvl_int <= 20:
             return 'INFO'
-        elif lvl_int <= 30:
+        if lvl_int <= 30:
             return 'WARNING'
-        elif lvl_int <= 40:
+        if lvl_int <= 40:
             return 'ERROR'
         return 'FATAL'
 

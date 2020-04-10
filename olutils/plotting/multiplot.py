@@ -1,7 +1,8 @@
+"""Tools to ease multi plotting"""
 import matplotlib.pyplot as plt
 
 
-class MultiPlotIterator(object):
+class MultiPlotIterator:
     """Iterator for multi plot per line (convenient in notebooks)"""
 
     def __init__(self, n_cols=2, test_mode=False):
@@ -16,9 +17,9 @@ class MultiPlotIterator(object):
         self._n_shows = 0
 
         if test_mode:
-            self._show = lambda: plt.clf()
+            self._show = plt.clf
         else:
-            self._show = lambda: plt.show()
+            self._show = plt.show
 
     @property
     def count(self):

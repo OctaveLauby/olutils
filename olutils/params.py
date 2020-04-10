@@ -33,7 +33,6 @@ def check_type(name, value, exp_type):
     Raise:
         (TypeError) if type not correct
     """
-    # TODO : Manage callable and NoneType
     if not isinstance(value, exp_type):
         raise TypeError(
             f"parameter {name} should be {exp_type} instance"
@@ -98,8 +97,7 @@ def iter_params(param_ranges):
         """Return iterable on parameters given there ranges"""
         for param_set in itertools.product(*ranges):
             yield {
-                param: value
-                for param, value in zip(params, param_set)
+                param: value for param, value in zip(params, param_set)
             }
     return params_iter(params, ranges)
 

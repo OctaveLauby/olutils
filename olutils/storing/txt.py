@@ -1,5 +1,4 @@
 """This module provide functions to read and write text files."""
-import re
 from collections.abc import Iterable
 
 from olutils.files import sopen
@@ -30,7 +29,7 @@ def read_txt(path, rtype="list", w_eol=True, f_eol=None,
     """
     # Define function to map lines
     if not w_eol:
-        line_conv = lambda line: rm_eol(line)
+        line_conv = rm_eol
     elif f_eol is None:
         line_conv = lambda line: line
     elif isinstance(f_eol, str):
@@ -49,12 +48,11 @@ def read_txt(path, rtype="list", w_eol=True, f_eol=None,
     line_iter = line_iterator(path)
     if rtype in [list, "list"]:
         return [line_conv(line) for line in line_iter]
-    elif rtype in [Iterable, "iter", "iterable"]:
+    if rtype in [Iterable, "iter", "iterable"]:
         return line_iter
-    elif rtype in [str, "str", "string"]:
+    if rtype in [str, "str", "string"]:
         return "".join(line_iter)
-    else:
-        return ValueError(f"Unexpected value for rtype param: {rtype}")
+    return ValueError(f"Unexpected value for rtype param: {rtype}")
 
 
 def write_txt(content, path, has_eol=True, eol=DFT_EOL, encoding=None):

@@ -59,7 +59,7 @@ class Row(OrderedDict):
         setattr(self, key, value)
 
 
-class RowReader(object):
+class RowReader:
     """Convenient row reader that includes attr conversions and building"""
 
     def __init__(self, fields, conversions=None, operations=None, delete=None):
