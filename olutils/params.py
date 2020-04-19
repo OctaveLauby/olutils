@@ -40,13 +40,14 @@ def check_type(name, value, exp_type):
         )
 
 
-def read_params(params, dft_params, safe=True):
+def read_params(params, dft_params, safe=True, skip_extra=True):
     """Return params completed with dft params in convenient dict-like object
 
     Args:
         params (NoneType or dict): list of params given by user
         dft_params (dict): expected parameters with default values
         safe (bool): raises KeyError if params contains key not in dft_params
+        skip_extra (bool): skip extra keys
 
     Return:
         (Param) dict-like structure where params are accessible as attributes
@@ -62,6 +63,8 @@ def read_params(params, dft_params, safe=True):
     for key, val in params.items():
         if key not in res:
             wrong_params.append(key)
+            if skip_extra:
+                continue
         res[key] = val
     if wrong_params and safe:
         raise KeyError(f"Unexpected params : {', '.join(wrong_params)}")

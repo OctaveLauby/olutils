@@ -30,7 +30,12 @@ def test_read_params():
         params.read_params({"a": 1, "c": 3}, {"a": 0, "b": 2})
 
     kwargs = params.read_params({"a": 1, "c": 3}, {"a": 0, "b": 2}, safe=False)
-    assert kwargs == {'a': 1, 'b': 2, 'c': 3}
+    assert kwargs == {'a': 1, 'b': 2}
+
+    kwargs = params.read_params(
+        {"a": 1, "c": 3}, {"a": 0, "b": 2}, safe=False, skip_extra=False
+    )
+    assert kwargs == {'a': 1, 'b': 2, "c": 3}
 
 
 def test_add_dft_args(capfd):
