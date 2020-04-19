@@ -40,35 +40,54 @@ def check_type(name, value, exp_type):
         )
 
 
-def read_params(params, dft_params, safe=True, skip_extra=True):
+def read_params(params, dft_params, safe=True):
     """Return params completed with dft params in convenient dict-like object
 
     Args:
         params (NoneType or dict): list of params given by user
-        dft_params (dict): expected parameters with default values
+        dft_params (dict or list): expected parameters with default values
+            (dict) -> reduce-complete params with dft_params
+            (list) -> return list of dict where dict at index i is params
+                        reduced & completed with dft_params[i]
         safe (bool): raises KeyError if params contains key not in dft_params
-        skip_extra (bool): skip extra keys
+
+    Example:
+        >>> params.read_params({'a': 0}, {'a': 1, 'b': 2})
+        kwargs == {'a': 0, 'b': 2}
+
+        >>> params.read_params({'a': 0, 'c': 8}, {'a': 1, 'b': 2}, safe=False)
+        kwargs == {'a': 0, 'b': 2}
+
+        >>> params.read_params(
+        ...     {'a': 0, 'c': 8},
+        ...     [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],
+        ... )
+        kwargs == [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
 
     Return:
         (Param) dict-like structure where params are accessible as attributes
+        or (list[Param}) if  dft_params is a list of params
     """
     params = {} if params is None else params
-    assert isinstance(params, dict) and isinstance(dft_params, dict), (
-        f"read_params expect dict arguments"
-        f": got {type(params)} and {type(dft_params)}"
-    )
-    res = dft_params.copy()
-    wrong_params = []
-    params = params if params else {}
+    r_dict  = isinstance(dft_params, dict)
+    dft_set = [dft_params] if r_dict else dft_params
+
+    results = [dft.copy() for dft in dft_set]
+    key_usage = {}
     for key, val in params.items():
-        if key not in res:
-            wrong_params.append(key)
-            if skip_extra:
-                continue
-        res[key] = val
+        if not key in key_usage:
+            key_usage[key] = 0
+        for res in results:
+            if key in res:
+                res[key] = val
+                key_usage[key] += 1
+
+    wrong_params = [key for key, val in key_usage.items() if not val]
     if wrong_params and safe:
         raise KeyError(f"Unexpected params : {', '.join(wrong_params)}")
-    return Param(res)
+
+    results = [Param(res) for res in results]
+    return results[0] if r_dict else results
 
 
 def iter_params(param_ranges):

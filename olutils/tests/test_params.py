@@ -18,24 +18,49 @@ def test_check_type():
 
 
 def test_read_params():
-    kwargs = params.read_params({"a": 1}, {"a": 0, "b": 2})
-    assert kwargs == {'a': 1, 'b': 2}
-    assert kwargs.a == 1
+
+    # ---- Single default params
+    kwargs = params.read_params({'a': 0}, {'a': 1, 'b': 2})
+    assert kwargs == {'a': 0, 'b': 2}
+    assert kwargs.a == 0
     assert kwargs.b == 2
     kwargs.b = 3
     assert kwargs.b == 3
-    assert kwargs == {'a': 1, 'b': 3}
+    assert kwargs == {'a': 0, 'b': 3}
 
     with pytest.raises(KeyError):
-        params.read_params({"a": 1, "c": 3}, {"a": 0, "b": 2})
+        params.read_params({'a': 0, 'c': 8}, {'a': 1, 'b': 2})
 
-    kwargs = params.read_params({"a": 1, "c": 3}, {"a": 0, "b": 2}, safe=False)
-    assert kwargs == {'a': 1, 'b': 2}
+    kwargs = params.read_params({'a': 0, 'c': 8}, {'a': 1, 'b': 2}, safe=False)
+    assert kwargs == {'a': 0, 'b': 2}
+
+    # ---- Multiple default params
+    kwargs = params.read_params(
+        {'a': 0, 'c': 8}, [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],
+    )
+    assert kwargs == [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
+
+    with pytest.raises(KeyError):
+        kwargs = params.read_params(
+            {'a': 0, 'c': 8, 'e': 10}, [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],
+        )
 
     kwargs = params.read_params(
-        {"a": 1, "c": 3}, {"a": 0, "b": 2}, safe=False, skip_extra=False
+        {'a': 0, 'c': 8, 'e': 10},
+        [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],
+        safe=False
     )
-    assert kwargs == {'a': 1, 'b': 2, "c": 3}
+    assert kwargs == [{'a': 0, 'b': 2}, {'c': 8, 'd': 4}]
+
+    kwargs = params.read_params(
+        {'a': 0, 'c': 8, 'e': 10},
+        [{'a': 1, 'b': 2, 'e': 5, 'f': 6}, {'c': 3, 'd': 4, 'e': 5, 'f': 7}],
+        safe=False
+    )
+    assert kwargs == [
+        {'a': 0, 'b': 2, 'e': 10, 'f': 6},
+        {'c': 8, 'd': 4, 'e': 10, 'f': 7},
+    ]
 
 
 def test_add_dft_args(capfd):
