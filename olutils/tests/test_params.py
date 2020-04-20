@@ -35,7 +35,7 @@ def test_read_params():
     assert kwargs == {'a': 0, 'b': 2}
 
     kwargs = params.read_params(
-        {'a': params._default, 'b': None}, {'a': 1, 'b': 2}
+        {'a': params.DFT, 'b': None}, {'a': 1, 'b': 2}
     )
     assert kwargs == {'a': 1, 'b': None}
 
@@ -47,7 +47,7 @@ def test_read_params():
     assert kwargs == [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
 
     with pytest.raises(KeyError):
-        kwargs = params.read_params(
+        params.read_params(
             {'a': 0, 'c': 8, 'e': 10}, [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],
         )
 

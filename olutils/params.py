@@ -1,7 +1,7 @@
 """Utils to manage parameters and arguments"""
 import itertools
 
-_default = object()
+DFT = object()
 
 
 class Param(dict):
@@ -42,7 +42,7 @@ def check_type(name, value, exp_type):
         )
 
 
-def read_params(params, dft_params, safe=True, default=_default):
+def read_params(params, dft_params, safe=True, default=DFT):
     """Return params completed with dft params in convenient dict-like object
 
     Args:
@@ -63,7 +63,7 @@ def read_params(params, dft_params, safe=True, default=_default):
         kwargs == {'a': 0, 'b': 2}
 
         >>> params.read_params(
-        ...     {'a': _default, 'b': None},
+        ...     {'a': DFT, 'b': None},
         ...     {'a': 1, 'b': 2},
         ... )
         kwargs == {'a': 1, 'b': None}
