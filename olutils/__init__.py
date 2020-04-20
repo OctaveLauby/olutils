@@ -45,6 +45,7 @@ from .params import (
     iter_params,
     Param,
     read_params,
+    _default,
 )
 from .search import (
     closest,

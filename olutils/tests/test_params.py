@@ -34,6 +34,12 @@ def test_read_params():
     kwargs = params.read_params({'a': 0, 'c': 8}, {'a': 1, 'b': 2}, safe=False)
     assert kwargs == {'a': 0, 'b': 2}
 
+    kwargs = params.read_params(
+        {'a': params._default, 'b': None}, {'a': 1, 'b': 2}
+    )
+    assert kwargs == {'a': 1, 'b': None}
+
+
     # ---- Multiple default params
     kwargs = params.read_params(
         {'a': 0, 'c': 8}, [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],

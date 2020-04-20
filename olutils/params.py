@@ -1,6 +1,8 @@
 """Utils to manage parameters and arguments"""
 import itertools
 
+_default = object()
+
 
 class Param(dict):
     """Container for parameters where items are accessible as attributes"""
@@ -40,7 +42,7 @@ def check_type(name, value, exp_type):
         )
 
 
-def read_params(params, dft_params, safe=True):
+def read_params(params, dft_params, safe=True, default=_default):
     """Return params completed with dft params in convenient dict-like object
 
     Args:
@@ -50,6 +52,8 @@ def read_params(params, dft_params, safe=True):
             (list) -> return list of dict where dict at index i is params
                         reduced & completed with dft_params[i]
         safe (bool): raises KeyError if params contains key not in dft_params
+        default (object): value in params to replace with dft_params
+            similar to no param in params
 
     Example:
         >>> params.read_params({'a': 0}, {'a': 1, 'b': 2})
@@ -57,6 +61,12 @@ def read_params(params, dft_params, safe=True):
 
         >>> params.read_params({'a': 0, 'c': 8}, {'a': 1, 'b': 2}, safe=False)
         kwargs == {'a': 0, 'b': 2}
+
+        >>> params.read_params(
+        ...     {'a': _default, 'b': None},
+        ...     {'a': 1, 'b': 2},
+        ... )
+        kwargs == {'a': 1, 'b': None}
 
         >>> params.read_params(
         ...     {'a': 0, 'c': 8},
@@ -73,16 +83,19 @@ def read_params(params, dft_params, safe=True):
     dft_set = [dft_params] if r_dict else dft_params
 
     results = [dft.copy() for dft in dft_set]
-    key_usage = {}
+    key_is_default = {}  # make sure keys from params are in defaults
     for key, val in params.items():
-        if not key in key_usage:
-            key_usage[key] = 0
-        for res in results:
-            if key in res:
-                res[key] = val
-                key_usage[key] += 1
+        if not key in key_is_default:
+            key_is_default[key] = False
+        for result in results:
+            if key not in result:
+                continue
+            key_is_default[key] += True
+            if val is default:
+                continue
+            result[key] = val
 
-    wrong_params = [key for key, val in key_usage.items() if not val]
+    wrong_params = [key for key, val in key_is_default.items() if not val]
     if wrong_params and safe:
         raise KeyError(f"Unexpected params : {', '.join(wrong_params)}")
 
