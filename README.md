@@ -2,32 +2,31 @@ olutils
 ---
 
 
+
 # Introduction
 
 The module ***olutils*** provide common tools to simplify project creation. It includes:
+
 - class with logger
 - parameter management
 - object management (copy, saving, loading)
-- plotting [if matplotlib available]
+- plotting (if matplotlib available)
 
 
 ## Installation
 
 One can install olutils using pip install command:
 
-```bash
-pip install olutils
-```
-
+    ```bash
+    pip install olutils
+    ```
 
 ## Usage
-
 
 Use of temporal converters and deep defaultdict:
 
 ```python
 import olutils
-
 
 # Building a deep default dict with datetimes as values
 flights = olutils.deepdefaultdict(lambda x: None, depth=2)
@@ -40,7 +39,6 @@ flights['NY-Paris']['arrival'] = olutils.str2dt("2019-01-15 11:00+01:00")
 
 flights.pprint()
 ```
-
 
 File reading and object storing:
 
@@ -61,9 +59,24 @@ my_loaded_rows = olutils.load("output/my_rows.csv")
 my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 ```
 
+Multi-plotting
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+from olutils import plotiter
+
+for i in plotiter(range(5), n_cols=3):
+    x = [i + k/10 for k in range(10)]
+    y = [np.sin(xk) for xk in x]
+    plt.plot(x, y)
+```
+
 
 
 # For developers
+
 
 ## Download the project
 
@@ -83,22 +96,6 @@ pip install -e .
 
 ## Virtual Environment
 
-Using new pipenv feature (`pip install pipenv`)
-
-```bash
-pipenv install --dev
-pipenv shell
-...
-exit
-```
-
-
-**Comments**:
-
-1. Matplotlib does not have to be imported: plotting submodule is not loaded in that case
-
-2. One can alternatively use classic virtual environment:
-
 ```bash
 python -m venv venv
 source venv/Scripts/activate
@@ -107,40 +104,46 @@ python -m pip install -r requirements.txt
 deactivate
 ```
 
+> matplotlib does not have to be imported: plotting submodule is not loaded in that case
+
 
 ## Distribution
 
+0. Install distribution libraries
+
+    ```bash
+    pip install check-manifest
+    pip install twine
+    ```
 
 1. Building manifest file:
 
-```bash
-check-manifest --create
-```
+    ```bash
+    check-manifest --create
+    ```
 
 2. Building the wheel:
 
-```bash
-python setup.py bdist_wheel
-```
+    ```bash
+    python setup.py bdist_wheel
+    ```
 
 3. Building the source distribution:
 
-```bash
-python setup.py sdist
-```
+    ```bash
+    python setup.py sdist
+    ```
 
 4. Publishing:
 
-```bash
-python setup.py bdist_wheel sdist
-twine upload dist/*
-```
+    ```bash
+    python setup.py bdist_wheel sdist
+    twine upload dist/*
+    ```
 
 > For TestPyPi publication:  `twine upload --repository-url https://test.pypi.org/legacy/ dist/* `
 
-
 > [Not working on Git terminal](https://github.com/pypa/packaging-problems/issues/197) for some reason
-
 
 
 ## Testing

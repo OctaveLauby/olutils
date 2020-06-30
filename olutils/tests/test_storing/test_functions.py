@@ -57,3 +57,11 @@ def test_save_load():
     with pytest.raises(pickle.UnpicklingError):
         storing.load(path, mthd="pickle")
     assert storing.load(path, mthd="json") == obj
+
+    # Test txt load and save
+    content = "some text"
+    path = path_frmt.format("txt")
+    storing.save(content, path)
+    assert storing.load(path, rtype=str) == content
+    storing.save([content], path, has_eol=False)
+    assert storing.load(path) == [content+"\n"]

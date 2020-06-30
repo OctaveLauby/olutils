@@ -17,6 +17,7 @@ from itertools import chain
 from olutils.files import sopen
 from olutils.params import read_params
 from olutils.tools import countiter
+from .common import DFT_EOL
 
 
 def read_csv(path, delimiter="smart", encoding=None, **params):
@@ -67,7 +68,7 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
         encoding    (str)           : encoding to open output
         params (dict): @see params for csv.DictWriter
             delimiter       dft is ","
-            lineterminator  dft is "\n"
+            lineterminator  dft is DFT_EOL
             restval         dft is None if field missing in a row
             extrasaction    dft is "ignore" additional fields in rows
 
@@ -79,7 +80,7 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
     encoding = params.pop('encoding', None)
     params = read_params(params, {
         'delimiter': ",",
-        'lineterminator': "\n",
+        'lineterminator': DFT_EOL,
         'restval': None,
         'extrasaction': "ignore"  # Ignore additional keys if rows
     }, safe=False)
@@ -117,5 +118,8 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
     with sopen(path, "w+", encoding=encoding) as file:
         # TODO : find a convenient way to raise error when field is missing
         writer = DictWriter(file, fieldnames=fieldnames, **params)
-        file.write(params['delimiter'].join(header) + "\n")
+        file.write(
+            params['delimiter'].join(header)
+            + params['lineterminator']
+        )
         writer.writerows(rows)

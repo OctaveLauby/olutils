@@ -1,6 +1,8 @@
 """Utils to manage parameters and arguments"""
 import itertools
 
+DFT = object()
+
 
 class Param(dict):
     """Container for parameters where items are accessible as attributes"""
@@ -33,7 +35,6 @@ def check_type(name, value, exp_type):
     Raise:
         (TypeError) if type not correct
     """
-    # TODO : Manage callable and NoneType
     if not isinstance(value, exp_type):
         raise TypeError(
             f"parameter {name} should be {exp_type} instance"
@@ -41,32 +42,65 @@ def check_type(name, value, exp_type):
         )
 
 
-def read_params(params, dft_params, safe=True):
+def read_params(params, dft_params, safe=True, default=DFT):
     """Return params completed with dft params in convenient dict-like object
 
     Args:
         params (NoneType or dict): list of params given by user
-        dft_params (dict): expected parameters with default values
+        dft_params (dict or list): expected parameters with default values
+            (dict) -> reduce-complete params with dft_params
+            (list) -> return list of dict where dict at index i is params
+                        reduced & completed with dft_params[i]
         safe (bool): raises KeyError if params contains key not in dft_params
+        default (object): value in params to replace with dft_params
+            similar to no param in params
+
+    Example:
+        >>> params.read_params({'a': 0}, {'a': 1, 'b': 2})
+        kwargs == {'a': 0, 'b': 2}
+
+        >>> params.read_params({'a': 0, 'c': 8}, {'a': 1, 'b': 2}, safe=False)
+        kwargs == {'a': 0, 'b': 2}
+
+        >>> params.read_params(
+        ...     {'a': DFT, 'b': None},
+        ...     {'a': 1, 'b': 2},
+        ... )
+        kwargs == {'a': 1, 'b': None}
+
+        >>> params.read_params(
+        ...     {'a': 0, 'c': 8},
+        ...     [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],
+        ... )
+        kwargs == [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
 
     Return:
         (Param) dict-like structure where params are accessible as attributes
+        or (list[Param}) if  dft_params is a list of params
     """
     params = {} if params is None else params
-    assert isinstance(params, dict) and isinstance(dft_params, dict), (
-        f"read_params expect dict arguments"
-        f": got {type(params)} and {type(dft_params)}"
-    )
-    res = dft_params.copy()
-    wrong_params = []
-    params = params if params else {}
+    r_dict = isinstance(dft_params, dict)
+    dft_set = [dft_params] if r_dict else dft_params
+
+    results = [dft.copy() for dft in dft_set]
+    key_is_default = {}  # make sure keys from params are in defaults
     for key, val in params.items():
-        if key not in res:
-            wrong_params.append(key)
-        res[key] = val
+        if not key in key_is_default:
+            key_is_default[key] = False
+        for result in results:
+            if key not in result:
+                continue
+            key_is_default[key] += True
+            if val is default:
+                continue
+            result[key] = val
+
+    wrong_params = [key for key, val in key_is_default.items() if not val]
     if wrong_params and safe:
         raise KeyError(f"Unexpected params : {', '.join(wrong_params)}")
-    return Param(res)
+
+    results = [Param(res) for res in results]
+    return results[0] if r_dict else results
 
 
 def iter_params(param_ranges):
@@ -97,10 +131,7 @@ def iter_params(param_ranges):
     def params_iter(params, ranges):
         """Return iterable on parameters given there ranges"""
         for param_set in itertools.product(*ranges):
-            yield {
-                param: value
-                for param, value in zip(params, param_set)
-            }
+            yield dict(zip(params, param_set))
     return params_iter(params, ranges)
 
 
