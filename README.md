@@ -59,6 +59,20 @@ my_loaded_rows = olutils.load("output/my_rows.csv")
 my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 ```
 
+Multi-plotting
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+from olutils import plotiter
+
+for i in plotiter(range(5), n_cols=3):
+    x = [i + k/10 for k in range(10)]
+    y = [np.sin(xk) for xk in x]
+    plt.plot(x, y)
+```
+
 
 
 # For developers
