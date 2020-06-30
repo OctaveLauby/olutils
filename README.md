@@ -114,6 +114,7 @@ deactivate
     ```bash
     pip install check-manifest
     pip install twine
+    pip install wheel
     ```
 
 1. Building manifest file:
