@@ -79,7 +79,7 @@ def read_params(params, dft_params, safe=True, default=DFT):
         or (list[Param}) if  dft_params is a list of params
     """
     params = {} if params is None else params
-    r_dict  = isinstance(dft_params, dict)
+    r_dict = isinstance(dft_params, dict)
     dft_set = [dft_params] if r_dict else dft_params
 
     results = [dft.copy() for dft in dft_set]
@@ -131,9 +131,7 @@ def iter_params(param_ranges):
     def params_iter(params, ranges):
         """Return iterable on parameters given there ranges"""
         for param_set in itertools.product(*ranges):
-            yield {
-                param: value for param, value in zip(params, param_set)
-            }
+            yield dict(zip(params, param_set))
     return params_iter(params, ranges)
 
 
