@@ -35,7 +35,7 @@ def dict2str(obj, bullets="#*>-", indent="\t", prefix="",
         (str) pretty representation of obj
     """
     if not isinstance(obj, dict):
-        return str(obj)
+        return leafconv(obj)
 
     bullet = bullets[0] if bullets else ""
     exbullet = "" if bullet in ["", " "] else (bullet + " ")

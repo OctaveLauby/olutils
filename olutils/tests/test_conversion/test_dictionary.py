@@ -64,3 +64,4 @@ def test_dict2str():
         "\n|    'cde': [1, 2]"
     )
     assert conversion.dict2str({}) == "<empty dict>"
+    assert conversion.dict2str("hello", leafconv=repr) == "'hello'"
