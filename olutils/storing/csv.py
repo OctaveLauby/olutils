@@ -37,7 +37,7 @@ def read_csv(path, delimiter="smart", mode=None, encoding=None, **params):
     """
     mode = 'r' if mode is None else mode
     if delimiter == "smart":
-        with open(path, encoding=encoding) as file:
+        with open(path, mode, encoding=encoding) as file:
             line = file.readline()
         delimiters = sorted([
             (delimiter, len(line.split(delimiter))) for delimiter in ",;\t"
@@ -48,7 +48,7 @@ def read_csv(path, delimiter="smart", mode=None, encoding=None, **params):
 
     def row_iterator(path):
         """Iterate row of file at path"""
-        with open(path, encoding=encoding) as file:
+        with open(path, mode, encoding=encoding) as file:
             reader = DictReader(file, delimiter=delimiter)
             for elem in countiter(reader, start=1, **params):
                 yield elem
