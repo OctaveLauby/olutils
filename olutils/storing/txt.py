@@ -11,7 +11,7 @@ def rm_eol(line):
 
 
 def read_txt(path, rtype="list", w_eol=True, f_eol=None,
-             encoding=None):
+             mode=None, encoding=None):
     """Return content of text file at path
 
     Args:
@@ -22,11 +22,14 @@ def read_txt(path, rtype="list", w_eol=True, f_eol=None,
             "str"   > string
         w_eol (bool)    : return lines with line terminators
         f_eol (str)     : force line terminators to a given string
-        iterator (bool) : return iterator on lines
+        mode (str)      : mode to open file with (default is 'r')
+        encoding (str)  : encoding used to read file
 
     Return:
         (list)
     """
+    mode = 'r' if mode is None else mode
+
     # Define function to map lines
     if not w_eol:
         line_conv = rm_eol
@@ -40,7 +43,7 @@ def read_txt(path, rtype="list", w_eol=True, f_eol=None,
     # Create row iterator
     def line_iterator(path):
         """Iterate lines of file at path"""
-        with open(path, encoding=encoding) as file:
+        with open(path, mode, encoding=encoding) as file:
             for line in file:
                 yield line_conv(line)
 

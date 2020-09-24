@@ -13,7 +13,7 @@ from .txt import read_txt, write_txt
 # Object management
 
 
-def load(path, mthd=None, encoding=None, **params):
+def load(path, mthd=None, mode=None, encoding=None, **params):
     """Load object at path given a method
 
     Args:
@@ -24,6 +24,8 @@ def load(path, mthd=None, encoding=None, **params):
             'json'      > return obj using json loading library
             'pickle'    > return obj using pickle loading method
             'txt'       > return content of text file
+        mode (str)    : mode to open file with
+            default is 'r', except for pickle method where it is 'rb'
         encoding (str): file encoding
             None for default
             'utf-8' for classic Linux encoding
@@ -43,15 +45,17 @@ def load(path, mthd=None, encoding=None, **params):
 
     res = None
     if mthd == "csv":
-        res = read_csv(path, encoding=encoding, **params)
+        res = read_csv(path, mode=mode, encoding=encoding, **params)
     elif mthd == "json":
-        with open(path, encoding=encoding) as file:
+        mode = 'r' if mode is None else mode
+        with open(path, mode, encoding=encoding) as file:
             res = json.load(file, **params)
     elif mthd == "pickle":
-        with open(path, "rb", encoding=encoding) as file:
+        mode = 'rb' if mode is None else mode
+        with open(path, mode, encoding=encoding) as file:
             res = pickle.load(file, **params)
     elif mthd == "txt":
-        res = read_txt(path, encoding=encoding, **params)
+        res = read_txt(path, mode=mode, encoding=encoding, **params)
     else:
         raise ValueError(f"Unknown mthd '{mthd}'")
     return res
