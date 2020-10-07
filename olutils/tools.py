@@ -2,14 +2,16 @@
 from time import sleep, time
 
 
-def countiter(array, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
+def countiter(array, start=1, stop=None, w_count=False, v_batch=1, prefix="", suffix=""):
     """Iter elems from a while counting
 
     Args:
         array (iterable)
         start (int)     : count starting point
+        stop (int)      : stop iteration when count reaches stop (last included)
         w_count (bool)  : also yield count
-        v_batch (int)   : number of iteration b/w displays
+        v (int)         : number of iteration b/w displays
+        v_batch (int)   : same as v_batch, deprecated
         prefix (string) : count prefix in display
         suffix (string) : count suffix in display
 
@@ -23,13 +25,16 @@ def countiter(array, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
         size = len(array) + start - 1
     except TypeError:
         size = "?"
+    if stop is not None:
+        size = f"{stop} (/{size})"
 
-    i = 0
+    i = start-1  # ensure existence if no element
     for i, elem in enumerate(array, start):
         if verbose and (i == start or i % v_batch == 0):
             print(f"\r{prefix}{i}/{size}{suffix}", end="")
         yield (i, elem) if w_count else elem
-
+        if (stop is not None) and (i == stop):
+            break
     if verbose:
         print(f"\r{prefix}{i}/{size}{suffix}", end="")
         print()

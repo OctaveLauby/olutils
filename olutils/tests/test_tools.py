@@ -51,6 +51,13 @@ def test_countiter(capfd):
         assert readout(capfd) == ""
     assert readout(capfd) == ""
 
+    aggregator = []
+    for i, elem in tools.countiter([1, 2, 3], stop=2, w_count=True):
+        aggregator.append(elem)
+        assert readout(capfd) == f"\r{i}/2 (/3)"
+    assert aggregator == [1, 2]
+    assert readout(capfd) == f"\r{2}/2 (/3)\n"
+
 
 def test_diff():
     assert tools.diff(
