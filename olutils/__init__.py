@@ -17,6 +17,7 @@ from .conversion import (
     convert_ts,
     dict2str,
     dt2float,
+    err2str,
     float2dt,
     str2dt,
 )
