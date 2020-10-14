@@ -60,6 +60,8 @@ from .tools import (
     countiter,
     diff,
     display,
+    identity,
+    prod,
     wait_until,
 )
 
