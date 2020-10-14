@@ -59,7 +59,7 @@ my_loaded_rows = olutils.load("output/my_rows.csv")
 my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 ```
 
-Multi-plotting
+Multi-plotting:
 
 ```python
 import matplotlib.pyplot as plt
@@ -73,7 +73,59 @@ for i in plotiter(range(5), n_cols=3):
     plt.plot(x, y)
 ```
 
+Others:
 
+```python
+import olutils
+
+# Operations
+assert olutils.prod([2, 7]) == 14
+assert olutils.identity(1) == 1
+
+# Comparison
+l1 = [1, 2, "hi", "bye"]
+l2 = [3, "bye", "bye bye", 2]
+assert olutils.diff(l1, l2) == {
+    'common': {2, "bye"},
+    'minus': {1, "hi"},
+    'plus': {3, "bye bye"},
+}
+
+# Pretty display
+assert olutils.err2str(ValueError("Message")) == "ValueError - Message"
+l = [1, 2, 3, 4, 5]
+imp_l = olutils.implicit_list(l, 4)
+assert str(imp_l) == '[1, 2, ..., 5]'
+dic = {
+    'values': l,
+    'info': {
+        'name': "Some example",
+        'also': "This is awesome (kinda)",
+    }
+}
+print(f"Dictionary used: {dic}")
+print(f"Dictionary to pretty string:")
+def leafconv(x):
+    return (
+        str(olutils.implicit_list(x, 5))
+        if isinstance(x, list)
+        else str(x)
+    )
+print(olutils.dict2str(dic, leafconv=leafconv))
+
+
+# Iteration
+print("Iterating on very long iterable:")
+for elem in olutils.countiter(range(int(10e6)), v_batch=100, prefix=". "):
+    # One-Line display of progress every 100 iteration
+    pass
+
+
+# And more
+# olutils.dict2str
+
+...
+```
 
 # For developers
 
