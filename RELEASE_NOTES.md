@@ -1,7 +1,8 @@
 History of release notes
+---
+
 
 # Version 1.2.0
-
 
 ## New Functions:
 - `prod`: same as sum for production
