@@ -203,23 +203,37 @@ deactivate
 
     > If any error, fix issues + commit and push
 
-6. Add tag and Push
-
-    ```bash
-    git tag -a vx.x.x -m "Version x.x.x"
-    git push origin --tags
-    ```
-
-7. Merge dev pull request on github
+6. Merge dev pull request on github
     - Check the File Changes (one should see the new release note and the possible fixes he made)
     - Merge pull request
 
     > One can redo tests locally just to be sure
 
-8. Merge master pull request on github + Delete branch
+7. Merge master pull request on github + Delete branch
+
+8. Add tag and Push
+
+    - Tag master
+
+    ```bash
+    git checkout master
+    git tag -a vx.x.x -m "Version x.x.x"
+    ```
+
+    - Tag dev
+
+    ```bash
+    git checkout dev
+    git tag -a vx.x.x-dev -m "Version x.x.x (dev)"
+    ```
+
+    - Push
+
+    ```bash
+    git push origin --tags
+    ```
 
 9. Update local repo:
-    - Checkout to dev
     - Remove release branch: `git branch -d release/x.x.x`
 
 
