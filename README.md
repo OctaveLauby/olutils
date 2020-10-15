@@ -59,7 +59,7 @@ my_loaded_rows = olutils.load("output/my_rows.csv")
 my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 ```
 
-Multi-plotting
+Multi-plotting:
 
 ```python
 import matplotlib.pyplot as plt
@@ -73,7 +73,59 @@ for i in plotiter(range(5), n_cols=3):
     plt.plot(x, y)
 ```
 
+Others:
 
+```python
+import olutils
+
+# Operations
+assert olutils.prod([2, 7]) == 14
+assert olutils.identity(1) == 1
+
+# Comparison
+l1 = [1, 2, "hi", "bye"]
+l2 = [3, "bye", "bye bye", 2]
+assert olutils.diff(l1, l2) == {
+    'common': {2, "bye"},
+    'minus': {1, "hi"},
+    'plus': {3, "bye bye"},
+}
+
+# Pretty display
+assert olutils.err2str(ValueError("Message")) == "ValueError - Message"
+l = [1, 2, 3, 4, 5]
+imp_l = olutils.implicit_list(l, 4)
+assert str(imp_l) == '[1, 2, ..., 5]'
+dic = {
+    'values': l,
+    'info': {
+        'name': "Some example",
+        'also': "This is awesome (kinda)",
+    }
+}
+print(f"Dictionary used: {dic}")
+print(f"Dictionary to pretty string:")
+def leafconv(x):
+    return (
+        str(olutils.implicit_list(x, 5))
+        if isinstance(x, list)
+        else str(x)
+    )
+print(olutils.dict2str(dic, leafconv=leafconv))
+
+
+# Iteration
+print("Iterating on very long iterable:")
+for elem in olutils.countiter(range(int(10e6)), v_batch=100, prefix=". "):
+    # One-Line display of progress every 100 iteration
+    pass
+
+
+# And more
+# olutils.dict2str
+
+...
+```
 
 # For developers
 
@@ -107,7 +159,85 @@ deactivate
 > matplotlib does not have to be imported: plotting submodule is not loaded in that case
 
 
-## Distribution
+## Release & Distribute
+
+### Release
+
+0. Check current version to know what is the next version
+
+    ```bash
+    git tag
+    ```
+
+1. Create release branch
+
+    ```bash
+    git checkout release/x.x.x
+    ```
+
+2. Add related section in [release notes](RELEASE_NOTES.md), commit and push (even if not completed yet)
+
+    ```
+    git commit -m "Adding release note related to current release"
+    git push --set-upstream origin release/x.x.x
+    ```
+
+3. Create 2 pull requests on github:
+    - on from {release_branch} to {dev} (name="Release/x.x.x Dev)
+    - on from {release_branch} to {master} (name="Release/x.x.x)
+
+4. Fill up the release note + commit and push
+    - Read commits descriptions
+    - Go through all the Files Changes
+
+    > Fill free to complete missing documentations and add comments in code
+
+5. Run tests on clean venv
+
+    ```bash
+    rm -r venv
+    python -m venv venv
+    source venv/Scripts/activate
+    python m pytest -vv
+    ```
+
+    > If any error, fix issues + commit and push
+
+6. Merge dev pull request on github
+    - Check the File Changes (one should see the new release note and the possible fixes he made)
+    - Merge pull request
+
+    > One can redo tests locally just to be sure
+
+7. Merge master pull request on github + Delete branch
+
+8. Add tag and Push
+
+    - Tag master
+
+    ```bash
+    git checkout master
+    git tag -a vx.x.x -m "Version x.x.x"
+    ```
+
+    - Tag dev
+
+    ```bash
+    git checkout dev
+    git tag -a vx.x.x-dev -m "Version x.x.x (dev)"
+    ```
+
+    - Push
+
+    ```bash
+    git push origin --tags
+    ```
+
+9. Update local repo:
+    - Remove release branch: `git branch -d release/x.x.x`
+
+
+### Distribution
 
 0. Install distribution libraries
 

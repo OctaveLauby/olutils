@@ -3,7 +3,7 @@ import functools
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 
-from olutils import read_params
+from olutils.params import read_params
 
 
 # -------------------------------------------------------------------------- #

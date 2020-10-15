@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 
 from olutils import tools
@@ -51,6 +52,13 @@ def test_countiter(capfd):
         assert readout(capfd) == ""
     assert readout(capfd) == ""
 
+    aggregator = []
+    for i, elem in tools.countiter([1, 2, 3], stop=2, w_count=True):
+        aggregator.append(elem)
+        assert readout(capfd) == f"\r{i}/2 (/3)"
+    assert aggregator == [1, 2]
+    assert readout(capfd) == f"\r{2}/2 (/3)\n"
+
 
 def test_diff():
     assert tools.diff(
@@ -98,3 +106,15 @@ def test_display(capfd):
 
     tools.display(msg, verbose=None, v=False)
     assert readout(capfd) == ""
+
+
+def test_prod():
+
+    assert tools.prod([]) == 1
+    assert tools.prod([5, 8, 0.5]) == 20
+    assert tools.prod(e for e in [5, 8, 0.5]) == 20
+
+    assert (tools.prod([
+        np.array([3, 7]),
+        np.array([5, 11]),
+    ]) == np.array([15, 77])).all()

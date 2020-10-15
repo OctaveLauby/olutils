@@ -2,16 +2,19 @@
 from time import sleep, time
 
 
-def countiter(array, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
+def countiter(array, start=1, stop=None, w_count=False, v_batch=1, prefix="", suffix="", dft_ind="?"):
     """Iter elems from a while counting
 
     Args:
         array (iterable)
         start (int)     : count starting point
+        stop (int)      : stop iteration when count reaches stop (last included)
         w_count (bool)  : also yield count
-        v_batch (int)   : number of iteration b/w displays
+        v (int)         : number of iteration b/w displays
+        v_batch (int)   : same as v_batch, deprecated
         prefix (string) : count prefix in display
         suffix (string) : count suffix in display
+        dft_ind (str)   : string displayed if max count can't be deduced from array
 
     Return:
         (iterable)
@@ -22,14 +25,17 @@ def countiter(array, start=1, w_count=False, v_batch=1, prefix="", suffix=""):
     try:
         size = len(array) + start - 1
     except TypeError:
-        size = "?"
+        size = dft_ind
+    if stop is not None:
+        size = f"{stop} (/{size})"
 
-    i = 0
+    i = start-1  # ensure existence if no element
     for i, elem in enumerate(array, start):
         if verbose and (i == start or i % v_batch == 0):
             print(f"\r{prefix}{i}/{size}{suffix}", end="")
         yield (i, elem) if w_count else elem
-
+        if (stop is not None) and (i == stop):
+            break
     if verbose:
         print(f"\r{prefix}{i}/{size}{suffix}", end="")
         print()
@@ -78,6 +84,24 @@ def display(*args, **kwargs):
     if verb:
         print(*args, **kwargs)
 
+
+
+def identity(object):
+    """Identity function"""
+    return object
+
+
+def prod(iterable, /, start=1):
+    """Return the product of a 'start' value (dft: 0) multiplied by iterable
+
+    When the iterable is empty, return the start value.
+    This function is intended specifically for use with numeric values and may
+    reject non-numeric types.
+    """
+    res = start
+    for obj in iterable:
+        res *= obj
+    return res
 
 def wait_until(predicate, freq=0.1, timeout=5, raise_err=True):
     """Wait until predicate return True"""

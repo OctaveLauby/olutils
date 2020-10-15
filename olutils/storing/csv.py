@@ -20,13 +20,14 @@ from olutils.tools import countiter
 from .common import DFT_EOL
 
 
-def read_csv(path, delimiter="smart", encoding=None, **params):
+def read_csv(path, delimiter="smart", mode=None, encoding=None, **params):
     """Return csv.DictReader iterator on file at path (can display row count)
 
     Args:
         path (str)      : path to input
         delimiter (str) : delimiter for columns
             "smart" > try common delimiters and use the one building more cols
+        mode (str)      : mode to open file with (default is 'r')
         encoding (str)  : encoding of file
         **params (dict) : @see utils.tools.countiter
             v_batch     dft value is 0 (no display)
@@ -34,8 +35,9 @@ def read_csv(path, delimiter="smart", encoding=None, **params):
     Returns:
         (iterator)
     """
+    mode = 'r' if mode is None else mode
     if delimiter == "smart":
-        with open(path, encoding=encoding) as file:
+        with open(path, mode, encoding=encoding) as file:
             line = file.readline()
         delimiters = sorted([
             (delimiter, len(line.split(delimiter))) for delimiter in ",;\t"
@@ -46,7 +48,7 @@ def read_csv(path, delimiter="smart", encoding=None, **params):
 
     def row_iterator(path):
         """Iterate row of file at path"""
-        with open(path, encoding=encoding) as file:
+        with open(path, mode, encoding=encoding) as file:
             reader = DictReader(file, delimiter=delimiter)
             for elem in countiter(reader, start=1, **params):
                 yield elem
