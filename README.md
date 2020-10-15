@@ -159,7 +159,71 @@ deactivate
 > matplotlib does not have to be imported: plotting submodule is not loaded in that case
 
 
-## Distribution
+## Release & Distribute
+
+### Release
+
+0. Check current version to know what is the next version
+
+    ```bash
+    git tag
+    ```
+
+1. Create release branch
+
+    ```bash
+    git checkout release/x.x.x
+    ```
+
+2. Add related section in [release notes](RELEASE_NOTES.md), commit and push (even if not completed yet)
+
+    ```
+    git commit -m "Adding release note related to current release"
+    git push --set-upstream origin release/x.x.x
+    ```
+
+3. Create 2 pull requests on github:
+    - on from {release_branch} to {dev} (name="Release/x.x.x Dev)
+    - on from {release_branch} to {master} (name="Release/x.x.x)
+
+4. Fill up the release note + commit and push
+    - Read commits descriptions
+    - Go through all the Files Changes
+
+    > Fill free to complete missing documentations and add comments in code
+
+5. Run tests on clean venv
+
+    ```bash
+    rm -r venv
+    python -m venv venv
+    source venv/Scripts/activate
+    python m pytest -vv
+    ```
+
+    > If any error, fix issues + commit and push
+
+6. Add tag and Push
+
+    ```bash
+    git tag -a vx.x.x -m "Version x.x.x"
+    git push origin --tags
+    ```
+
+7. Merge dev pull request on github
+    - Check the File Changes (one should see the new release note and the possible fixes he made)
+    - Merge pull request
+
+    > One can redo tests locally just to be sure
+
+8. Merge master pull request on github + Delete branch
+
+9. Update local repo:
+    - Checkout to dev
+    - Remove release branch: `git branch -d release/x.x.x`
+
+
+### Distribution
 
 0. Install distribution libraries
 
