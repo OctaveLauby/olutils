@@ -192,7 +192,11 @@ deactivate
 
     > Fill free to complete missing documentations and add comments in code
 
-5. Run tests on clean venv
+6. Update [setup](setup.py)
+    - Update version
+    - Ensure install_requires have all [requirements](requirements.txt)
+
+7. Run tests on clean venv
 
     ```bash
     rm -r venv
@@ -203,15 +207,15 @@ deactivate
 
     > If any error, fix issues + commit and push
 
-6. Merge dev pull request on github
+8. Merge dev pull request on github
     - Check the File Changes (one should see the new release note and the possible fixes he made)
     - Merge pull request
 
     > One can redo tests locally just to be sure
 
-7. Merge master pull request on github + Delete branch
+9. Merge master pull request on github + Delete branch
 
-8. Add tag and Push
+10. Add tag and Push
 
     - Tag master
 
@@ -233,11 +237,13 @@ deactivate
     git push origin --tags
     ```
 
-9. Update local repo:
+11. Update local repo:
     - Remove release branch: `git branch -d release/x.x.x`
 
 
 ### Distribution
+
+First make sure to be on master branch with latest release.
 
 0. Install distribution libraries
 

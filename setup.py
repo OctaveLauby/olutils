@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setup(
     # Library description
     name="olutils",
-    version="1.1.0",
+    version="1.2.0",
     description="tools for common operations in a module",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -36,6 +36,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Operating System :: OS Independent",
     ],
 )
