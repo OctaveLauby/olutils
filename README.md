@@ -169,9 +169,10 @@ deactivate
     git tag
     ```
 
-1. Create release branch
+1. Create release branch from branch-to-release (usually dev)
 
     ```bash
+    git checkout <branch_to_release>
     git checkout release/x.x.x
     ```
 
@@ -217,6 +218,7 @@ deactivate
 
     ```bash
     git checkout master
+    git pull
     git tag -a vx.x.x -m "Version x.x.x"
     ```
 
@@ -224,6 +226,7 @@ deactivate
 
     ```bash
     git checkout dev
+    git pull
     git tag -a vx.x.x-dev -m "Version x.x.x (dev)"
     ```
 
