@@ -10,7 +10,7 @@ olutils
 
 The module ***olutils*** provide common tools to simplify daily coding. It includes:
 
-- object management (saving, loading for .txt, .csv, .pickle)
+- object storing (.csv, .json, .pickle, .txt)
 - convenient collection (deep defaultdict, lazy list, identity/prod functions)
 - conversion functions (for datetime, dictionaries, errors)
 - sequencing helpers (iteration with progress display, wait until predicate)
@@ -69,7 +69,7 @@ assert olutils.identity(1) == 1
 
 
 
-## Object management
+## Object Storing
 
 * Storage: `save` and `load`
 
@@ -101,7 +101,7 @@ import olutils
 
 
 print("Iterating on very long iterable:")
-for elem in olutils.countiter(range(int(10e6)), v_batch=100, prefix=". "):
+for elem in olutils.countiter(range(int(10e6)), vbatch=100, prefix=". "):
     # One-Line display of progress every 100 iteration
     pass
 ```

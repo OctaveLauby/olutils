@@ -2,7 +2,7 @@ olutils - developer documentation
 ---
 
 
-# For developers
+# Basics
 
 
 ## Download the project
@@ -21,6 +21,14 @@ pip install -e .
 ```
 
 
+## Testing
+
+```bash
+python -m pytest olutils -vv
+python -m pylint olutils --ignore-patterns=test*
+```
+
+
 ## Virtual Environment
 
 ```bash
@@ -34,9 +42,10 @@ deactivate
 > matplotlib does not have to be imported: plotting submodule is not loaded in that case
 
 
-## Release & Distribute
 
-### Release
+# Release & Distribute
+
+## Release
 
 0. Check current version to know what is the next version
 
@@ -119,7 +128,7 @@ deactivate
     - Remove release branch: `git branch -d release/x.x.x`
 
 
-### Distribution
+## Distribution
 
 First make sure to be on master branch with latest release.
 
@@ -159,11 +168,3 @@ First make sure to be on master branch with latest release.
 > For TestPyPi publication:  `twine upload --repository-url https://test.pypi.org/legacy/ dist/* `
 
 > [Not working on Git terminal](https://github.com/pypa/packaging-problems/issues/197) for some reason
-
-
-## Testing
-
-```bash
-python -m pytest olutils -vv
-python -m pylint olutils --ignore-patterns=test*
-```
