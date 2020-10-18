@@ -27,18 +27,28 @@ UNIT_TO_SEC = {
 }
 
 
-def convert_ts(x, unit):
-    """Convert timestamp(s) in secs to given unit from given start
+def convert_seconds(secs, unit):
+    """Convert number of seconds to given unit
 
     Args:
-        x (float or iterable): timestamp(s)
-        unit (str): unit to convert into (min, day, month, year, dt, td)
+        secs (float or iterable): number of seconds
+        unit (str): unit to convert to
+
+    Available units:
+        s, sec, second      -> second
+        min, minute         -> minute
+        h, hour             -> hour
+        d, day              -> day
+        month               -> month
+        y, year             -> year
+        dt, datetime        -> datetime (secs is interpreted as unix-timestamp)
+        td, timedelta       -> timedelta
 
     Return:
         (float or iterable)
-            if x is list, set or tuple, return list set or tuple
-            elif x is numpy array and unit is not dt or td, return numpy array
-            elif x is another iterable, return map-object
+            if secs is list, set or tuple, return list set or tuple
+            elif secs is numpy array and unit is not dt or td, return numpy array
+            elif secs is another iterable, return map-object
     """
     try:
         divisor = UNIT_TO_SEC[unit]
@@ -46,28 +56,28 @@ def convert_ts(x, unit):
         divisor = None
     try:
         if divisor:
-            return x / divisor
+            return secs / divisor
         if unit in ["dt", "datetime"]:
-            return float2dt(x)
+            return ts2dt(secs)
         if unit in ["td", "timedelta"]:
-            return timedelta(seconds=float(x))
+            return timedelta(seconds=float(secs))
         raise ValueError("Unknown time unit '%s'" % unit)
     except TypeError:
-        if isinstance(x, (list, set, tuple)):
-            return type(x)(convert_ts(tick, unit) for tick in x)
-        if isinstance(x, Iterable):
-            return map(lambda tick: convert_ts(tick, unit), x)
-        raise TypeError(f"Can't convert type {type(x)}") from None
+        if isinstance(secs, (list, set, tuple)):
+            return type(secs)(convert_seconds(tick, unit) for tick in secs)
+        if isinstance(secs, Iterable):
+            return map(lambda tick: convert_seconds(tick, unit), secs)
+        raise TypeError(f"Can't convert type {type(secs)}") from None
 
 
-def dt2float(dt):
+def dt2ts(dt):
     """Return seconds since the Unix Epoch"""
     return (dt-DATE_REF).total_seconds()
 
 
-def float2dt(timestamp):
+def ts2dt(ts):
     """Return datetime from seconds since the Unix Epoch"""
-    return DATE_REF + timedelta(seconds=float(timestamp))
+    return DATE_REF + timedelta(seconds=float(ts))
 
 
 def str2dt(string, *args, **kwargs):

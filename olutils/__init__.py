@@ -19,11 +19,11 @@ from .collection import (
 from .compare import content_diff
 from .conversion import (
     basedict,
-    convert_ts,
+    convert_seconds,
     dict2str,
-    dt2float,
+    dt2ts,
     err2str,
-    float2dt,
+    ts2dt,
     str2dt,
 )
 from .files import (

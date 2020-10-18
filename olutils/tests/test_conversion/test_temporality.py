@@ -10,21 +10,21 @@ def test_globals():
     assert temporality.YEAR == 365.25 * 24 * 3600
 
 
-def test_convert_ts():
+def test_convert_seconds():
     hour, year = temporality.HOUR, temporality.YEAR
-    assert temporality.convert_ts(hour, "s") == hour
-    assert temporality.convert_ts(hour, "min") == 60
-    assert temporality.convert_ts(hour, unit="min") == 60
-    assert temporality.convert_ts(hour, "hour") == 1
-    assert temporality.convert_ts(year, "day") == 365.25
-    assert temporality.convert_ts(year, "month") == 12
-    assert temporality.convert_ts(year, "year") == 1
-    assert temporality.convert_ts(4*year, "dt") == datetime(1974, 1, 1)
-    assert temporality.convert_ts(hour, "td") == timedelta(0, 3600)
+    assert temporality.convert_seconds(hour, "s") == hour
+    assert temporality.convert_seconds(hour, "min") == 60
+    assert temporality.convert_seconds(hour, unit="min") == 60
+    assert temporality.convert_seconds(hour, "hour") == 1
+    assert temporality.convert_seconds(year, "day") == 365.25
+    assert temporality.convert_seconds(year, "month") == 12
+    assert temporality.convert_seconds(year, "year") == 1
+    assert temporality.convert_seconds(4*year, "dt") == datetime(1974, 1, 1)
+    assert temporality.convert_seconds(hour, "td") == timedelta(0, 3600)
 
-    assert temporality.convert_ts([60, 750], "min") == [1, 12.5]
-    assert temporality.convert_ts((60, 750), "min") == (1, 12.5)
-    assert temporality.convert_ts({60, 750}, "min") == {1, 12.5}
+    assert temporality.convert_seconds([60, 750], "min") == [1, 12.5]
+    assert temporality.convert_seconds((60, 750), "min") == (1, 12.5)
+    assert temporality.convert_seconds({60, 750}, "min") == {1, 12.5}
 
     inp = [75, 3720]
     outputs = {
@@ -34,23 +34,23 @@ def test_convert_ts():
     }
     for unit, out in outputs.items():
         for ptype in [list, set, tuple]:
-            assert temporality.convert_ts(ptype(inp), unit) == ptype(out)
+            assert temporality.convert_seconds(ptype(inp), unit) == ptype(out)
 
-        res = temporality.convert_ts(iter(inp), unit)
+        res = temporality.convert_seconds(iter(inp), unit)
         assert isinstance(res, map)
         assert list(res) == list(out)
 
-        res = temporality.convert_ts(np.array(inp), unit)
+        res = temporality.convert_seconds(np.array(inp), unit)
         assert isinstance(res, map if unit in ['td', 'dt'] else np.ndarray)
         assert list(res) == list(out)
 
 
-def test_dt2float():
-    assert temporality.dt2float(datetime(1970, 1, 2)) == temporality.DAY
+def test_dt2ts():
+    assert temporality.dt2ts(datetime(1970, 1, 2)) == temporality.DAY
 
 
-def test_float2dt():
-    assert temporality.float2dt(temporality.DAY) == datetime(1970, 1, 2)
+def test_ts2dt():
+    assert temporality.ts2dt(temporality.DAY) == datetime(1970, 1, 2)
 
 
 def test_str2dt():
