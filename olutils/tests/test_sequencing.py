@@ -32,7 +32,7 @@ def test_countiter(capfd):
 
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     iterator = lib.countiter(
-        alphabet, w_count=True, prefix="> ", suffix=" <", v_batch=5,
+        alphabet, w_count=True, prefix="> ", suffix=" <", vbatch=5,
     )
     for i, elem in iterator:
         assert elem == alphabet[i-1]
@@ -42,12 +42,12 @@ def test_countiter(capfd):
             assert readout(capfd) == ""
     assert readout(capfd) == "\r> 26/26 <\n"
 
-    for i, elem in lib.countiter([1, 2, 3], w_count=True, v_batch=0):
+    for i, elem in lib.countiter([1, 2, 3], w_count=True, vbatch=0):
         assert elem == i
         assert readout(capfd) == ""
     assert readout(capfd) == ""
 
-    for i, elem in lib.countiter([1, 2, 3], w_count=True, v_batch=None):
+    for i, elem in lib.countiter([1, 2, 3], w_count=True, vbatch=None):
         assert elem == i
         assert readout(capfd) == ""
     assert readout(capfd) == ""

@@ -2,7 +2,8 @@
 from time import sleep, time
 
 
-def countiter(array, start=1, stop=None, w_count=False, v_batch=1, prefix="", suffix="", dft_ind="?"):
+def countiter(__object, start=1, stop=None,
+              w_count=False, vbatch=1, prefix="", suffix="", dindicator="?"):
     """Iter elems from a while counting
 
     Args:
@@ -10,28 +11,29 @@ def countiter(array, start=1, stop=None, w_count=False, v_batch=1, prefix="", su
         start (int)     : count starting point
         stop (int)      : stop iteration when count reaches stop (last included)
         w_count (bool)  : also yield count
-        v (int)         : number of iteration b/w displays
-        v_batch (int)   : same as v_batch, deprecated
+        vbatch (int)    : number of iteration b/w progess displays
+            0 for no display
         prefix (string) : count prefix in display
         suffix (string) : count suffix in display
-        dft_ind (str)   : string displayed if max count can't be deduced from array
+        dindicator (str): default indicator for max count
+            used when object has no readable length
 
     Return:
         (iterable)
             if w_count: yield (i, elem)
             else: yield elem
     """
-    verbose = bool(v_batch)
+    verbose = bool(vbatch)
     try:
-        size = len(array) + start - 1
+        size = len(__object) + start - 1
     except TypeError:
-        size = dft_ind
+        size = dindicator
     if stop is not None:
         size = f"{stop} (/{size})"
 
     i = start-1  # ensure existence if no element
-    for i, elem in enumerate(array, start):
-        if verbose and (i == start or i % v_batch == 0):
+    for i, elem in enumerate(__object, start):
+        if verbose and (i == start or i % vbatch == 0):
             print(f"\r{prefix}{i}/{size}{suffix}", end="")
         yield (i, elem) if w_count else elem
         if (stop is not None) and (i == stop):
