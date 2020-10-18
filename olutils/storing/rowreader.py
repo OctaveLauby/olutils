@@ -101,7 +101,7 @@ class RowReader:
             (KeyError) if a field is missing in row
 
         Return:
-            (self.rowcls)
+            (Row)
         """
         try:
             row = Row(OrderedDict([

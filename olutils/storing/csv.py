@@ -1,4 +1,4 @@
-"""This module provide functions to read and write csv.
+"""This module provides functions to read and write csv.
 
 It is based on csv library, and add a layer so that :
 - Functions open and close file
@@ -20,7 +20,7 @@ from olutils.sequencing import countiter
 from .common import DFT_EOL
 
 
-def read_csv(path, delimiter="smart", mode=None, encoding=None, **params):
+def read_csv(path, /, delimiter="smart", mode=None, encoding=None, **params):
     """Return csv.DictReader iterator on file at path (can display row count)
 
     Args:
@@ -29,8 +29,9 @@ def read_csv(path, delimiter="smart", mode=None, encoding=None, **params):
             "smart" > try common delimiters and use the one building more cols
         mode (str)      : mode to open file with (default is 'r')
         encoding (str)  : encoding of file
-        **params (dict) : @see utils.tools.countiter
-            v_batch     dft value is 0 (no display)
+        **params (dict) : @see olutils.countiter
+            vbatch      nb of lines b/w progress displays (dft=0, no display)
+            start       first index of progress counter (dft=1)
 
     Returns:
         (iterator)
@@ -50,14 +51,15 @@ def read_csv(path, delimiter="smart", mode=None, encoding=None, **params):
         """Iterate row of file at path"""
         with open(path, mode, encoding=encoding) as file:
             reader = DictReader(file, delimiter=delimiter)
-            for elem in countiter(reader, start=1, **params):
+            for elem in countiter(reader, **params):
                 yield elem
 
-    params['v_batch'] = params.pop('v_batch', 0)
+    params['vbatch'] = params.pop('vbatch', 0)
+    params['start'] = params.pop('start', 1)
     return row_iterator(path)
 
 
-def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
+def write_csv(rows, path, /, fieldnames=None, header=None, pretty=False,
               encoding=None, **params):
     """"Write a list of dictionaries to path
 
@@ -77,9 +79,8 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
     Raise:
         (ValueError) if rows empty and fieldnames is None
         (TypeError) if fst row is not a dictionary and fieldnames is None
-        (---) then same behavior than csv.DictWriter
+        else same behavior than csv.DictWriter
     """
-    encoding = params.pop('encoding', None)
     params = read_params(params, {
         'delimiter': ",",
         'lineterminator': DFT_EOL,
@@ -102,7 +103,6 @@ def write_csv(rows, path, fieldnames=None, header=None, pretty=False,
             raise TypeError(
                 "rows must be an iterable on dictionaries"
             ) from None
-        i_rows = chain([fstrow], i_rows)
 
     # Read and compute header
     header = fieldnames if header is None else header

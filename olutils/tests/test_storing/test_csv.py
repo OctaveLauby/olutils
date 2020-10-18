@@ -108,7 +108,7 @@ def test_read_csv(capfd):
     # ---- Playing with display args
 
     filepath = os.path.join(MOCK_DIR, "base_comma_lg.csv")
-    for i, row in storing.read_csv(filepath, w_count=True, v_batch=4):
+    for i, row in storing.read_csv(filepath, w_count=True, vbatch=4):
         assert readout(capfd) == (
             f"\r{i}/?" if (i == 1 or i % 4 == 0) else ""
         )

@@ -13,16 +13,16 @@ from .txt import read_txt, write_txt
 # Object management
 
 
-def load(path, mthd=None, mode=None, encoding=None, **params):
+def load(path, /, mthd=None, mode=None, encoding=None, **params):
     """Load object at path given a method
 
     Args:
-        path (str)  : path where obj is stored
+        path (str)  : path where __object is stored
         mthd (str): method of storing
             None        > catch method from path extension
             'csv'       > return iterable on rows
-            'json'      > return obj using json loading library
-            'pickle'    > return obj using pickle loading method
+            'json'      > return __object using json loading library
+            'pickle'    > return __object using pickle loading method
             'txt'       > return content of text file
         mode (str)    : mode to open file with
             default is 'r', except for pickle method where it is 'rb'
@@ -61,23 +61,23 @@ def load(path, mthd=None, mode=None, encoding=None, **params):
     return res
 
 
-def save(obj, path, mthd=None, encoding=None, **params):
+def save(__object, path, /, mthd=None, encoding=None, **params):
     """Save object to path given a method
 
     Args:
-        obj (object): object to store
-        path (str)  : path where to save object
-        mthd (str): method of storing
+        __object (object)   : object to store
+        path (str)          : path where to save object
+        mthd (str)          : method of storing
             None        > catch method from path extension
             'csv'       > store as csv file (requires obj to be list of dict)
             'json'      > store as pretty json file (requires obj to be json like)
             'pickle'    > store as pickle file
             'txt'       > store as text file
-        encoding (str): file encoding
+        encoding (str)      : file encoding
             None for default
             'utf-8' for classic Linux encoding
             'utf-8-sig' for classic windows encoding
-        **params: available params depend on mthd value
+        **params            : available params depend on mthd value
             'csv'       > @see write_csv
                 fieldnames, header, pretty, ...
             'json'      > @see json.dump
@@ -95,7 +95,7 @@ def save(obj, path, mthd=None, encoding=None, **params):
         os.makedirs(directory)
 
     if mthd == "csv":
-        write_csv(obj, path, encoding=encoding, **params)
+        write_csv(__object, path, encoding=encoding, **params)
     elif mthd == "json":
         with sopen(path, "w", encoding=encoding) as file:
             params = read_params(
@@ -104,12 +104,12 @@ def save(obj, path, mthd=None, encoding=None, **params):
                 safe=False,
             )
             json.dump(
-                obj, file, **params
+                __object, file, **params
             )
     elif mthd == "pickle":
         with sopen(path, "wb", encoding=encoding) as file:
-            pickle.dump(obj, file, **params)
+            pickle.dump(__object, file, **params)
     elif mthd == "txt":
-        write_txt(obj, path, encoding=encoding, **params)
+        write_txt(__object, path, encoding=encoding, **params)
     else:
         raise ValueError(f"Unknown mthd '{mthd}'")
