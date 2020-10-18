@@ -1,9 +1,8 @@
-"""List conversion"""
-from .spestr import SpeStr
+"""Convenient way to build quick overview of long containers"""
 
 
-def lazy_content(l, max_values, mid_value=SpeStr('...')):
-    """Return lazy content of list, with at most max_values
+def lazy_content(__object, nvals, ellipsis=...):
+    """Return list at most {nvals} items from object
 
     Extra values are replaced with mid_value
 
@@ -12,26 +11,26 @@ def lazy_content(l, max_values, mid_value=SpeStr('...')):
         >>> lazy_content([1, 2, 3, 4, 5], 3)
         ... [1, ..., 5]
     """
-    if len(l) <= max_values:
-        return l
-    else:
-        return (
-                l[:max_values // 2]
-                + [mid_value]
-                + l[len(l) - abs(max_values - 1) // 2:]
-        )
+    if len(__object) <= nvals:
+        return __object
+    return (
+            __object[:nvals // 2]
+            + [ellipsis]
+            + __object[len(__object) - abs(nvals - 1) // 2:]
+    )
 
 
 class LazyList:
     """List with lazy representation"""
 
-    def __init__(self, l, max_values, mid_value=SpeStr('...')):
-        self._content = list(l)
-        self.maxvals = max_values
-        self.midval = mid_value
+    def __init__(self, __object, nvals, ellipsis=...):
+        self._content = list(__object)
+        self.nvals = nvals
+        self.ellipsis = ellipsis
 
     @property
     def content(self):
+        """Full content"""
         return self._content
 
     @property
@@ -39,14 +38,16 @@ class LazyList:
         """Lazy content list"""
         return lazy_content(
             self.content,
-            max_values=self.maxvals,
-            mid_value=self.midval,
+            nvals=self.nvals,
+            ellipsis=self.ellipsis,
         )
 
     def append(self, __object):
+        """Append object to the end of the list"""
         return self.content.append(__object)
 
     def insert(self, __index, __object):
+        """Insert object before index"""
         return self.content.insert(__index, __object)
 
     def __len__(self):
