@@ -1,4 +1,4 @@
-from olutils import pprint as lib
+from olutils.collection import list as lib
 
 
 def test_implicit_list():

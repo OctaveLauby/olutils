@@ -41,29 +41,6 @@ def countiter(array, start=1, stop=None, w_count=False, v_batch=1, prefix="", su
         print()
 
 
-def diff(list1, list2):
-    """Return diff b/w lists in a dictionary
-
-    About:
-        Because 0 == False and 1 == True, diff may not work as wanted with
-        list mixing booleans and integers.
-
-    Return:
-        (dict) with following items
-            'common', set of common elements
-            'minus', set of elements in list1 and not in list2
-            'plus', set of elements in list2 and not in list1
-    """
-    set1 = set(list1)
-    set2 = set(list2)
-    common = set1.intersection(set2)
-    return {
-        'common': common,
-        'minus': set1 - common,
-        'plus': set2 - common,
-    }
-
-
 def display(*args, **kwargs):
     """Extension of print with verbose kwarg
 
@@ -84,24 +61,6 @@ def display(*args, **kwargs):
     if verb:
         print(*args, **kwargs)
 
-
-
-def identity(object):
-    """Identity function"""
-    return object
-
-
-def prod(iterable, /, start=1):
-    """Return the product of a 'start' value (dft: 0) multiplied by iterable
-
-    When the iterable is empty, return the start value.
-    This function is intended specifically for use with numeric values and may
-    reject non-numeric types.
-    """
-    res = start
-    for obj in iterable:
-        res *= obj
-    return res
 
 def wait_until(predicate, freq=0.1, timeout=5, raise_err=True):
     """Wait until predicate return True"""
