@@ -1,7 +1,7 @@
 """Convenient tools to read and encapsulate rows (dictionaries)"""
 from collections import OrderedDict
 
-from olutils import tools
+from olutils.compare import content_diff
 
 
 class Row(OrderedDict):
@@ -109,7 +109,7 @@ class RowReader:
                 for attr, field in self.fields.items()
             ]))
         except KeyError:
-            diff = tools.diff(irow.keys(), self.fields.values())
+            diff = content_diff(irow.keys(), self.fields.values())
             raise KeyError(
                 f"Row is missing keys: {', '.join(map(repr, diff['plus']))}"
             ) from None

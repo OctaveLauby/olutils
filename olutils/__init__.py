@@ -14,6 +14,7 @@ from .collection import (
     identity,
     prod,
 )
+from .compare import content_diff
 from .conversion import (
     basedict,
     convert_ts,
