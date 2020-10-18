@@ -18,7 +18,7 @@ class DefaultDict(collections.defaultdict):
         """Return pretty string of self
 
         Args:
-            *args, **kwargs: @see olutils.conversion.dict2str
+            *args, **kwargs: @see olutils.dict2str
 
         Return:
             (str)
@@ -29,7 +29,7 @@ class DefaultDict(collections.defaultdict):
         """Pretty print self
 
         Args:
-            *args, **kwargs: @see olutils.conversion.dict2str
+            *args, **kwargs: @see olutils.dict2str
         """
         print(self.pstring(*args, **kwargs))
 
@@ -40,7 +40,7 @@ def defaultdict(default_factory, *args, **kwargs):
 
 
 def deepdefaultdict(default_factory, depth):
-    """Return a multi ladder defaultdict given the depth and the leaf frmt"""
+    """Return a multi ladder defaultdict given the leaf factory and depth"""
     if depth == 0:
         return default_factory
     if depth == 1:

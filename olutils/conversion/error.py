@@ -1,4 +1,4 @@
-"""Module for error conversion"""
+"""Error converter(s)"""
 
 
 def err2str(error, msg_only=False):

@@ -1,6 +1,8 @@
-def identity(object):
+"""Convenient functions"""
+
+def identity(__object):
     """Identity function"""
-    return object
+    return __object
 
 
 def prod(iterable, /, start=1):
