@@ -11,6 +11,8 @@
 from .collection import (
     deepdefaultdict,
     defaultdict,
+    lazy_content,
+    LazyList,
     identity,
     prod,
 )
