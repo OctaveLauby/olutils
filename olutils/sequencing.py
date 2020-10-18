@@ -64,8 +64,18 @@ def display(*args, **kwargs):
         print(*args, **kwargs)
 
 
-def wait_until(predicate, freq=0.1, timeout=5, raise_err=True):
-    """Wait until predicate return True"""
+def wait_until(predicate, /, freq=0.1, timeout=5, raise_err=True):
+    """Wait until predicate return True
+
+    Args:
+        predicate (callable)
+        freq (int|float): number of seconds b/w checks of predicate
+        timeout (int|float): max number of seconds to wait
+        raise_err (bool): raise error if timeout reached
+
+    Return:
+        (bool): whether predicate returned True
+    """
     start = time()
     while not predicate():
         if time() - start > timeout:
