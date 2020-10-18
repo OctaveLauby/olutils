@@ -2,7 +2,6 @@
 
 from .dictionary import basedict, dict2str
 from .error import err2str
-from .list import implicit_list
 from .temporality import (
     convert_ts,
     dt2float,

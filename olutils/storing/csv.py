@@ -16,7 +16,7 @@ from itertools import chain
 
 from olutils.files import sopen
 from olutils.params import read_params
-from olutils.tools import countiter
+from olutils.sequencing import countiter
 from .common import DFT_EOL
 
 
