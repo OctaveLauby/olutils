@@ -135,7 +135,7 @@ import olutils
 assert olutils.err2str(ValueError("Message")) == "ValueError - Message"
 l = [1, 2, 3, 4, 5]
 imp_l = olutils.lazy_content(l, 4)
-assert str(imp_l) == '[1, 2, ..., 5]'
+assert str(imp_l) == '[1, 2, Ellipsis, 5]'
 dic = {
     'values': l,
     'info': {
