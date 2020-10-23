@@ -13,6 +13,7 @@ def test_LazyList():
 
 
     ll = lib.LazyList([1, 2, 3, 4, 5], 3)
+    assert len(ll) == 5
     assert str(ll) == '[1, Ellipsis, 5]'
     assert repr(ll) == '[1, Ellipsis, 5]'
     ll.append(6)

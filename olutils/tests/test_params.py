@@ -18,6 +18,21 @@ def test_check_type():
         lib2.check_type("arg", 1., int)
 
 
+def test_Params():
+    kwargs = {'a': 1, 'b': 2}
+    params = lib2.Params(kwargs)
+    params['c'] = 3
+    assert params.a == 1
+    assert params.b == 2
+    assert params.c == 3
+
+    with pytest.raises(AttributeError):
+        params.d
+
+    with pytest.raises(AttributeError):
+        params.d = 5
+
+
 def test_read_params():
 
     # ---- Single default kwargs
@@ -68,6 +83,19 @@ def test_read_params():
         {'a': 0, 'b': 2, 'e': 10, 'f': 6},
         {'c': 8, 'd': 4, 'e': 10, 'f': 7},
     ]
+
+
+def test_iter_params():
+    param_ranges = OrderedDict([
+        ('a', [0, 1, 2]),
+        ('b', [10, 20]),
+    ])
+    param_list = [
+        {'a': a, 'b': b}
+        for a, b in [(0, 10), (0, 20), (1, 10), (1, 20), (2, 10), (2, 20)]
+    ]
+    for params, eparams in zip(lib2.iter_params(param_ranges), param_list):
+        assert params == eparams
 
 
 def test_add_dft_args(capfd):

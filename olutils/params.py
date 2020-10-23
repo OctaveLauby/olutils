@@ -30,7 +30,7 @@ def check_type(name, value, exp_type):
     Args:
         name (str)      : parameter name to display in error message
         value (object)  : parameter value to check the type of
-        exp_type (type or tuple): expected type of parameter
+        exp_type (type|tuple): expected type of parameter
 
     Raise:
         (TypeError) if type not correct
@@ -46,8 +46,8 @@ def read_params(params, dft_params, safe=True, default=DFT):
     """Return kwargs completed with dft kwargs in convenient dict-like object
 
     Args:
-        params (NoneType or dict): list of kwargs given by user
-        dft_params (dict or list): expected parameters with default values
+        params (NoneType|dict): list of kwargs given by user
+        dft_params (dict|list): expected parameters with default values
             (dict) -> reduce-complete kwargs with dft_params
             (list) -> return list of dict where dict at index i is kwargs
                         reduced & completed with dft_params[i]
@@ -107,7 +107,7 @@ def iter_params(param_ranges):
     """Return iterator on all possible param value associations
 
     Args:
-        param_ranges (dict of list): for each parameter, possible values
+        param_ranges (dict): for each parameter, possible values
 
     Example:
         >> param_iter = iter_params({'int': [1, 2], 'str': ["a", "b"]})

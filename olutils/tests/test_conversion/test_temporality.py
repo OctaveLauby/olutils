@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from datetime import datetime, timedelta
 
 import olutils.conversion as lib
@@ -48,6 +49,12 @@ def test_secs2unit():
         res = lib.secs2unit(np.array(inp), unit)
         assert isinstance(res, map if unit in ['td', 'dt'] else np.ndarray)
         assert list(res) == list(out)
+
+    with pytest.raises(ValueError):
+        lib.secs2unit(10,"unknown")
+
+    with pytest.raises(TypeError):
+        lib.secs2unit('60', "min")
 
 
 def test_dt2ts():

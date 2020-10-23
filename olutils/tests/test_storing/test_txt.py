@@ -1,4 +1,5 @@
 import os
+import pytest
 import shutil
 
 import olutils.storing as lib
@@ -70,6 +71,12 @@ def test_read_txt():
     content_list_crlf = lib.read_txt(path, f_eol="\r\n")
     assert content_list_crlf == [l.replace("\n", "\r\n") for l in content_list]
 
+    with pytest.raises(TypeError):
+        lib.read_txt(path, w_eol=True, f_eol=1)
+
+    with pytest.raises(ValueError):
+        lib.read_txt(path, rtype=int)
+
 
 def test_write_txt():
 
@@ -87,3 +94,7 @@ def test_write_txt():
     lines = [line + "\n" for line in clean_lines]
     lib.write_txt(lines, path)
     assert_content_equal(path, content)
+
+    lines = 30
+    lib.write_txt(lines, path)
+    assert_content_equal(path, str(lines))

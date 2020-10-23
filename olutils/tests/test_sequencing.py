@@ -97,3 +97,11 @@ def test_display(capfd):
 
     lib.display(msg, verbose=None, v=False)
     assert readout(capfd) == ""
+
+
+def test_sequencing():
+    # TODO: improve
+    assert lib.wait_until(lambda: True, timeout=0.01, freq=0.001)
+    with pytest.raises(TimeoutError):
+        lib.wait_until(lambda: False, timeout=0.01, freq=0.001)
+    assert not lib.wait_until(lambda: False, timeout=0.01, raise_err=False)

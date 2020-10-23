@@ -3,7 +3,7 @@ History of release notes
 
 ---
 
-# Version 2.0-alpha
+# Version 2.0.1
 
 Lot of changes, here are the major ones:
 
@@ -37,6 +37,8 @@ Lot of changes, here are the major ones:
     - `countiter` dft_ind becomes dindicator
 - Forcing positional and keyword arguments
 - Improve documentation
+- 100% Test Coverage
+- Travis and Coverage badges
 
 
 

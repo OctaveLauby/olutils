@@ -16,7 +16,7 @@ def read_txt(path, /, *, rtype=list, w_eol=True, f_eol=None,
 
     Args:
         path (str)      : path to write to
-        rtype (str)     : type to return
+        rtype (object)  : type to return
             Iterable, "iter", "iterable"        -> Iterable on rows
             list, "list"                        -> list of strings
             str, "str", "string"                -> rows joined with ''
@@ -59,7 +59,7 @@ def read_txt(path, /, *, rtype=list, w_eol=True, f_eol=None,
         return line_iter
     if rtype in [str, "str", "string"]:
         return "".join(line_iter)
-    return ValueError(f"Unexpected value for rtype param: {rtype}")
+    raise ValueError(f"Unexpected value for rtype param: {rtype}")
 
 
 def write_txt(content, path, /, *, has_eol=True, eol=DFT_EOL, encoding=None):

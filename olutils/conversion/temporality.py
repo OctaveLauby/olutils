@@ -74,7 +74,7 @@ def secs2unit(secs, /, unit):
     except TypeError:
         if isinstance(secs, (list, set, tuple)):
             return type(secs)(secs2unit(tick, unit) for tick in secs)
-        if isinstance(secs, Iterable):
+        if not isinstance(secs, str) and isinstance(secs, Iterable):
             return map(lambda tick: secs2unit(tick, unit), secs)
         raise TypeError(f"Can't convert type {type(secs)}") from None
 
