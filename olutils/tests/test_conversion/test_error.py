@@ -1,4 +1,4 @@
-from olutils.conversion import error as lib
+import olutils as lib
 
 
 def test_err2str():

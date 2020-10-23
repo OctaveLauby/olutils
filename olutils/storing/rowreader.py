@@ -1,69 +1,14 @@
 """Convenient tools to read and encapsulate rows (dictionaries)"""
 from collections import OrderedDict
 
-from olutils import tools
-
-
-class Row(OrderedDict):
-    """Extension of OrderedDict with items accessible through attributes"""
-
-    def __init__(self, content):
-        """Init Row with content
-
-        Args:
-            content (dict or list): content of row
-
-        Example:
-            >> row = Row([('key1': 1), ('key0', 0)])
-            >> row.setattr('key2': 2)
-            >> assert row.key0 == 0
-            >> assert row.key1 == 1
-            >> assert row.key2 == 2
-            >> assert row.attributes == ['key1', 'key0', 'key2']
-        """
-        super().__init__(content)
-        self._attributes = []
-        items = content.items() if isinstance(content, dict) else content
-        for key, value in items:
-            self.setattr(key, value)
-
-    @property
-    def attributes(self):
-        """Ordered row attributes/keys"""
-        return self._attributes
-
-    def delattr(self, key):
-        """Remove attribute"""
-        try:
-            self.pop(key)
-        except KeyError:
-            raise AttributeError(
-                f"Row does not contain attribute '{key}', it can't be deleted"
-            ) from None
-
-    def pop(self, key, *args, **kwargs):
-        """Remove specified key and return the corresponding value"""
-        output = super().pop(key, *args, **kwargs)
-        try:
-            self._attributes.remove(key)
-            delattr(self, key)
-        except (ValueError, AttributeError):
-            pass
-        return output
-
-    def setattr(self, key, value):
-        """Set attribute and fills attributes list"""
-        if key not in self.attributes:
-            self._attributes.append(key)
-        self[key] = value
-        setattr(self, key, value)
+from olutils.compare import content_diff
 
 
 class RowReader:
-    """Convenient row reader that includes attr conversions and building"""
+    """Convenient row reader that includes key conversions and building"""
 
     def __init__(self, fields, conversions=None, operations=None, delete=None):
-        """Init a row row reader instance
+        """Initialize a row reader instance
 
         Args:
             fields (dict)       : (attribute, column name) items to read attr
@@ -101,26 +46,26 @@ class RowReader:
             (KeyError) if a field is missing in row
 
         Return:
-            (self.rowcls)
+            (OrderedDict)
         """
         try:
-            row = Row(OrderedDict([
+            row = OrderedDict([
                 (attr, irow[field])
                 for attr, field in self.fields.items()
-            ]))
+            ])
         except KeyError:
-            diff = tools.diff(irow.keys(), self.fields.values())
+            diff = content_diff(irow.keys(), self.fields.values())
             raise KeyError(
                 f"Row is missing keys: {', '.join(map(repr, diff['plus']))}"
             ) from None
 
-        for attr, func in self.conversions.items():
-            row.setattr(attr, func(getattr(row, attr)))
+        for key, func in self.conversions.items():
+            row[key] = func(row[key])
 
-        for attr, func in self.operations.items():
-            row.setattr(attr, func(row))
+        for key, func in self.operations.items():
+            row[key] = func(row)
 
-        for attr in self.delete:
-            row.delattr(attr)
+        for key in self.delete:
+            del row[key]
 
         return row

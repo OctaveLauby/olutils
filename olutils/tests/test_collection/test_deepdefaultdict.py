@@ -1,9 +1,9 @@
-from olutils import collection
+import olutils as lib
 
 
 def test_defaultdict():
 
-    dic = collection.defaultdict(int)
+    dic = lib.defaultdict(int)
     dic['key_1'] += 1
     dic['key_3'] += 3
     dic = dic.to_dict()
@@ -13,7 +13,7 @@ def test_defaultdict():
 
 def test_deepdefaultdict():
 
-    dic = collection.deepdefaultdict(int, depth=2)
+    dic = lib.deepdefaultdict(int, depth=2)
     dic['key_1']['key_1'] += 11
     dic['key_1']['key_2'] += 12
     dic['key_2']['key_1'] += 21

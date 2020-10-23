@@ -2,45 +2,40 @@ olutils
 ---
 
 
+[![Travis](https://img.shields.io/travis/olutils/olutils/master.svg?label=Travis%20CI)](
+    https://travis-ci.org/olutils/olutils)
+[![codecov](https://codecov.io/gh/olutils/olutils/branch/master/graph/badge.svg)](
+    https://codecov.io/gh/olutils/olutils)
+
 
 # Introduction
 
-The module ***olutils*** provide common tools to simplify project creation. It includes:
+## About
 
-- class with logger
+The module ***olutils*** provide common tools to simplify daily coding. It includes:
+
+- object storing (.csv, .json, .pickle, .txt)
+- convenient collection (deep defaultdict, lazy list, identity/prod functions)
+- conversion functions (for datetime, dictionaries, errors)
+- sequencing helpers (iteration with progress display, wait until predicate)
 - parameter management
-- object management (copy, saving, loading)
-- plotting (if matplotlib available)
+- and more...
+
 
 
 ## Installation
 
-One can install olutils using pip install command:
+One can install olutils using pip install command: `pip install olutils`
 
-    ```bash
-    pip install olutils
-    ```
 
-## Usage
 
-Use of temporal converters and deep defaultdict:
 
-```python
-import olutils
+# Usage
 
-# Building a deep default dict with datetimes as values
-flights = olutils.deepdefaultdict(lambda x: None, depth=2)
 
-# Filling it
-flights['Paris-NY']['departure'] = olutils.str2dt("2019-01-15 08:00+01:00")
-flights['Paris-NY']['arrival'] = olutils.str2dt("2019-01-15 10:30-05:00")
-flights['NY-Paris']['departure'] = olutils.str2dt("2019-01-17 23:00-05:00")
-flights['NY-Paris']['arrival'] = olutils.str2dt("2019-01-15 11:00+01:00")
+## Object Storing
 
-flights.pprint()
-```
-
-File reading and object storing:
+* Storage: `save` and `load`
 
 ```python
 import olutils
@@ -59,21 +54,39 @@ my_loaded_rows = olutils.load("output/my_rows.csv")
 my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 ```
 
-Multi-plotting:
+
+
+## Collections
+
+* `deepdefaultdict`
 
 ```python
-import matplotlib.pyplot as plt
-import numpy as np
+import olutils
+from olutils.conversion import str2dt
 
-from olutils import plotiter
+# Building a deep default dict with datetimes as values
+flights = olutils.deepdefaultdict(lambda x: None, depth=2)
 
-for i in plotiter(range(5), n_cols=3):
-    x = [i + k/10 for k in range(10)]
-    y = [np.sin(xk) for xk in x]
-    plt.plot(x, y)
+# Filling it
+flights['Paris-NY']['departure'] = str2dt("2019-01-15 08:00+01:00")
+flights['Paris-NY']['arrival'] = str2dt("2019-01-15 10:30-05:00")
+flights['NY-Paris']['departure'] = str2dt("2019-01-17 23:00-05:00")
+flights['NY-Paris']['arrival'] = str2dt("2019-01-15 11:00+01:00")
+
+flights.pprint()
 ```
 
-Others:
+
+* `LazyList`
+
+```python
+import olutils
+
+print(olutils.LazyList(range(10000), 10))
+```
+
+
+* functions: `prod` and `identity`
 
 ```python
 import olutils
@@ -81,20 +94,49 @@ import olutils
 # Operations
 assert olutils.prod([2, 7]) == 14
 assert olutils.identity(1) == 1
+```
+
+
+
+## More
+
+* Explicit iteration
+
+```python
+import olutils
+
+
+print("Iterating on very long iterable:")
+for elem in olutils.countiter(range(int(10e6)), vbatch=100, prefix=". "):
+    # One-Line display of progress every 100 iteration
+    pass
+```
+
+
+* Compare
+
+```python
+import olutils
 
 # Comparison
 l1 = [1, 2, "hi", "bye"]
 l2 = [3, "bye", "bye bye", 2]
-assert olutils.diff(l1, l2) == {
+assert olutils.content_diff(l1, l2) == {
     'common': {2, "bye"},
     'minus': {1, "hi"},
     'plus': {3, "bye bye"},
 }
+```
 
-# Pretty display
+
+* Pretty displays
+
+```python
+import olutils
+
 assert olutils.err2str(ValueError("Message")) == "ValueError - Message"
 l = [1, 2, 3, 4, 5]
-imp_l = olutils.implicit_list(l, 4)
+imp_l = olutils.lazy_content(l, 4)
 assert str(imp_l) == '[1, 2, ..., 5]'
 dic = {
     'values': l,
@@ -107,188 +149,9 @@ print(f"Dictionary used: {dic}")
 print(f"Dictionary to pretty string:")
 def leafconv(x):
     return (
-        str(olutils.implicit_list(x, 5))
+        str(olutils.lazy_content(x, 5))
         if isinstance(x, list)
         else str(x)
     )
 print(olutils.dict2str(dic, leafconv=leafconv))
-
-
-# Iteration
-print("Iterating on very long iterable:")
-for elem in olutils.countiter(range(int(10e6)), v_batch=100, prefix=". "):
-    # One-Line display of progress every 100 iteration
-    pass
-
-
-# And more
-# olutils.dict2str
-
-...
-```
-
-# For developers
-
-
-## Download the project
-
-Clone repository:
-
-```bash
-git clone https://github.com/OctaveLauby/olutils.git
-cd olutils
-```
-
-One can make an editable code installation:
-
-```bash
-pip install -e .
-```
-
-
-## Virtual Environment
-
-```bash
-python -m venv venv
-source venv/Scripts/activate
-python -m pip install -r requirements.txt
-...
-deactivate
-```
-
-> matplotlib does not have to be imported: plotting submodule is not loaded in that case
-
-
-## Release & Distribute
-
-### Release
-
-0. Check current version to know what is the next version
-
-    ```bash
-    git tag
-    ```
-
-1. Create release branch from branch-to-release (usually dev)
-
-    ```bash
-    git checkout <branch_to_release>
-    git checkout release/x.x.x
-    ```
-
-2. Add related section in [release notes](RELEASE_NOTES.md), commit and push (even if not completed yet)
-
-    ```
-    git commit -m "Adding release note related to current release"
-    git push --set-upstream origin release/x.x.x
-    ```
-
-3. Create 2 pull requests on github:
-    - on from {release_branch} to {dev} (name="Release/x.x.x Dev)
-    - on from {release_branch} to {master} (name="Release/x.x.x)
-
-4. Fill up the release note + commit and push
-    - Read commits descriptions
-    - Go through all the Files Changes
-
-    > Fill free to complete missing documentations and add comments in code
-
-6. Update [setup](setup.py)
-    - Update version
-    - Ensure install_requires have all [requirements](requirements.txt)
-
-7. Run tests on clean venv
-
-    ```bash
-    rm -r venv
-    python -m venv venv
-    source venv/Scripts/activate
-    python m pytest -vv
-    ```
-
-    > If any error, fix issues + commit and push
-
-8. Merge dev pull request on github
-    - Check the File Changes (one should see the new release note and the possible fixes he made)
-    - Merge pull request
-
-    > One can redo tests locally just to be sure
-
-9. Merge master pull request on github + Delete branch
-
-10. Add tag and Push
-
-    - Tag master
-
-    ```bash
-    git checkout master
-    git pull
-    git tag -a vx.x.x -m "Version x.x.x"
-    ```
-
-    - Tag dev
-
-    ```bash
-    git checkout dev
-    git pull
-    git tag -a vx.x.x-dev -m "Version x.x.x (dev)"
-    ```
-
-    - Push
-
-    ```bash
-    git push origin --tags
-    ```
-
-11. Update local repo:
-    - Remove release branch: `git branch -d release/x.x.x`
-
-
-### Distribution
-
-First make sure to be on master branch with latest release.
-
-0. Install distribution libraries
-
-    ```bash
-    pip install check-manifest
-    pip install twine
-    pip install wheel
-    ```
-
-1. Building manifest file:
-
-    ```bash
-    check-manifest --create
-    ```
-
-2. Building the wheel:
-
-    ```bash
-    python setup.py bdist_wheel
-    ```
-
-3. Building the source distribution:
-
-    ```bash
-    python setup.py sdist
-    ```
-
-4. Publishing:
-
-    ```bash
-    python setup.py bdist_wheel sdist
-    twine upload dist/*
-    ```
-
-> For TestPyPi publication:  `twine upload --repository-url https://test.pypi.org/legacy/ dist/* `
-
-> [Not working on Git terminal](https://github.com/pypa/packaging-problems/issues/197) for some reason
-
-
-## Testing
-
-```bash
-python -m pytest olutils -vv
-python -m pylint olutils --ignore-patterns=test*
 ```
