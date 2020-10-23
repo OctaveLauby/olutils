@@ -17,7 +17,6 @@ from .collection import (
 from .compare import content_diff
 from .conversion import (
     basedict,
-    convert_seconds,
     dict2str,
     dt2ts,
     err2str,

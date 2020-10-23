@@ -27,7 +27,7 @@ UNIT_TO_SEC = {
 }
 
 
-def convert_seconds(secs, /, unit):
+def secs2unit(secs, /, unit):
     """Convert number of seconds to given unit
 
     Args:
@@ -73,9 +73,9 @@ def convert_seconds(secs, /, unit):
         raise ValueError("Unknown time unit '%s'" % unit)
     except TypeError:
         if isinstance(secs, (list, set, tuple)):
-            return type(secs)(convert_seconds(tick, unit) for tick in secs)
+            return type(secs)(secs2unit(tick, unit) for tick in secs)
         if isinstance(secs, Iterable):
-            return map(lambda tick: convert_seconds(tick, unit), secs)
+            return map(lambda tick: secs2unit(tick, unit), secs)
         raise TypeError(f"Can't convert type {type(secs)}") from None
 
 
