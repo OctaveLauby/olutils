@@ -15,13 +15,8 @@ setup(
     # Packages / Modules
     packages=find_packages(),
     install_requires=[
-        "check-manifest>=0.37",
-        "matplotlib>=3.0.3",
         "numpy>=1.10.0",
-        "pylint>=2.3.1",
-        "pytest>=4.3",
         "python-dateutil>=2.8.0",
-        "twine>=1.13.0",
     ],
 
     # Code source and license
