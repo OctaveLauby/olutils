@@ -28,7 +28,7 @@ def read_csv(path, /, *, delimiter="smart", mode=None, encoding=None, **kwargs):
             "smart" > try common delimiters and use the one building more cols
         mode (str)      : mode to open file with (default is 'r')
         encoding (str)  : encoding of file
-        **kwargs (dict) : @see `~olutils.countiter`
+        **kwargs        : @see `~olutils.countiter`
             vbatch      nb of lines b/w progress displays (dft=0, no display)
             start       first index of progress counter (dft=1)
 
@@ -69,7 +69,7 @@ def write_csv(rows, path, /, *, fieldnames=None, header=None, pretty=False,
         header      (n-list)        : column names regarding field names
         pretty      (bool)          : pretty frmt header
         encoding    (str)           : encoding to open output
-        kwargs (dict): @see `csv.DictWriter`
+        **kwargs: @see `csv.DictWriter`
             delimiter       dft is ","
             lineterminator  dft is DFT_EOL
             restval         dft is None if field missing in a row
