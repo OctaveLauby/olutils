@@ -34,7 +34,7 @@ python -m pylint olutils --ignore-patterns=test*
 Testing with coverage
 
 ```bash
-coverage -m pytest
+coverage run -m pytest
 coverage report
 ```
 
