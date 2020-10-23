@@ -1,6 +1,46 @@
 History of release notes
 ---
 
+---
+
+# Version 2.0-alpha
+
+Lot of changes, here are the major ones:
+
+## Removed:
+- `log` module (`LogClass`, `get_loggers`, ...)
+- `Row` class (implies change in `RowReader.read` signature)
+
+## Moved to to [olanalytics](https://github.com/OctaveLauby/olanalytics)
+- `closest` and `previous`
+- `plotting` module (`plot_iter`, `resize`, ...)
+
+## New Objects:
+- `LazyList`: list container with lazy display
+
+## Feature Changes:
+- `diff` renamed `content_diff`
+- `implicit_list` renamed `lazy_content`
+- `convert_ts` renamed `secs2unit`
+- `dt2float` renamed `dt2ts`
+- `ts2dt` renamed `float2dt`
+- `Param` renamed `Params`
+- time converters (`str2dt`, `ts2dt`, ...) must be imported through `olutils.conversion`
+- specific storing functions (`read_csv`, `write_csv`, ...) must be imported through `olutils.storing`
+- specific param tools (`check_type`, `iter_params`, ...)   must be imported through `olutils.params`
+
+## Other changes:
+- Renaming and re-ordering modules
+- Renaming arguments
+    - `basedict` leaf_conv becomes leafconv
+    - `countiter` v_batch becomes vbatch
+    - `countiter` dft_ind becomes dindicator
+- Forcing positional and keyword arguments
+- Improve documentation
+
+
+
+---
 
 # Version 1.2.0
 
