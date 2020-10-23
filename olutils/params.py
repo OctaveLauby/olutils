@@ -4,7 +4,7 @@ import itertools
 DFT = object()
 
 
-class Param(dict):
+class Params(dict):
     """Container for parameters where items are accessible as attributes"""
 
     def __getattr__(self, attr):
@@ -43,47 +43,47 @@ def check_type(name, value, exp_type):
 
 
 def read_params(params, dft_params, safe=True, default=DFT):
-    """Return params completed with dft params in convenient dict-like object
+    """Return kwargs completed with dft kwargs in convenient dict-like object
 
     Args:
-        params (NoneType or dict): list of params given by user
+        params (NoneType or dict): list of kwargs given by user
         dft_params (dict or list): expected parameters with default values
-            (dict) -> reduce-complete params with dft_params
-            (list) -> return list of dict where dict at index i is params
+            (dict) -> reduce-complete kwargs with dft_params
+            (list) -> return list of dict where dict at index i is kwargs
                         reduced & completed with dft_params[i]
-        safe (bool): raises KeyError if params contains key not in dft_params
-        default (object): value in params to replace with dft_params
-            similar to no param in params
+        safe (bool): raises KeyError if kwargs contains key not in dft_params
+        default (object): value in kwargs to replace with dft_params
+            similar to no param in kwargs
 
     Example:
-        >>> params.read_params({'a': 0}, {'a': 1, 'b': 2})
-        kwargs == {'a': 0, 'b': 2}
+        >>> read_params({'a': 0}, {'a': 1, 'b': 2})
+        {'a': 0, 'b': 2}
 
-        >>> params.read_params({'a': 0, 'c': 8}, {'a': 1, 'b': 2}, safe=False)
-        kwargs == {'a': 0, 'b': 2}
+        >>> read_params({'a': 0, 'c': 8}, {'a': 1, 'b': 2}, safe=False)
+        {'a': 0, 'b': 2}
 
-        >>> params.read_params(
+        >>> read_params(
         ...     {'a': DFT, 'b': None},
         ...     {'a': 1, 'b': 2},
         ... )
-        kwargs == {'a': 1, 'b': None}
+        {'a': 1, 'b': None}
 
-        >>> params.read_params(
+        >>> read_params(
         ...     {'a': 0, 'c': 8},
         ...     [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],
         ... )
-        kwargs == [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
+        [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
 
     Return:
-        (Param) dict-like structure where params are accessible as attributes
-        or (list[Param}) if  dft_params is a list of params
+        (Params) dict-like structure where kwargs are accessible as attributes
+        or (list[Params}) if  dft_params is a list of kwargs
     """
     params = {} if params is None else params
     r_dict = isinstance(dft_params, dict)
     dft_set = [dft_params] if r_dict else dft_params
 
     results = [dft.copy() for dft in dft_set]
-    key_is_default = {}  # make sure keys from params are in defaults
+    key_is_default = {}  # make sure keys from kwargs are in defaults
     for key, val in params.items():
         if not key in key_is_default:
             key_is_default[key] = False
@@ -97,9 +97,9 @@ def read_params(params, dft_params, safe=True, default=DFT):
 
     wrong_params = [key for key, val in key_is_default.items() if not val]
     if wrong_params and safe:
-        raise KeyError(f"Unexpected params : {', '.join(wrong_params)}")
+        raise KeyError(f"Unexpected kwargs : {', '.join(wrong_params)}")
 
-    results = [Param(res) for res in results]
+    results = [Params(res) for res in results]
     return results[0] if r_dict else results
 
 
@@ -135,7 +135,7 @@ def iter_params(param_ranges):
     return params_iter(params, ranges)
 
 
-def add_dft_args(parser, dft_args, flag_prefix="", help_prefix=""):
+def add_dft_args(parser, dft_args, help_prefix="", flag_prefix=""):
     """Add arguments to parser.
 
     Args:
