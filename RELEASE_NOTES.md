@@ -37,6 +37,7 @@ Lot of changes, here are the major ones:
     - `countiter` dft_ind becomes dindicator
 - Forcing positional and keyword arguments
 - Improve documentation
+- Travis and Coverage badges
 
 
 
