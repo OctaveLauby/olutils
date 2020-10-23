@@ -9,3 +9,9 @@ def test_diff():
         'minus': {1, "hi"},
         'plus': {3, "bye bye"},
     }
+    assert lib.content_diff(
+        [1, 2, "hi", "bye"], [3, "bye", "bye bye", 2], only_diff=True
+    ) == {
+       'minus': {1, "hi"},
+       'plus': {3, "bye bye"},
+   }
