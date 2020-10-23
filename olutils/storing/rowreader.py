@@ -8,7 +8,7 @@ class Row(OrderedDict):
     """Extension of OrderedDict with items accessible through attributes"""
 
     def __init__(self, content):
-        """Init Row with content
+        """Initialize Row with content
 
         Args:
             content (dict or list): content of row
@@ -60,10 +60,10 @@ class Row(OrderedDict):
 
 
 class RowReader:
-    """Convenient row reader that includes attr conversions and building"""
+    """Convenient row reader that includes key conversions and building"""
 
     def __init__(self, fields, conversions=None, operations=None, delete=None):
-        """Init a row row reader instance
+        """Initialize a row reader instance
 
         Args:
             fields (dict)       : (attribute, column name) items to read attr

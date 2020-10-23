@@ -1,12 +1,10 @@
-"""olutils provide tools for common operation in a module
+"""Tools for common operation in a module
 
 - conversions
 - file writing / reading
 - object storing
-- logs
 - parameter management
 - loop monitoring
-- plotting (if matplotlib available)
 """
 from .collection import (
     deepdefaultdict,

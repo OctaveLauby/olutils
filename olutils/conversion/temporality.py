@@ -1,4 +1,4 @@
-"""Convenient converters for temporality"""
+"""Temporality converters"""
 from collections.abc import Iterable
 from datetime import datetime, timedelta
 from dateutil.parser import parse
@@ -27,11 +27,11 @@ UNIT_TO_SEC = {
 }
 
 
-def convert_seconds(secs, unit):
+def convert_seconds(secs, /, unit):
     """Convert number of seconds to given unit
 
     Args:
-        secs (float or iterable): number of seconds
+        secs (int|float|iterable): number of seconds
         unit (str): unit to convert to
 
     Available units:
@@ -44,11 +44,20 @@ def convert_seconds(secs, unit):
         dt, datetime        -> datetime (secs is interpreted as unix-timestamp)
         td, timedelta       -> timedelta
 
+    Raise:
+        (TypeError) : secs-type not handled
+        (ValueError): unit not handled
+
     Return:
-        (float or iterable)
-            if secs is list, set or tuple, return list set or tuple
-            elif secs is numpy array and unit is not dt or td, return numpy array
-            elif secs is another iterable, return map-object
+        (object)
+            if secs is int|float
+                if unit is dt: return datetime
+                elif unit is timedelta: return timedelta
+                else: return int|float
+            elif secs is iterable
+                if secs is list|set|tuple: return list|set|tuple
+                elif secs is ndarray & unit is not dt|td: return ndarray
+                else: return map-object
     """
     try:
         divisor = UNIT_TO_SEC[unit]
@@ -70,16 +79,21 @@ def convert_seconds(secs, unit):
         raise TypeError(f"Can't convert type {type(secs)}") from None
 
 
-def dt2ts(dt):
+def dt2ts(dt, /):
     """Return seconds since the Unix Epoch"""
     return (dt-DATE_REF).total_seconds()
 
 
-def ts2dt(ts):
+def ts2dt(ts, /):
     """Return datetime from seconds since the Unix Epoch"""
     return DATE_REF + timedelta(seconds=float(ts))
 
 
-def str2dt(string, *args, **kwargs):
-    """Return string converted to datetime"""
-    return parse(string, *args, **kwargs)
+def str2dt(timestr, /, *args, **kwargs):
+    """Return datetime from string
+
+    Args:
+        timestr (str)   : string describing a datetime
+        *args, **kwargs : @see `dateutil.parser.parse`
+    """
+    return parse(timestr, *args, **kwargs)

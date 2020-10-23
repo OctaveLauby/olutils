@@ -19,7 +19,7 @@ def test_check_type():
 
 def test_read_params():
 
-    # ---- Single default params
+    # ---- Single default kwargs
     kwargs = params.read_params({'a': 0}, {'a': 1, 'b': 2})
     assert kwargs == {'a': 0, 'b': 2}
     assert kwargs.a == 0
@@ -40,7 +40,7 @@ def test_read_params():
     assert kwargs == {'a': 1, 'b': None}
 
 
-    # ---- Multiple default params
+    # ---- Multiple default kwargs
     kwargs = params.read_params(
         {'a': 0, 'c': 8}, [{'a': 1, 'b': 2}, {'c': 3, 'd': 4}],
     )

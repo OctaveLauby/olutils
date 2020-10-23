@@ -1,7 +1,7 @@
-"""Error converter(s)"""
+"""Error converters"""
 
 
-def err2str(error, msg_only=False):
+def err2str(error, /, *, msg_only=False):
     """Return string of error"""
     if msg_only:
         return str(error)

@@ -1,16 +1,16 @@
-"""This module provides functions to read and write text files."""
+"""Functions to read and write text files."""
 from collections.abc import Iterable
 
 from olutils.files import sopen
 from .common import DFT_EOL
 
 
-def rm_eol(line):
+def rm_eol(line, /):
     """Return line with end of line removed"""
     return line.rstrip("\n\r")
 
 
-def read_txt(path, /, rtype=list, w_eol=True, f_eol=None,
+def read_txt(path, /, *, rtype=list, w_eol=True, f_eol=None,
              mode=None, encoding=None):
     """Return content of text file at path
 
@@ -24,6 +24,10 @@ def read_txt(path, /, rtype=list, w_eol=True, f_eol=None,
         f_eol (str)     : force line terminators to a given string
         mode (str)      : mode to open file with (default is 'r')
         encoding (str)  : encoding used to read file
+
+    Raise:
+        (TypeError) : f_eol-type not handled
+        (ValueError): rtype not handled
 
     Return:
         (list)
@@ -58,7 +62,7 @@ def read_txt(path, /, rtype=list, w_eol=True, f_eol=None,
     return ValueError(f"Unexpected value for rtype param: {rtype}")
 
 
-def write_txt(content, path, has_eol=True, eol=DFT_EOL, encoding=None):
+def write_txt(content, path, /, *, has_eol=True, eol=DFT_EOL, encoding=None):
     """Write content in a text file
 
     Args:

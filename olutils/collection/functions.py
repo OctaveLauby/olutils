@@ -1,6 +1,6 @@
 """Convenient functions"""
 
-def identity(__object):
+def identity(__object, /):
     """Identity function"""
     return __object
 

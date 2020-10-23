@@ -1,6 +1,6 @@
-"""Special String"""
+"""Special strings3"""
 
 class SpeStr(str):
-    """String where representation has no ' around"""
+    """String with no ' around repr"""
     def __repr__(self):
         return str(self)

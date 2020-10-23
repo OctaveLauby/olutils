@@ -1,4 +1,4 @@
-"""This module provides functions to read and write csv.
+"""CSV File reading and writing
 
 It is based on csv library, and add a layer so that :
 - Functions open and close file
@@ -12,7 +12,6 @@ Also, because it is based on csv library, it has same limitations :
 @see https://stackoverflow.com/questions/11379300/csv-reader-behavior-with-none-and-empty-string
 """
 from csv import DictReader, DictWriter
-from itertools import chain
 
 from olutils.files import sopen
 from olutils.params import read_params
@@ -20,7 +19,7 @@ from olutils.sequencing import countiter
 from .common import DFT_EOL
 
 
-def read_csv(path, /, delimiter="smart", mode=None, encoding=None, **params):
+def read_csv(path, /, *, delimiter="smart", mode=None, encoding=None, **kwargs):
     """Return csv.DictReader iterator on file at path (can display row count)
 
     Args:
@@ -29,12 +28,12 @@ def read_csv(path, /, delimiter="smart", mode=None, encoding=None, **params):
             "smart" > try common delimiters and use the one building more cols
         mode (str)      : mode to open file with (default is 'r')
         encoding (str)  : encoding of file
-        **params (dict) : @see olutils.countiter
+        **kwargs (dict) : @see `~olutils.countiter`
             vbatch      nb of lines b/w progress displays (dft=0, no display)
             start       first index of progress counter (dft=1)
 
     Returns:
-        (iterator)
+        (iterable)
     """
     mode = 'r' if mode is None else mode
     if delimiter == "smart":
@@ -47,20 +46,20 @@ def read_csv(path, /, delimiter="smart", mode=None, encoding=None, **params):
         if n_cols <= 1:
             raise ValueError(f"Could not find delimiter of '{path}'")
 
-    def row_iterator(path):
+    def row_iterator(filepath):
         """Iterate row of file at path"""
-        with open(path, mode, encoding=encoding) as file:
-            reader = DictReader(file, delimiter=delimiter)
-            for elem in countiter(reader, **params):
+        with open(filepath, mode, encoding=encoding) as buffer:
+            reader = DictReader(buffer, delimiter=delimiter)
+            for elem in countiter(reader, **kwargs):
                 yield elem
 
-    params['vbatch'] = params.pop('vbatch', 0)
-    params['start'] = params.pop('start', 1)
+    kwargs['vbatch'] = kwargs.pop('vbatch', 0)
+    kwargs['start'] = kwargs.pop('start', 1)
     return row_iterator(path)
 
 
-def write_csv(rows, path, /, fieldnames=None, header=None, pretty=False,
-              encoding=None, **params):
+def write_csv(rows, path, /, *, fieldnames=None, header=None, pretty=False,
+              encoding=None, **kwargs):
     """"Write a list of dictionaries to path
 
     Args:
@@ -70,18 +69,18 @@ def write_csv(rows, path, /, fieldnames=None, header=None, pretty=False,
         header      (n-list)        : column names regarding field names
         pretty      (bool)          : pretty frmt header
         encoding    (str)           : encoding to open output
-        params (dict): @see params for csv.DictWriter
+        kwargs (dict): @see `csv.DictWriter`
             delimiter       dft is ","
             lineterminator  dft is DFT_EOL
             restval         dft is None if field missing in a row
             extrasaction    dft is "ignore" additional fields in rows
 
     Raise:
-        (ValueError) if rows empty and fieldnames is None
-        (TypeError) if fst row is not a dictionary and fieldnames is None
+        (ValueError): empty rows and fieldnames is None
+        (TypeError) : first row is not a dictionary and fieldnames is None
         else same behavior than csv.DictWriter
     """
-    params = read_params(params, {
+    kwargs = read_params(kwargs, {
         'delimiter': ",",
         'lineterminator': DFT_EOL,
         'restval': None,
@@ -119,9 +118,9 @@ def write_csv(rows, path, /, fieldnames=None, header=None, pretty=False,
     # Write file
     with sopen(path, "w+", encoding=encoding) as file:
         # TODO : find a convenient way to raise error when field is missing
-        writer = DictWriter(file, fieldnames=fieldnames, **params)
+        writer = DictWriter(file, fieldnames=fieldnames, **kwargs)
         file.write(
-            params['delimiter'].join(header)
-            + params['lineterminator']
+            kwargs['delimiter'].join(header)
+            + kwargs['lineterminator']
         )
         writer.writerows(rows)

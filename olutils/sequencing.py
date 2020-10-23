@@ -1,17 +1,17 @@
-"""Some common utils"""
+"""Functions for sequencing"""
 from time import sleep, time
 
 
-def countiter(__object, start=1, stop=None,
+def countiter(iterable, /, start=1, stop=None, *,
               w_count=False, vbatch=1, prefix="", suffix="", dindicator="?"):
-    """Iter elems from a while counting
+    """Iterate elements from a while counting
 
     Args:
-        array (iterable)
+        iterable (iterable)
         start (int)     : count starting point
         stop (int)      : stop iteration when count reaches stop (last included)
         w_count (bool)  : also yield count
-        vbatch (int)    : number of iteration b/w progess displays
+        vbatch (int)    : number of iteration b/w progress displays
             0 for no display
         prefix (string) : count prefix in display
         suffix (string) : count suffix in display
@@ -25,14 +25,14 @@ def countiter(__object, start=1, stop=None,
     """
     verbose = bool(vbatch)
     try:
-        size = len(__object) + start - 1
+        size = len(iterable) + start - 1
     except TypeError:
         size = dindicator
     if stop is not None:
         size = f"{stop} (/{size})"
 
     i = start-1  # ensure existence if no element
-    for i, elem in enumerate(__object, start):
+    for i, elem in enumerate(iterable, start):
         if verbose and (i == start or i % vbatch == 0):
             print(f"\r{prefix}{i}/{size}{suffix}", end="")
         yield (i, elem) if w_count else elem
@@ -64,7 +64,7 @@ def display(*args, **kwargs):
         print(*args, **kwargs)
 
 
-def wait_until(predicate, /, freq=0.1, timeout=5, raise_err=True):
+def wait_until(predicate, *, freq=0.1, timeout=5, raise_err=True):
     """Wait until predicate return True
 
     Args:
@@ -72,6 +72,9 @@ def wait_until(predicate, /, freq=0.1, timeout=5, raise_err=True):
         freq (int|float): number of seconds b/w checks of predicate
         timeout (int|float): max number of seconds to wait
         raise_err (bool): raise error if timeout reached
+
+    Raise:
+        (TimeoutError): raise_err is True & timeout reached
 
     Return:
         (bool): whether predicate returned True

@@ -1,11 +1,12 @@
-"""Conversion functions for dictionaries"""
+"""Dictionary converters"""
+from olutils.collection.functions import identity
 
 
-def basedict(__object, /, leafconv=lambda x: x):
+def basedict(__object, /, leafconv=identity):
     """Return base dict from object (recursive)
 
     Args:
-        __object (dict-like): dict-like object to recursively convert
+        __object (dict)     : dict-like object to recursively convert
         leafconv (callable) : function to convert leaves (not dict values)
 
     Return:
@@ -19,7 +20,7 @@ def basedict(__object, /, leafconv=lambda x: x):
     return leafconv(__object)
 
 
-def dict2str(__object, /, bullets="#*>-", indent="\t", prefix="",
+def dict2str(__object, /, *, bullets="#*>-", indent="\t", prefix="",
              keyconv=str, leafconv=str):
     """Convert dict to pretty formatted string
 
@@ -52,8 +53,12 @@ def dict2str(__object, /, bullets="#*>-", indent="\t", prefix="",
         if isinstance(value, dict):
             string += prefix + exbullet + keyconv(key).ljust(key_maxsize) + ":"
             value_str = dict2str(
-                value, bullets=nbullets, indent=indent, prefix=prefix+indent,
-                leafconv=leafconv, keyconv=keyconv
+                value,
+                bullets=nbullets,
+                indent=indent,
+                prefix=prefix+indent,
+                leafconv=leafconv,
+                keyconv=keyconv,
             )
             if value:
                 string += "\n" + value_str
