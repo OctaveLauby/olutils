@@ -43,7 +43,7 @@ def defaultdict(default_factory, *args, **kwargs):
 def deepdefaultdict(default_factory, depth):
     """Return a multi ladder defaultdict given the leaf factory and depth"""
     if depth == 0:
-        return default_factory
+        return default_factory()
     if depth == 1:
         return defaultdict(default_factory)
     return defaultdict(lambda: deepdefaultdict(default_factory, depth-1))
