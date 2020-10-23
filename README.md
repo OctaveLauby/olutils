@@ -2,8 +2,7 @@ olutils
 ---
 
 
-[![Travis](https://img.shields.io/travis/olutils/olutils/master.svg?label=Travis%20CI)](
-    https://travis-ci.org/olutils/olutils)
+[![Build Status](https://travis-ci.com/OctaveLauby/olutils.svg?branch=master)](https://travis-ci.com/OctaveLauby/olutils)
 [![codecov](https://codecov.io/gh/olutils/olutils/branch/master/graph/badge.svg)](
     https://codecov.io/gh/olutils/olutils)
 
