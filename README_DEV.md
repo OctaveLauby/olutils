@@ -21,12 +21,23 @@ pip install -e .
 ```
 
 
+
 ## Testing
+
+Classic testing
 
 ```bash
 python -m pytest olutils -vv
 python -m pylint olutils --ignore-patterns=test*
 ```
+
+Testing with coverage
+
+```bash
+coverage -m pytest
+coverage report
+```
+
 
 
 ## Virtual Environment

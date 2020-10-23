@@ -1,0 +1,6 @@
+[run]
+source=
+    olutils
+omit=
+    .venv/*
+    *tests*
