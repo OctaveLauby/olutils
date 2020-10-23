@@ -1,4 +1,4 @@
-import olutils.collection.lazylist as lib
+import olutils as lib
 
 
 def test_build_lazy_content():

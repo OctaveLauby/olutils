@@ -4,7 +4,7 @@ import itertools
 DFT = object()
 
 
-class Param(dict):
+class Params(dict):
     """Container for parameters where items are accessible as attributes"""
 
     def __getattr__(self, attr):
@@ -75,8 +75,8 @@ def read_params(params, dft_params, safe=True, default=DFT):
         [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
 
     Return:
-        (Param) dict-like structure where kwargs are accessible as attributes
-        or (list[Param}) if  dft_params is a list of kwargs
+        (Params) dict-like structure where kwargs are accessible as attributes
+        or (list[Params}) if  dft_params is a list of kwargs
     """
     params = {} if params is None else params
     r_dict = isinstance(dft_params, dict)
@@ -99,7 +99,7 @@ def read_params(params, dft_params, safe=True, default=DFT):
     if wrong_params and safe:
         raise KeyError(f"Unexpected kwargs : {', '.join(wrong_params)}")
 
-    results = [Param(res) for res in results]
+    results = [Params(res) for res in results]
     return results[0] if r_dict else results
 
 

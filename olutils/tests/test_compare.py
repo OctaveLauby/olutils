@@ -1,4 +1,4 @@
-from olutils import compare as lib
+import olutils as lib
 
 
 def test_diff():

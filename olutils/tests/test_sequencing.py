@@ -1,7 +1,6 @@
-import numpy as np
 import pytest
 
-from olutils import sequencing as lib
+import olutils as lib
 
 
 def readout(capfd):

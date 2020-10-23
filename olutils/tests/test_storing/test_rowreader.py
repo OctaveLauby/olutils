@@ -1,13 +1,13 @@
 import pytest
 from collections import OrderedDict
 
-from olutils.storing import rowreader
+import olutils.storing as lib
 
 
 def test_RowReader():
 
     # ---- Simple test
-    reader = rowreader.RowReader(
+    reader = lib.RowReader(
         fields={'field1': "Header1", 'field2': "Header2"},
     )
 
@@ -22,7 +22,7 @@ def test_RowReader():
 
     label_func = lambda row: str(row['id']) + "." + row['name']
 
-    reader = rowreader.RowReader(
+    reader = lib.RowReader(
         fields={'id': "ID", 'name': "Nom"},
         conversions={'id': int},
         operations={'label': label_func},
@@ -30,7 +30,7 @@ def test_RowReader():
     row = reader.read({'ID': "8", 'Nom': "Octave"})
     assert row == {'id': 8, 'name': "Octave", 'label': "8.Octave"}
 
-    reader = rowreader.RowReader(
+    reader = lib.RowReader(
         fields={'id': "ID", 'name': "Nom"},
         conversions={'id': int},
         operations={'label': label_func},

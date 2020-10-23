@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from olutils import conversion
+import olutils as lib
 
 
 def test_basedict():
@@ -14,7 +14,7 @@ def test_basedict():
         ])
     ])
 
-    dic = conversion.basedict(dic)
+    dic = lib.basedict(dic)
     assert type(dic) == dict
     assert type(dic['sub_odict']) == dict
     assert type(dic['odict_l'][0]) == OrderedDict
@@ -37,7 +37,7 @@ def test_dict2str():
             ('cde', [1, 2]),
         ])}),
     ])
-    assert conversion.dict2str(obj) == (
+    assert lib.dict2str(obj) == (
         "# 1    : 11"
         "\n# two  : 22"
         "\n# 12345:"
@@ -49,7 +49,7 @@ def test_dict2str():
         "\n\t\t> b  : hello"
         "\n\t\t> cde: [1, 2]"
     )
-    assert conversion.dict2str(
+    assert lib.dict2str(
         obj, bullets="*-", indent="  ", prefix="|", leafconv=repr, keyconv=repr
     ) == (
         "|* '1'  : 11"
@@ -63,5 +63,5 @@ def test_dict2str():
         "\n|    'b'  : 'hello'"
         "\n|    'cde': [1, 2]"
     )
-    assert conversion.dict2str({}) == "<empty dict>"
-    assert conversion.dict2str("hello", leafconv=repr) == "'hello'"
+    assert lib.dict2str({}) == "<empty dict>"
+    assert lib.dict2str("hello", leafconv=repr) == "'hello'"

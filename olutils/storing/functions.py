@@ -77,12 +77,12 @@ def save(__object, path, /, mthd=None, *, encoding=None, **params):
             'utf-8' for classic Linux encoding
             'utf-8-sig' for classic windows encoding
         **params            : available kwargs depend on mthd value
-            'csv'       > @see `~olutils.storage.write_csv`
+            'csv'       > @see `~olutils.storing.write_csv`
                 fieldnames, header, pretty, ...
             'json'      > @see `json.dump`
                 encoding issues can be avoid using ensure_ascii=False
             'pickle'    > @see `pickle.dump`
-            'txt'       > @see `~olutils.storage.write_txt`
+            'txt'       > @see `~olutils.storing.write_txt`
                 has_eol, eol
 
     Raise:

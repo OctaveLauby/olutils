@@ -1,6 +1,6 @@
 import numpy as np
 
-from olutils.collection import functions as lib
+import olutils as lib
 
 
 def test_prod():

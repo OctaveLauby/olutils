@@ -3,7 +3,7 @@ import pickle
 import pytest
 import shutil
 
-from olutils import storing
+import olutils as lib
 
 
 TMP_DIR = "tmp"
@@ -38,30 +38,30 @@ def test_save_load():
 
     for mthd in ["csv", "json", "pickle"]:
         path = path_frmt.format(mthd)
-        storing.save(obj, path)
+        lib.save(obj, path)
         if mthd == "csv":
-            assert list(storing.load(path)) == [
+            assert list(lib.load(path)) == [
                 {key: str(val) for key, val in row.items()}
                 for row in obj
             ]
         else:
-            assert storing.load(path) == obj
+            assert lib.load(path) == obj
 
     path = path_frmt.format("unk")
     with pytest.raises(ValueError):
-        storing.save(obj, path)
+        lib.save(obj, path)
 
-    storing.save(obj, path, mthd="json")
+    lib.save(obj, path, mthd="json")
     with pytest.raises(ValueError):
-        storing.load(path)
+        lib.load(path)
     with pytest.raises(pickle.UnpicklingError):
-        storing.load(path, mthd="pickle")
-    assert storing.load(path, mthd="json") == obj
+        lib.load(path, mthd="pickle")
+    assert lib.load(path, mthd="json") == obj
 
     # Test txt load and save
     content = "some text"
     path = path_frmt.format("txt")
-    storing.save(content, path)
-    assert storing.load(path, rtype=str) == content
-    storing.save([content], path, has_eol=False)
-    assert storing.load(path) == [content+"\n"]
+    lib.save(content, path)
+    assert lib.load(path, rtype=str) == content
+    lib.save([content], path, has_eol=False)
+    assert lib.load(path) == [content+"\n"]

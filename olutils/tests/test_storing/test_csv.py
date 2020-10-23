@@ -3,7 +3,7 @@ import pytest
 import shutil
 from collections import OrderedDict
 
-from olutils import storing
+import olutils.storing as lib
 
 
 TMP_DIR = "tmp"
@@ -49,23 +49,23 @@ def test_read_csv(capfd):
     # ---- Basic load
 
     filepath = os.path.join(MOCK_DIR, "base_comma.csv")
-    assert list(storing.read_csv(filepath)) == rows
+    assert list(lib.read_csv(filepath)) == rows
 
     filepath = os.path.join(MOCK_DIR, "base_semicolon.csv")
-    assert list(storing.read_csv(filepath)) == rows
+    assert list(lib.read_csv(filepath)) == rows
 
     filepath = os.path.join(MOCK_DIR, "base_tab.csv")
-    assert list(storing.read_csv(filepath)) == rows
+    assert list(lib.read_csv(filepath)) == rows
 
     filepath = os.path.join(MOCK_DIR, "base_dash.csv")
     with pytest.raises(ValueError):
-        storing.read_csv(filepath)
+        lib.read_csv(filepath)
 
     filepath = os.path.join(MOCK_DIR, "base_dash.csv")
-    assert list(storing.read_csv(filepath, delimiter="-")) == rows
+    assert list(lib.read_csv(filepath, delimiter="-")) == rows
 
     filepath = os.path.join(MOCK_DIR, "base_comma_lg.csv")
-    for i, row in enumerate(storing.read_csv(filepath), 1):
+    for i, row in enumerate(lib.read_csv(filepath), 1):
         if i in [1, 3, 8]:
             assert row == {
                 'index': str(i),
@@ -83,7 +83,7 @@ def test_read_csv(capfd):
     # ---- Rows with multiple delimiters
 
     filepath = os.path.join(MOCK_DIR, "multi_sep.csv")
-    assert list(storing.read_csv(filepath)) == [
+    assert list(lib.read_csv(filepath)) == [
         OrderedDict([
             ('col, 1', "this;is,col\t1"),
             ('col 2', "col\t2"),
@@ -91,14 +91,14 @@ def test_read_csv(capfd):
             ('col, 4', "col, 4"),
         ]),
     ]
-    assert list(storing.read_csv(filepath, delimiter=",")) == [
+    assert list(lib.read_csv(filepath, delimiter=",")) == [
         OrderedDict([
             ('col', "this;is,col\t1;col\t2;col"),
             (' 1;col 2;col\t3;col', " 3;col"),
             (' 4', " 4"),
         ]),
     ]
-    assert list(storing.read_csv(filepath, delimiter="\t")) == [
+    assert list(lib.read_csv(filepath, delimiter="\t")) == [
         OrderedDict([
             ('col, 1;col 2;col', "this;is,col\t1;col"),
             ('3;col, 4', "2;col, 3;col, 4"),
@@ -108,7 +108,7 @@ def test_read_csv(capfd):
     # ---- Playing with display args
 
     filepath = os.path.join(MOCK_DIR, "base_comma_lg.csv")
-    for i, row in storing.read_csv(filepath, w_count=True, vbatch=4):
+    for i, row in lib.read_csv(filepath, w_count=True, vbatch=4):
         assert readout(capfd) == (
             f"\r{i}/?" if (i == 1 or i % 4 == 0) else ""
         )
@@ -122,7 +122,7 @@ def test_write_csv():
     # ---- Basic writes
 
     # # Basic write
-    storing.write_csv(
+    lib.write_csv(
         [
             OrderedDict([('col_1', "val_11"), ('col_2', "val_12")]),
             OrderedDict([('col_1', "val_21"), ('col_2', "val_22")]),
@@ -136,7 +136,7 @@ def test_write_csv():
     ))
 
     # # Pretty header, ;-delimiter and value with delimiter in it
-    storing.write_csv(
+    lib.write_csv(
         [
             OrderedDict([('col_1', "1, one"), ('col_two', "2; two")]),
             OrderedDict([('col_1', "you"), ('col_two', "me")]),
@@ -152,7 +152,7 @@ def test_write_csv():
     ))
 
     # # Selective write
-    storing.write_csv(
+    lib.write_csv(
         [
             OrderedDict([('c_1', "v_11"), ('c_2', "v_12"), ('c_3', "v_13")]),
             OrderedDict([('c_1', "v_21"), ('c_2', "v_22"), ('c_3', "v_23")]),
@@ -169,11 +169,11 @@ def test_write_csv():
 
     # # Empty rows but fieldnames
 
-    storing.write_csv([], filepath, fieldnames=["c_1", "c_2"])
+    lib.write_csv([], filepath, fieldnames=["c_1", "c_2"])
     assert_content_equal(filepath, "c_1,c_2\n")
 
     # # a row with empty val and None val (handled the same)
-    storing.write_csv(
+    lib.write_csv(
         [
             OrderedDict([('col_1', "val_11"), ('col_2', "val_12")]),
             OrderedDict([('col_1', ""), ('col_2', None)]),
@@ -187,7 +187,7 @@ def test_write_csv():
     ))
 
     # # a row is missing a key and a row with empty key (no error)
-    storing.write_csv(
+    lib.write_csv(
         [
             OrderedDict([('col_1', "val_11"), ('col_2', "val_12")]),
             OrderedDict([('col_1', "val_21")]),
@@ -203,27 +203,27 @@ def test_write_csv():
     # ---- ERRORS
 
     # # Write ref to make sure file is not overwritten
-    storing.write_csv([], filepath, fieldnames=['c_1', 'c_2'])
+    lib.write_csv([], filepath, fieldnames=['c_1', 'c_2'])
 
     # # empty iterable
-    storing.write_csv([], filepath, fieldnames=['c_1', 'c_2'])
+    lib.write_csv([], filepath, fieldnames=['c_1', 'c_2'])
     with pytest.raises(ValueError):
-        storing.write_csv([], filepath)
+        lib.write_csv([], filepath)
     assert_content_equal(filepath, "c_1,c_2\n")
 
     # # Fst row not dictionary
     with pytest.raises(TypeError):
-        storing.write_csv(["ab", "cd"], filepath)
+        lib.write_csv(["ab", "cd"], filepath)
     assert_content_equal(filepath, "c_1,c_2\n")
 
     # # rows not iterable on dict
     with pytest.raises(TypeError):
-        storing.write_csv({'key': "value"}, filepath)
+        lib.write_csv({'key': "value"}, filepath)
     assert_content_equal(filepath, "c_1,c_2\n")
 
     # # fieldnames and header do not have same length
     with pytest.raises(AssertionError):
-        storing.write_csv([
+        lib.write_csv([
             OrderedDict([('col_1', "val_11"), ('col_2', "val_12")]),
             OrderedDict([('col_1', ""), ('col_2', None)]),
         ], filepath, header=["First, Column", "Second Column", "Third Column"])
