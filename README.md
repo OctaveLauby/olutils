@@ -28,21 +28,46 @@ One can install olutils using pip install command: `pip install olutils`
 
 # Usage
 
+
+## Object Storing
+
+* Storage: `save` and `load`
+
+```python
+import olutils
+
+my_dict = {'key_1': "value_1", 'key_2': 2}
+my_rows = [{'col_1': 11, 'col_2': 21}, {'col_1': 21, 'col_2': 22}]
+
+# Saving objects in output directory (automatically created)
+olutils.save(my_dict, "output/my_dict.json")
+olutils.save(my_rows, "output/my_rows.csv")
+olutils.save(my_rows, "output/my_rows.unknown", mthd="json")
+
+# Loading objects from save outputs
+my_loaded_dict = olutils.load("output/my_dict.json")
+my_loaded_rows = olutils.load("output/my_rows.csv")
+my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
+```
+
+
+
 ## Collections
 
 * `deepdefaultdict`
 
 ```python
 import olutils
+from olutils.conversion import str2dt
 
 # Building a deep default dict with datetimes as values
 flights = olutils.deepdefaultdict(lambda x: None, depth=2)
 
 # Filling it
-flights['Paris-NY']['departure'] = olutils.str2dt("2019-01-15 08:00+01:00")
-flights['Paris-NY']['arrival'] = olutils.str2dt("2019-01-15 10:30-05:00")
-flights['NY-Paris']['departure'] = olutils.str2dt("2019-01-17 23:00-05:00")
-flights['NY-Paris']['arrival'] = olutils.str2dt("2019-01-15 11:00+01:00")
+flights['Paris-NY']['departure'] = str2dt("2019-01-15 08:00+01:00")
+flights['Paris-NY']['arrival'] = str2dt("2019-01-15 10:30-05:00")
+flights['NY-Paris']['departure'] = str2dt("2019-01-17 23:00-05:00")
+flights['NY-Paris']['arrival'] = str2dt("2019-01-15 11:00+01:00")
 
 flights.pprint()
 ```
@@ -65,29 +90,6 @@ import olutils
 # Operations
 assert olutils.prod([2, 7]) == 14
 assert olutils.identity(1) == 1
-```
-
-
-
-## Object Storing
-
-* Storage: `save` and `load`
-
-```python
-import olutils
-
-my_dict = {'key_1': "value_1", 'key_2': 2}
-my_rows = [{'col_1': 11, 'col_2': 21}, {'col_1': 21, 'col_2': 22}]
-
-# Saving objects in output directory (automatically created)
-olutils.save(my_dict, "output/my_dict.json")
-olutils.save(my_rows, "output/my_rows.csv")
-olutils.save(my_rows, "output/my_rows.unknown", mthd="json")
-
-# Loading objects from save outputs
-my_loaded_dict = olutils.load("output/my_dict.json")
-my_loaded_rows = olutils.load("output/my_rows.csv")
-my_loaded_rows_ = olutils.load("output/my_rows.unknown", mthd="json")
 ```
 
 
@@ -115,7 +117,7 @@ import olutils
 # Comparison
 l1 = [1, 2, "hi", "bye"]
 l2 = [3, "bye", "bye bye", 2]
-assert olutils.diff(l1, l2) == {
+assert olutils.content_diff(l1, l2) == {
     'common': {2, "bye"},
     'minus': {1, "hi"},
     'plus': {3, "bye bye"},
@@ -143,7 +145,7 @@ print(f"Dictionary used: {dic}")
 print(f"Dictionary to pretty string:")
 def leafconv(x):
     return (
-        str(olutils.implicit_list(x, 5))
+        str(olutils.lazy_content(x, 5))
         if isinstance(x, list)
         else str(x)
     )
