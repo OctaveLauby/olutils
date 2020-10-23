@@ -2,6 +2,10 @@ olutils
 ---
 
 
+[![Travis](https://img.shields.io/travis/olutils/olutils/master.svg?label=Travis%20CI)](
+    https://travis-ci.org/olutils/olutils)
+[![codecov](https://codecov.io/gh/olutils/olutils/branch/master/graph/badge.svg)](
+    https://codecov.io/gh/olutils/olutils)
 
 
 # Introduction
