@@ -56,7 +56,7 @@ deactivate
 1. Create release branch from branch-to-release (usually dev)
 
     ```bash
-    git checkout <branch_to_release>
+    git checkout {branch_to_release}
     git checkout release/x.x.x
     ```
 
