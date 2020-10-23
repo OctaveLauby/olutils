@@ -56,8 +56,7 @@ deactivate
 1. Create release branch from branch-to-release (usually dev)
 
     ```bash
-    git checkout {branch_to_release}
-    git checkout release/x.x.x
+    git checkout -b release/x.x.x
     ```
 
 2. Add related section in [release notes](RELEASE_NOTES.md), commit and push (even if not completed yet)
