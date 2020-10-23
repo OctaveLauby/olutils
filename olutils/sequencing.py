@@ -48,7 +48,7 @@ def display(*args, **kwargs):
 
     Args:
         v, verbose (bool): whether to print or not
-        *args, **kwargs: @see print
+        *args, **kwargs: @see `print`
     """
     verb1, verb2 = kwargs.pop("v", None), kwargs.pop("verbose", None)
     if isinstance(verb1, bool) and isinstance(verb2, bool):
