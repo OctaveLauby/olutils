@@ -2,7 +2,7 @@ olutils
 ---
 
 
-[![travis](https://img.shields.io/travis/com/OctaveLauby/olutils/master?label=travis)](https://travis-ci.com/OctaveLauby/olutils)
+[![travis](https://img.shields.io/travis/com/OctaveLauby/olutils/dev?label=travis)](https://travis-ci.com/OctaveLauby/olutils)
 [![codecov](https://codecov.io/gh/OctaveLauby/olutils/branch/dev/graph/badge.svg)](https://codecov.io/gh/OctaveLauby/olutils/branch/dev)
 [![PyPI Latest Release](https://img.shields.io/pypi/v/olutils.svg)](https://pypi.org/project/olutils/)
 
