@@ -1,6 +1,13 @@
 History of release notes
 ---
 
+# Version 2.0.2
+
+## Bugfixes
+- `deepdefaultdict`: fix infinite loop when **depth** < 0
+
+
+
 ---
 
 # Version 2.0.1
@@ -23,7 +30,7 @@ Lot of changes, here are the major ones:
 - `implicit_list` renamed `lazy_content`
 - `convert_ts` renamed `secs2unit`
 - `dt2float` renamed `dt2ts`
-- `ts2dt` renamed `float2dt`
+- `float2dt` renamed `ts2dt`
 - `Param` renamed `Params`
 - time converters (`str2dt`, `ts2dt`, ...) must be imported through `olutils.conversion`
 - specific storing functions (`read_csv`, `write_csv`, ...) must be imported through `olutils.storing`
@@ -32,9 +39,9 @@ Lot of changes, here are the major ones:
 ## Other changes:
 - Renaming and re-ordering modules
 - Renaming arguments
-    - `basedict` leaf_conv becomes leafconv
-    - `countiter` v_batch becomes vbatch
-    - `countiter` dft_ind becomes dindicator
+    - `basedict` **leaf_conv** becomes **leafconv**
+    - `countiter` **v_batch** becomes **vbatch**
+    - `countiter` **dft_ind** becomes **dindicator**
 - Forcing positional and keyword arguments
 - Improve documentation
 - 100% Test Coverage
@@ -57,4 +64,4 @@ Lot of changes, here are the major ones:
 - **dft_ind**  and **stop** argument in `countiter`
 
 ## Bugfixes:
-- **dict2str**: fix issue where 'leafconv' argument was not used properly
+- `dict2str`: fix issue where **leafconv** argument was not used properly

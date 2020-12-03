@@ -1,11 +1,11 @@
 """Extension of collections.defaultdict"""
 
-from collections import defaultdict
+from collections import defaultdict as ddict
 
 from olutils.conversion.dictionary import basedict, dict2str
 
 
-class DefaultDict(defaultdict):
+class DefaultDict(ddict):
     """dict with default factory
 
     Overload collections.defaultdict conversion to base dictionary and pretty
@@ -42,6 +42,8 @@ def defaultdict(default_factory, *args, **kwargs):
 
 def deepdefaultdict(default_factory, depth):
     """Return a multi ladder defaultdict given the leaf factory and depth"""
+    if depth < 0:
+        return None
     if depth == 0:
         return default_factory()
     if depth == 1:
