@@ -34,5 +34,6 @@ def test_deepdefaultdict():
     assert type(dic['key_2']) == dict
     assert dic == {'key_1': {'key_1': 11, 'key_2': 12}, 'key_2': {'key_1': 21}}
 
-    dic = lib.deepdefaultdict(int, depth=0)
-    assert dic == 0
+    assert lib.deepdefaultdict(int, depth=0) == 0
+    assert lib.deepdefaultdict(int, depth=-1) is None
+    assert lib.deepdefaultdict(int, depth=-10) is None
