@@ -1,11 +1,11 @@
 """Extension of collections.defaultdict"""
 
-from collections import defaultdict
+from collections import defaultdict as ddict
 
 from olutils.conversion.dictionary import basedict, dict2str
 
 
-class DefaultDict(defaultdict):
+class DefaultDict(ddict):
     """dict with default factory
 
     Overload collections.defaultdict conversion to base dictionary and pretty
