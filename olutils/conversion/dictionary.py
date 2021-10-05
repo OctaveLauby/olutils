@@ -1,8 +1,10 @@
 """Dictionary converters"""
+from typing import Any, Callable
+
 from olutils.collection.functions import identity
 
 
-def basedict(__object, /, leafconv=identity):
+def basedict(__object: Any, /, leafconv: Callable = identity):
     """Return base dict from object (recursive)
 
     Args:
@@ -14,23 +16,30 @@ def basedict(__object, /, leafconv=identity):
     """
     if isinstance(__object, dict):
         return {
-            key: basedict(value, leafconv=leafconv)
-            for key, value in __object.items()
+            key: basedict(value, leafconv=leafconv) for key, value in __object.items()
         }
     return leafconv(__object)
 
 
-def dict2str(__object, /, *, bullets="#*>-", indent="\t", prefix="",
-             keyconv=str, leafconv=str):
+def dict2str(
+    __object: Any,
+    /,
+    *,
+    bullets: str = "#*>-",
+    indent: str = "\t",
+    prefix: str = "",
+    keyconv: Callable = str,
+    leafconv: Callable = str,
+) -> str:
     """Convert dict to pretty formatted string
 
     Args:
-        __object (dict) : dictionary to format to string
-        bullets (str)   : list of bullets to use for dict-ladders
-        indent (str)    : indent to add when going to next dict-ladder
-        prefix (str)    : prefix before each row in string
-        keyconv (func)  : dict-key string converter
-        leafconv (func) : dict-leaf string converter
+        __object    : dictionary to format to string
+        bullets     : list of bullets to use for dict-ladders
+        indent      : indent to add when going to next dict-ladder
+        prefix      : prefix before each row in string
+        keyconv     : dict-key string converter
+        leafconv    : dict-leaf string converter
 
     Return:
         (str) pretty representation of __object
@@ -56,7 +65,7 @@ def dict2str(__object, /, *, bullets="#*>-", indent="\t", prefix="",
                 value,
                 bullets=nbullets,
                 indent=indent,
-                prefix=prefix+indent,
+                prefix=prefix + indent,
                 leafconv=leafconv,
                 keyconv=keyconv,
             )
@@ -66,8 +75,10 @@ def dict2str(__object, /, *, bullets="#*>-", indent="\t", prefix="",
                 string += " " + value_str
         else:
             string += (
-                prefix + exbullet
+                prefix
+                + exbullet
                 + keyconv(key).ljust(key_maxsize)
-                + ": " + leafconv(value)
+                + ": "
+                + leafconv(value)
             )
     return string
