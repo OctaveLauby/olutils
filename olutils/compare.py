@@ -1,12 +1,20 @@
 """Comparison Tools"""
+from typing import Hashable, Iterable, Set, TypedDict
 
-def content_diff(content1, content2, only_diff=False):
+
+class ContentDiff(TypedDict, total=False):
+    # Use required/not required keys when available (https://www.python.org/dev/peps/pep-0655/#motivation)
+    minus: Set[Hashable]
+    plus: Set[Hashable]
+    common: Set[Hashable]
+
+
+def content_diff(
+    content1: Iterable[Hashable],
+    content2: Iterable[Hashable],
+    only_diff: bool = False,
+) -> ContentDiff:
     """Return differences b/w contents (list|set|...) in a dictionary
-
-    Args:
-        content1 (iterable)
-        content2 (iterable)
-        only_diff (bool)    : also return common items
 
     About:
         Because 0 == False and 1 == True, diff may not work as wanted with
@@ -22,9 +30,9 @@ def content_diff(content1, content2, only_diff=False):
     set2 = set(content2)
     common = set1.intersection(set2)
     res = {
-        'minus': set1 - common,
-        'plus': set2 - common,
+        "minus": set1 - common,
+        "plus": set2 - common,
     }
     if not only_diff:
-        res['common'] = common
+        res["common"] = common
     return res

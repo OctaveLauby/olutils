@@ -1,18 +1,20 @@
 """Function to manage files"""
 import os
 import shutil
+from typing import TextIO
 
 
 # --------------------------------------------------------------------------- #
 # File / Dir management
 
-def mkdirs(dirtree):
+
+def mkdirs(dirtree: str):
     """Build entire tree of directories if does not exists"""
     if dirtree and not os.path.isdir(dirtree):
         os.makedirs(dirtree)
 
 
-def rmdirs(dirtree):
+def rmdirs(dirtree: str):
     """Remove entire tree of directories
 
     Same as @see `shutil.rmtree`
@@ -20,12 +22,12 @@ def rmdirs(dirtree):
     return shutil.rmtree(dirtree)
 
 
-def sopen(filepath, /, option="w+", **kwargs):
+def sopen(filepath: str, /, option: str = "w+", **kwargs) -> TextIO:
     """Safely open a file, by default for writing, by creating dir tree
 
     Args:
-        filepath (str)
-        option (str):
+        filepath
+        option:
             'r'       open for reading (default)
             'w'       open for writing, truncating the file first
             'a'       open for writing, appending to the end of the file if it exists
