@@ -1,24 +1,23 @@
 """Dictionary converters"""
-from typing import Any, Callable
+from typing import Any, Callable, Dict, Hashable
 
 from olutils.collection.functions import identity
 
 
-def basedict(__object: Any, /, leafconv: Callable = identity):
+def basedict(__object: Dict, /, leafconv: Callable = identity) -> Dict:
     """Return base dict from object (recursive)
 
     Args:
-        __object (dict)     : dict-like object to recursively convert
-        leafconv (callable) : function to convert leaves (not dict values)
-
-    Return:
-        (dict)
+        __object (dict-like): dict-like object to recursively convert
+            for instance OrderedDict or defaultdict
+        leafconv: function to convert leaves (not dict values)
     """
-    if isinstance(__object, dict):
-        return {
-            key: basedict(value, leafconv=leafconv) for key, value in __object.items()
-        }
-    return leafconv(__object)
+    return {
+        key: basedict(value, leafconv=leafconv)
+        if isinstance(value, dict)
+        else leafconv(value)
+        for key, value in __object.items()
+    }
 
 
 def dict2str(
@@ -28,8 +27,8 @@ def dict2str(
     bullets: str = "#*>-",
     indent: str = "\t",
     prefix: str = "",
-    keyconv: Callable = str,
-    leafconv: Callable = str,
+    keyconv: Callable[[Hashable], str] = str,
+    leafconv: Callable[[Any], str] = str,
 ) -> str:
     """Convert dict to pretty formatted string
 

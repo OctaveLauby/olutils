@@ -6,7 +6,7 @@ from typing import Iterable, Union
 
 from dateutil.parser import parse
 
-from olutils.collection.typing import Number
+from olutils.collection.typing import Number, TimeRepr
 
 DATE_REF = datetime(1970, 1, 1)
 
@@ -28,8 +28,6 @@ UNIT_TO_SEC = {
     "y": YEAR,
     "year": YEAR,
 }
-
-TimeRepr = Union[Number, datetime, timedelta]
 
 
 def secs2unit(
@@ -62,6 +60,7 @@ def secs2unit(
             else: return int|float
         elif secs is iterable
             if secs is list|set|tuple: return list|set|tuple
+            elif secs is ndarray & unit is not dt|td: return ndarray
             else: return map-object
     """
     try:

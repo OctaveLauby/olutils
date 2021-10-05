@@ -1,6 +1,6 @@
 """Extension of collections.defaultdict"""
 from collections import defaultdict as ddict
-from typing import Callable, Optional
+from typing import Dict, Optional
 
 from olutils.collection.typing import Factory
 from olutils.conversion.dictionary import basedict, dict2str
@@ -13,7 +13,7 @@ class DefaultDict(ddict):
     formatting.
     """
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         """Return base dictionary from instance"""
         return basedict(self)
 

@@ -1,13 +1,15 @@
 """Convenient functions"""
-from typing import Any, Iterable
+from typing import Iterable
+
+from olutils.collection.typing import T
 
 
-def identity(__object: Any, /):
+def identity(__object: T, /) -> T:
     """Identity function"""
     return __object
 
 
-def prod(iterable: Iterable, /, start: int = 1):
+def prod(iterable: Iterable[T], /, start: int = 1) -> T:
     """Return the product of a 'start' value (dft: 0) multiplied by iterable
 
     About:
