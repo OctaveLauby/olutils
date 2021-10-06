@@ -1,7 +1,7 @@
 """Convenient functions"""
 from typing import Iterable
 
-from olutils.collection.typing import T
+from olutils.typing import T
 
 
 def identity(__object: T, /) -> T:

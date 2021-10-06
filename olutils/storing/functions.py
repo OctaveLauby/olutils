@@ -4,7 +4,7 @@ import os
 import pickle
 from typing import Any
 
-from olutils.files import sopen
+from olutils.os import sopen
 from olutils.params import read_params
 from .csv import read_csv, write_csv
 from .txt import read_txt, write_txt

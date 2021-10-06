@@ -2,8 +2,8 @@
 from collections import OrderedDict
 from typing import Callable, Dict, List
 
-from olutils.collection.typing import RowDict
-from olutils.compare import content_diff
+from olutils.typing import RowDict
+from olutils.comparison import content_diff
 
 
 class RowReader:

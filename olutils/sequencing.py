@@ -2,7 +2,7 @@
 from time import sleep, time
 from typing import Callable, Iterable, Union
 
-from olutils.collection.typing import Number, T
+from olutils.typing import Number, T
 
 
 def countiter(

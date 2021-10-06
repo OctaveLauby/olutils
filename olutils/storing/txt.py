@@ -2,7 +2,7 @@
 from collections.abc import Iterable as IterableABC
 from typing import Iterable, List, Union
 
-from olutils.files import sopen
+from olutils.os import sopen
 from .common import DFT_EOL
 
 
