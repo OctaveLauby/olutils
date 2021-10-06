@@ -14,8 +14,8 @@ Also, because it is based on csv library, it has same limitations :
 from csv import DictReader, DictWriter
 from typing import Iterable, List
 
-from olutils.collection.typing import RowDict
-from olutils.files import sopen
+from olutils.typing import RowDict
+from olutils.os import sopen
 from olutils.params import read_params
 from olutils.sequencing import countiter
 from .common import DFT_EOL

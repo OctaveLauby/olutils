@@ -6,7 +6,7 @@ from typing import Iterable, Union
 
 from dateutil.parser import parse
 
-from olutils.collection.typing import Number, TimeRepr
+from olutils.typing import Number, TimeRepr
 
 DATE_REF = datetime(1970, 1, 1)
 

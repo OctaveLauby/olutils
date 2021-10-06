@@ -14,13 +14,13 @@ from .collection import (
     identity,
     prod,
 )
-from .compare import content_diff
+from .comparison import content_diff
 from .conversion import (
     basedict,
     dict2str,
     err2str,
 )
-from .files import (
+from .os import (
     mkdirs,
     rmdirs,
     sopen,
