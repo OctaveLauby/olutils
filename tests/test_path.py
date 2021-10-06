@@ -21,6 +21,9 @@ def test_get_next_path_index(tmpdir):
     with pytest.raises(ValueError):
         lib.get_next_path("file.txt")
 
+    with pytest.raises(ValueError):
+        lib.get_next_path("file_{index}.txt")
+
 
 def test_get_next_path(tmpdir):
     path_frmt = os.path.join(tmpdir.strpath, "file_{}.txt")
