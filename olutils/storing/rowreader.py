@@ -53,7 +53,7 @@ class RowReader:
         Raises:
             (KeyError) if a field is missing in row
 
-        Return:
+        Returns:
             (OrderedDict)
         """
         try:

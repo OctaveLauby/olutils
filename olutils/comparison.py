@@ -20,7 +20,7 @@ def content_diff(
         Because 0 == False and 1 == True, diff may not work as wanted with
         list mixing booleans and integers.
 
-    Return:
+    Returns:
         (dict) with following items
             'minus', set of elements in content1 and not in content2
             'plus', set of elements in content2 and not in content1

@@ -4,9 +4,9 @@ from typing import Iterable
 from olutils.typing import T
 
 
-def identity(__object: T, /) -> T:
+def identity(__obj: T, /) -> T:
     """Identity function"""
-    return __object
+    return __obj
 
 
 def prod(iterable: Iterable[T], /, start: int = 1) -> T:

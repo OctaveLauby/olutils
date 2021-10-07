@@ -47,13 +47,13 @@ class LazyList:
             ellipsis=self.ellipsis,
         )
 
-    def append(self, __object: Any, /):
+    def append(self, __obj: Any, /):
         """Append object to the end of the list"""
-        return self.content.append(__object)
+        return self.content.append(__obj)
 
-    def insert(self, __index: int, __object: Any, /):
+    def insert(self, __index: int, __obj: Any, /):
         """Insert object before index"""
-        return self.content.insert(__index, __object)
+        return self.content.insert(__index, __obj)
 
     def __len__(self) -> int:
         return len(self.content)

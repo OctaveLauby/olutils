@@ -22,12 +22,12 @@ def load(
     """Load object at path given a method
 
     Args:
-        path: path where __object is stored
+        path: path where object is stored
         mthd: method of storing
             None        > catch method from path extension
             'csv'       > return iterable on rows
-            'json'      > return __object using json loading library
-            'pickle'    > return __object using pickle loading method
+            'json'      > return object using json loading library
+            'pickle'    > return object using pickle loading method
             'txt'       > return content of text file
         mode: mode to open file with
             default is 'r', except for pickle method where it is 'rb'
@@ -67,7 +67,7 @@ def load(
 
 
 def save(
-    __object: Any,
+    __obj: Any,
     path: str,
     /,
     mthd: str = None,
@@ -78,7 +78,7 @@ def save(
     """Save object to path given a method
 
     Args:
-        __object: object to store
+        __obj: object to store
         path: path where to save object
         mthd: method of storing
             None        > catch method from path extension
@@ -111,7 +111,7 @@ def save(
         os.makedirs(directory)
 
     if mthd == "csv":
-        write_csv(__object, path, encoding=encoding, **params)
+        write_csv(__obj, path, encoding=encoding, **params)
     elif mthd == "json":
         with sopen(path, "w", encoding=encoding) as file:
             params = read_params(
@@ -119,11 +119,11 @@ def save(
                 {"sort_keys": True, "indent": 4, "separators": (",", ": ")},
                 safe=False,
             )
-            json.dump(__object, file, **params)
+            json.dump(__obj, file, **params)
     elif mthd == "pickle":
         with sopen(path, "wb", encoding=encoding) as file:
-            pickle.dump(__object, file, **params)
+            pickle.dump(__obj, file, **params)
     elif mthd == "txt":
-        write_txt(__object, path, encoding=encoding, **params)
+        write_txt(__obj, path, encoding=encoding, **params)
     else:
         raise ValueError(f"Unknown mthd '{mthd}'")

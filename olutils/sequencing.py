@@ -31,7 +31,7 @@ def countiter(
         dindicator: default indicator for max count
             used when object has no readable length
 
-    Return:
+    Returns:
         if w_count: yield (i, elem)
         else: yield elem
     """
@@ -88,7 +88,7 @@ def wait_until(
     Raise:
         (TimeoutError): raise_err is True & timeout reached
 
-    Return:
+    Returns:
         whether predicate returned True
     """
     start = time()

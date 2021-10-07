@@ -53,7 +53,7 @@ def secs2unit(
         (TypeError) : secs-type not handled
         (ValueError): unit not handled
 
-    Return:
+    Returns:
         if secs is number
             if unit is dt: return datetime
             elif unit is timedelta: return timedelta

@@ -34,7 +34,7 @@ def test_save_load():
         {"1": -1, "2": -2},
     ]
 
-    path_frmt = os.path.join(TMP_DIR, "__object.{}")
+    path_frmt = os.path.join(TMP_DIR, "__obj.{}")
 
     for mthd in ["csv", "json", "pickle"]:
         path = path_frmt.format(mthd)

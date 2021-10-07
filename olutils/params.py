@@ -81,7 +81,7 @@ def read_params(
         ... )
         [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
 
-    Return:
+    Returns:
         (Params) dict-like structure where kwargs are accessible as attributes
         or (list[Params}) if  dft_params is a list of kwargs
     """
@@ -127,7 +127,7 @@ def iter_params(param_ranges: Dict[Any, List[Any]]) -> Iterable[ParamsDict]:
         >> next(param_iter)
         StopIteration
 
-    Return:
+    Returns:
         (iterator)
     """
     params, ranges = [], []

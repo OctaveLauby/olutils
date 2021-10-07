@@ -4,11 +4,11 @@ from typing import Any, Callable, Dict, Hashable
 from olutils.collection.functions import identity
 
 
-def basedict(__object: Dict, /, leafconv: Callable = identity) -> Dict:
+def basedict(__obj: Dict, /, leafconv: Callable = identity) -> Dict:
     """Return base dict from object (recursive)
 
     Args:
-        __object (dict-like): dict-like object to recursively convert
+        __obj (dict-like): dict-like object to recursively convert
             for instance OrderedDict or defaultdict
         leafconv: function to convert leaves (not dict values)
     """
@@ -16,12 +16,12 @@ def basedict(__object: Dict, /, leafconv: Callable = identity) -> Dict:
         key: basedict(value, leafconv=leafconv)
         if isinstance(value, dict)
         else leafconv(value)
-        for key, value in __object.items()
+        for key, value in __obj.items()
     }
 
 
 def dict2str(
-    __object: Any,
+    __obj: Any,
     /,
     *,
     bullets: str = "#*>-",
@@ -33,18 +33,18 @@ def dict2str(
     """Convert dict to pretty formatted string
 
     Args:
-        __object    : dictionary to format to string
+        __obj    : dictionary to format to string
         bullets     : list of bullets to use for dict-ladders
         indent      : indent to add when going to next dict-ladder
         prefix      : prefix before each row in string
         keyconv     : dict-key string converter
         leafconv    : dict-leaf string converter
 
-    Return:
-        (str) pretty representation of __object
+    Returns:
+        (str) pretty representation of __obj
     """
-    if not isinstance(__object, dict):
-        return leafconv(__object)
+    if not isinstance(__obj, dict):
+        return leafconv(__obj)
 
     bullet = bullets[0] if bullets else ""
     exbullet = "" if bullet in ["", " "] else (bullet + " ")
@@ -52,10 +52,10 @@ def dict2str(
 
     string = ""
     try:
-        key_maxsize = max(len(keyconv(key)) for key in __object.keys())
+        key_maxsize = max(len(keyconv(key)) for key in __obj.keys())
     except ValueError:
         return "<empty dict>"
-    for key, value in __object.items():
+    for key, value in __obj.items():
         if string:
             string += "\n"
         if isinstance(value, dict):
