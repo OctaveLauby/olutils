@@ -38,8 +38,7 @@ python -m pylint olutils
 Testing with coverage
 
 ```bash
-coverage run -m pytest tests
-coverage report
+coverage run -m pytest tests; coverage report
 ```
 
 Or, if one has pytest-cov installed:
