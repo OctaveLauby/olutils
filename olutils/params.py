@@ -25,7 +25,7 @@ class Params(dict):
             raise AttributeError(f"{attr} is neither a param attribute nor a field")
 
 
-# TODO: remove it has people have implemented tools upon typing
+# TODO: remove it (deprecated with typing ant https://typeguard.readthedocs.io/en/latest/userguide.html)
 def check_type(name: str, value: Any, exp_type: type):
     """Simple check of param type, raising TypeError with explicit message
 
@@ -92,7 +92,7 @@ def read_params(
     results = [dft.copy() for dft in dft_set]
     key_is_default = {}  # make sure keys from kwargs are in defaults
     for key, val in params.items():
-        if not key in key_is_default:
+        if key not in key_is_default:
             key_is_default[key] = False
         for result in results:
             if key not in result:
@@ -135,12 +135,12 @@ def iter_params(param_ranges: Dict[Any, List[Any]]) -> Iterable[ParamsDict]:
         params.append(param)
         ranges.append(prange)
 
-    def params_iter(params, ranges):
+    def params_iter():
         """Return iterable on parameters given there ranges"""
         for param_set in itertools.product(*ranges):
             yield dict(zip(params, param_set))
 
-    return params_iter(params, ranges)
+    return params_iter()
 
 
 def add_dft_args(

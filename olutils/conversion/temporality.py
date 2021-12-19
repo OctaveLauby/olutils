@@ -1,5 +1,7 @@
-"""Temporality converters"""
+"""Temporality converters
+
 # TODO : Handle timezones
+"""
 from collections.abc import Iterable as IterableABC
 from datetime import datetime, timedelta
 from typing import Iterable, Union
@@ -74,7 +76,7 @@ def secs2unit(
             return ts2dt(secs)
         if unit in ["td", "timedelta"]:
             return timedelta(seconds=float(secs))
-        raise ValueError("Unknown time unit '%s'" % unit)
+        raise ValueError(f"Unknown time unit '{unit}'")
     except TypeError:
         if isinstance(secs, (list, set, tuple)):
             return type(secs)(secs2unit(tick, unit) for tick in secs)

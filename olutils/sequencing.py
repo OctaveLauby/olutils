@@ -37,6 +37,7 @@ def countiter(
     """
     verbose = bool(vbatch)
     try:
+        # noinspection PyTypeChecker
         size = len(iterable) + start - 1
     except TypeError:
         size = dindicator

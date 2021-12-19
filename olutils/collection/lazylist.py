@@ -14,7 +14,7 @@ def lazy_content(__list: List, /, nvals: int, ellipsis: Any = ...) -> List:
     if len(__list) <= nvals:
         return __list
     return (
-        __list[: nvals // 2] + [ellipsis] + __list[len(__list) - abs(nvals - 1) // 2 :]
+        __list[: nvals // 2] + [ellipsis] + __list[len(__list) - abs(nvals - 1) // 2:]
     )
 
 

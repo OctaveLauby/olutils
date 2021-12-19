@@ -2,6 +2,14 @@ from typing import Any, Dict
 
 
 class Singleton(type):
+    """Metaclass to build singleton classes
+
+    Examples:
+        >>> class MyClass(metaclass=Singleton):
+        >>>    pass
+        >>> instance = MyClass()
+        >>> assert instance is MyClass()
+    """
 
     _instances: Dict[type, Any] = {}
 

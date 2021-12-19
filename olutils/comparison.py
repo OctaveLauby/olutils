@@ -3,6 +3,7 @@ from typing import Hashable, Iterable, Set, TypedDict
 
 
 class ContentDiff(TypedDict, total=False):
+    """Output signature for content_diff"""
     # Use required/not required keys when available (https://www.python.org/dev/peps/pep-0655/#motivation)
     minus: Set[Hashable]
     plus: Set[Hashable]

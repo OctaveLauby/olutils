@@ -2,6 +2,7 @@
 from collections.abc import Iterable as IterableABC
 from typing import Iterable, List, Union
 
+from olutils.collection import identity
 from olutils.os import sopen
 from .common import DFT_EOL
 
@@ -44,21 +45,22 @@ def read_txt(
     if not w_eol:
         line_conv = rm_eol
     elif f_eol is None:
-        line_conv = lambda line: line
+        line_conv = identity
     elif isinstance(f_eol, str):
-        line_conv = lambda line: rm_eol(line) + f_eol
+        def line_conv(line):
+            return rm_eol(line) + f_eol
     else:
         raise TypeError(f"f_eol must be str or NoneType, got {type(f_eol)}")
 
     # Create row iterator
-    def line_iterator(path: str) -> Iterable[str]:
+    def line_iterator() -> Iterable[str]:
         """Iterate lines of file at path"""
         with open(path, mode, encoding=encoding) as file:
             for line in file:
                 yield line_conv(line)
 
     # Return
-    line_iter = line_iterator(path)
+    line_iter = line_iterator()
     if rtype in [list, "list"]:
         return [line_conv(line) for line in line_iter]
     if rtype in [Iterable, "iter", "iterable"]:

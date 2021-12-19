@@ -18,9 +18,9 @@ def get_next_path_index(path_frmt: str, start: int = 1) -> int:
         assert "3823243077" in path_frmt.format(3823243077)
     except (IndexError, AssertionError):
         # IndexError means more than one placeholder, AssertionError means none
-        raise ValueError("path_frmt must contain only one positional-placeholder")
+        raise ValueError("path_frmt must contain only one positional-placeholder") from None
     except KeyError:
-        raise ValueError("path_frmt must contain no named-placeholder")
+        raise ValueError("path_frmt must contain no named-placeholder") from None
 
     i = start
     while exists(path_frmt.format(i)):
