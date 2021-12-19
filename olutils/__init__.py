@@ -13,6 +13,7 @@ from .collection import (
     LazyList,
     identity,
     prod,
+    Singleton,
 )
 from .comparison import content_diff
 from .conversion import (
