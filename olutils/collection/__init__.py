@@ -6,3 +6,4 @@ from .functions import (
 )
 from .lazylist import lazy_content, LazyList
 from .flatstr import FlatStr
+from .singleton import Singleton

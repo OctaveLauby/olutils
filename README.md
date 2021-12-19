@@ -95,6 +95,18 @@ assert olutils.identity(1) == 1
 ```
 
 
+* singleton:
+
+```python
+import olutils
+
+class MyClass(metaclass=olutils.Singleton):
+    pass
+
+instance = MyClass()
+assert instance is MyClass()
+```
+
 
 ## More
 

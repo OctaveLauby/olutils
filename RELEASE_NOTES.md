@@ -6,6 +6,7 @@ History of release notes
 ## New Features
 - `path` module (`next_path`)
 - `typing` module (`Number`, `TimeRepr`, `RowDict`, ...)
+- `Singleton` metaclass
 
 ## Feature Changes:
 - typing added to all function signatures
