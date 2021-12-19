@@ -5,7 +5,7 @@ import shutil
 import olutils.storing as lib
 
 TMP_DIR = "tmp"
-MOCK_DIR = os.path.join("olutils", "tests", "mockups")
+MOCK_DIR = os.path.join("tests", "mockups")
 
 
 def assert_content_equal(path, content):

@@ -28,10 +28,7 @@ def test_secs2unit():
     assert lib.secs2unit(4*year, "dt") == datetime(1974, 1, 1)
     assert lib.secs2unit(hour, "td") == timedelta(0, 3600)
 
-    assert lib.secs2unit([60, 750], "min") == [1, 12.5]
-    assert lib.secs2unit((60, 750), "min") == (1, 12.5)
-    assert lib.secs2unit({60, 750}, "min") == {1, 12.5}
-
+    # Test wgeb input is iterable
     inp = [75, 3720]
     outputs = {
         'min': [1.25, 62],

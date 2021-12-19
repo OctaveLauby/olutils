@@ -1,13 +1,16 @@
 """Utils to manage parameters and arguments"""
 import itertools
+from argparse import ArgumentParser
+from typing import Any, Dict, Optional, List, Union, Iterable
 
 DFT = object()
+ParamsDict = Dict[str, Any]
 
 
 class Params(dict):
     """Container for parameters where items are accessible as attributes"""
 
-    def __getattr__(self, attr):
+    def __getattr__(self, attr: str) -> Any:
         try:
             return self[attr]
         except KeyError:
@@ -15,22 +18,21 @@ class Params(dict):
                 f"{attr} is neither a param attribute nor a field"
             ) from None
 
-    def __setattr__(self, attr, val):
+    def __setattr__(self, attr: str, val: Any):
         if attr in self:
             self[attr] = val
         else:
-            raise AttributeError(
-                f"{attr} is neither a param attribute nor a field"
-            )
+            raise AttributeError(f"{attr} is neither a param attribute nor a field")
 
 
-def check_type(name, value, exp_type):
+# TODO: remove it (deprecated with typing ant https://typeguard.readthedocs.io/en/latest/userguide.html)
+def check_type(name: str, value: Any, exp_type: type):
     """Simple check of param type, raising TypeError with explicit message
 
     Args:
-        name (str)      : parameter name to display in error message
-        value (object)  : parameter value to check the type of
-        exp_type (type|tuple): expected type of parameter
+        name : parameter name to display in error message
+        value: parameter value to check the type of
+        exp_type: expected type of parameter
 
     Raise:
         (TypeError) if type not correct
@@ -42,17 +44,22 @@ def check_type(name, value, exp_type):
         )
 
 
-def read_params(params, dft_params, safe=True, default=DFT):
+def read_params(
+    params: Optional[ParamsDict],
+    dft_params: Union[ParamsDict, List],
+    safe: bool = True,
+    default: Any = DFT,
+) -> Union[Params, List[Params]]:
     """Return kwargs completed with dft kwargs in convenient dict-like object
 
     Args:
-        params (NoneType|dict): list of kwargs given by user
-        dft_params (dict|list): expected parameters with default values
+        params      : list of kwargs given by user
+        dft_params  : expected parameters with default values
             (dict) -> reduce-complete kwargs with dft_params
             (list) -> return list of dict where dict at index i is kwargs
                         reduced & completed with dft_params[i]
-        safe (bool): raises KeyError if kwargs contains key not in dft_params
-        default (object): value in kwargs to replace with dft_params
+        safe    : not safe means raise KeyError if kwargs contains key not in dft_params
+        default : value in kwargs to replace with dft_params
             similar to no param in kwargs
 
     Example:
@@ -74,7 +81,7 @@ def read_params(params, dft_params, safe=True, default=DFT):
         ... )
         [{'a': 0, 'b': 2}, {"c": 8, "d": 4}]
 
-    Return:
+    Returns:
         (Params) dict-like structure where kwargs are accessible as attributes
         or (list[Params}) if  dft_params is a list of kwargs
     """
@@ -85,7 +92,7 @@ def read_params(params, dft_params, safe=True, default=DFT):
     results = [dft.copy() for dft in dft_set]
     key_is_default = {}  # make sure keys from kwargs are in defaults
     for key, val in params.items():
-        if not key in key_is_default:
+        if key not in key_is_default:
             key_is_default[key] = False
         for result in results:
             if key not in result:
@@ -103,11 +110,11 @@ def read_params(params, dft_params, safe=True, default=DFT):
     return results[0] if r_dict else results
 
 
-def iter_params(param_ranges):
+def iter_params(param_ranges: Dict[Any, List[Any]]) -> Iterable[ParamsDict]:
     """Return iterator on all possible param value associations
 
     Args:
-        param_ranges (dict): for each parameter, possible values
+        param_ranges: for each parameter, possible values
 
     Example:
         >> param_iter = iter_params({'int': [1, 2], 'str': ["a", "b"]})
@@ -120,7 +127,7 @@ def iter_params(param_ranges):
         >> next(param_iter)
         StopIteration
 
-    Return:
+    Returns:
         (iterator)
     """
     params, ranges = [], []
@@ -128,32 +135,37 @@ def iter_params(param_ranges):
         params.append(param)
         ranges.append(prange)
 
-    def params_iter(params, ranges):
+    def params_iter():
         """Return iterable on parameters given there ranges"""
         for param_set in itertools.product(*ranges):
             yield dict(zip(params, param_set))
-    return params_iter(params, ranges)
+
+    return params_iter()
 
 
-def add_dft_args(parser, dft_args, help_prefix="", flag_prefix=""):
+def add_dft_args(
+    parser: ArgumentParser,
+    dft_args: ParamsDict,
+    help_prefix: str = "",
+    flag_prefix: str = "",
+):
     """Add arguments to parser.
 
     Args:
-        parser (argparse.ArgumentParser): parser you want to complete
-        dft_args    (dict): default arguments (arg_name, dft_value)
-        flag_prefix (str):  prefix before flag
-        help_prefix (str):  prefix before help
+        parser      : parser you want to complete
+        dft_args    : default arguments (arg_name, dft_value)
+        flag_prefix :  prefix before flag
+        help_prefix :  prefix before help
     """
     for param, dft_value in dft_args.items():
         param_flag = f"--{flag_prefix}{param}"
         if isinstance(dft_value, bool):
             action = "store_false" if dft_value else "store_true"
-            parser.add_argument(
-                param_flag, action=action,
-                help=f"{help_prefix}{param}"
-            )
+            parser.add_argument(param_flag, action=action, help=f"{help_prefix}{param}")
         else:
             parser.add_argument(
-                param_flag, required=False, default=dft_value,
-                help=f"{help_prefix}{param}, default is {dft_value}"
+                param_flag,
+                required=False,
+                default=dft_value,
+                help=f"{help_prefix}{param}, default is {dft_value}",
             )

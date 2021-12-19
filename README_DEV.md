@@ -31,15 +31,20 @@ pip install -e .
 Classic testing
 
 ```bash
-python -m pytest olutils -vv
-python -m pylint olutils --ignore-patterns=test*
+python -m pytest tests -vv
+python -m pylint olutils
 ```
 
 Testing with coverage
 
 ```bash
-coverage run -m pytest
-coverage report
+coverage run -m pytest tests; coverage report
+```
+
+Or, if one has pytest-cov installed:
+
+```bash
+python -m pytest tests --cov
 ```
 
 

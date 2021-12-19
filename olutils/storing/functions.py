@@ -2,27 +2,36 @@
 import json
 import os
 import pickle
+from typing import Any
 
-from olutils.files import sopen
+from olutils.os import sopen
 from olutils.params import read_params
 from .csv import read_csv, write_csv
 from .txt import read_txt, write_txt
 
 
-def load(path, /, mthd=None, *, mode=None, encoding=None, **kwargs):
+def load(
+    path: str,
+    /,
+    mthd: str = None,
+    *,
+    mode: str = None,
+    encoding: str = None,
+    **kwargs,
+) -> Any:
     """Load object at path given a method
 
     Args:
-        path (str)  : path where __object is stored
-        mthd (str): method of storing
+        path: path where object is stored
+        mthd: method of storing
             None        > catch method from path extension
             'csv'       > return iterable on rows
-            'json'      > return __object using json loading library
-            'pickle'    > return __object using pickle loading method
+            'json'      > return object using json loading library
+            'pickle'    > return object using pickle loading method
             'txt'       > return content of text file
-        mode (str)    : mode to open file with
+        mode: mode to open file with
             default is 'r', except for pickle method where it is 'rb'
-        encoding (str): file encoding
+        encoding: file encoding
             None for default
             'utf-8' for classic Linux encoding
             'utf-8-sig' for classic windows encoding
@@ -36,9 +45,6 @@ def load(path, /, mthd=None, *, mode=None, encoding=None, **kwargs):
 
     Raise:
         (ValueError): unknown method
-
-    Return:
-        (object)
     """
     if mthd is None:
         mthd = path.split(".")[-1]
@@ -46,11 +52,11 @@ def load(path, /, mthd=None, *, mode=None, encoding=None, **kwargs):
     if mthd == "csv":
         res = read_csv(path, mode=mode, encoding=encoding, **kwargs)
     elif mthd == "json":
-        mode = 'r' if mode is None else mode
+        mode = "r" if mode is None else mode
         with open(path, mode, encoding=encoding) as file:
             res = json.load(file, **kwargs)
     elif mthd == "pickle":
-        mode = 'rb' if mode is None else mode
+        mode = "rb" if mode is None else mode
         with open(path, mode, encoding=encoding) as file:
             res = pickle.load(file, **kwargs)
     elif mthd == "txt":
@@ -60,23 +66,31 @@ def load(path, /, mthd=None, *, mode=None, encoding=None, **kwargs):
     return res
 
 
-def save(__object, path, /, mthd=None, *, encoding=None, **params):
+def save(
+    __obj: Any,
+    path: str,
+    /,
+    mthd: str = None,
+    *,
+    encoding: str = None,
+    **params,
+):
     """Save object to path given a method
 
     Args:
-        __object (object)   : object to store
-        path (str)          : path where to save object
-        mthd (str)          : method of storing
+        __obj: object to store
+        path: path where to save object
+        mthd: method of storing
             None        > catch method from path extension
             'csv'       > store as csv file (requires obj to be list of dict)
             'json'      > store as pretty json file (requires obj to be json like)
             'pickle'    > store as pickle file
             'txt'       > store as text file
-        encoding (str)      : file encoding
+        encoding: file encoding
             None for default
             'utf-8' for classic Linux encoding
             'utf-8-sig' for classic windows encoding
-        **params            : available kwargs depend on mthd value
+        **params: available kwargs depend on mthd value
             'csv'       > @see `~olutils.storing.write_csv`
                 fieldnames, header, pretty, ...
             'json'      > @see `json.dump`
@@ -97,21 +111,19 @@ def save(__object, path, /, mthd=None, *, encoding=None, **params):
         os.makedirs(directory)
 
     if mthd == "csv":
-        write_csv(__object, path, encoding=encoding, **params)
+        write_csv(__obj, path, encoding=encoding, **params)
     elif mthd == "json":
         with sopen(path, "w", encoding=encoding) as file:
             params = read_params(
                 params,
-                {'sort_keys': True, 'indent': 4, 'separators': (',', ': ')},
+                {"sort_keys": True, "indent": 4, "separators": (",", ": ")},
                 safe=False,
             )
-            json.dump(
-                __object, file, **params
-            )
+            json.dump(__obj, file, **params)
     elif mthd == "pickle":
         with sopen(path, "wb", encoding=encoding) as file:
-            pickle.dump(__object, file, **params)
+            pickle.dump(__obj, file, **params)
     elif mthd == "txt":
-        write_txt(__object, path, encoding=encoding, **params)
+        write_txt(__obj, path, encoding=encoding, **params)
     else:
         raise ValueError(f"Unknown mthd '{mthd}'")

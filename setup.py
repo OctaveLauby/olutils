@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setup(
     # Library description
     name="olutils",
-    version="2.0.2",
+    version="2.1.0",
     description="tools for common operations in a module",
     long_description=long_description,
     long_description_content_type="text/markdown",

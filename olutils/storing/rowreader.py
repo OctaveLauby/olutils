@@ -1,13 +1,21 @@
 """Convenient tools to read and encapsulate rows (dictionaries)"""
 from collections import OrderedDict
+from typing import Callable, Dict, List
 
-from olutils.compare import content_diff
+from olutils.typing import RowDict
+from olutils.comparison import content_diff
 
 
 class RowReader:
     """Convenient row reader that includes key conversions and building"""
 
-    def __init__(self, fields, conversions=None, operations=None, delete=None):
+    def __init__(
+        self,
+        fields: Dict[str, str],
+        conversions: Dict[str, Callable] = None,
+        operations: Dict[str, Callable] = None,
+        delete: List[str] = None,
+    ):
         """Initialize a row reader instance
 
         Args:
@@ -36,7 +44,7 @@ class RowReader:
         self.operations = operations if operations else {}
         self.delete = delete if delete else []
 
-    def read(self, irow):
+    def read(self, irow: RowDict) -> RowDict:
         """Build an instance from initial row with required attributes
 
         Args:
@@ -45,14 +53,13 @@ class RowReader:
         Raises:
             (KeyError) if a field is missing in row
 
-        Return:
+        Returns:
             (OrderedDict)
         """
         try:
-            row = OrderedDict([
-                (attr, irow[field])
-                for attr, field in self.fields.items()
-            ])
+            row = OrderedDict(
+                [(attr, irow[field]) for attr, field in self.fields.items()]
+            )
         except KeyError:
             diff = content_diff(irow.keys(), self.fields.values())
             raise KeyError(

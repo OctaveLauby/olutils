@@ -1,6 +1,26 @@
 History of release notes
 ---
 
+# Version 2.1.0
+
+## New Features
+- `path` module (`next_path`)
+- `typing` module (`Number`, `TimeRepr`, `RowDict`, ...)
+
+## Feature Changes:
+- typing added to all function signatures
+- `basedict` now only expects dict-like objects (used to handle any object)
+- `SpeStr` renamed `FlatStr` (`collection.spestr` renamed `collection.flatstr`)
+- `files` module renamed `os`
+- `compare` module renamed `comparison`
+
+## Other Changes:
+- tests directory has been moved to project root
+
+
+
+---
+
 # Version 2.0.2
 
 ## Bugfixes
@@ -18,7 +38,7 @@ Lot of changes, here are the major ones:
 - `log` module (`LogClass`, `get_loggers`, ...)
 - `Row` class (implies change in `RowReader.read` signature)
 
-## Moved to to [olanalytics](https://github.com/OctaveLauby/olanalytics)
+## Moved to [olanalytics](https://github.com/OctaveLauby/olanalytics)
 - `closest` and `previous`
 - `plotting` module (`plot_iter`, `resize`, ...)
 
